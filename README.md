@@ -4,4 +4,4 @@
 
 [Google Meets](https://meet.google.com/xwd-djmc-bmb)
 
-[Definition of Done](https://github.com/sohvip/ILMOWEB/blob/main/documentation/DoD.md)
+[Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
