@@ -5,3 +5,6 @@
 [Google Meets](https://meet.google.com/xwd-djmc-bmb)
 
 [Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
+
+## Run tests
+To run unit tests manually, go to app-directory and run ```./manage.py test ilmoweb``` 
