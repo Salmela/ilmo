@@ -1,7 +1,8 @@
+"""Module for routing urls."""
 from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    path("", views.homePageView, name='home')
+    path("", views.home_page_view, name='home')
 ]
