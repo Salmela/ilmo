@@ -1,4 +1,5 @@
 # ILMO
+![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)  
 
 [Backlog](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?invite=CIPmtn8&pli=1#gid=1)
 
