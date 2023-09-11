@@ -9,3 +9,12 @@
 
 ## Run tests
 To run unit tests manually, go to app-directory and run ```./manage.py test ilmoweb``` 
+
+## Get unit test coverage
+Go to the directory containing the ```manage.py``` file.  
+
+- Run ```coverage run --source='.' manage.py test ilmoweb/ ```  
+  
+- To produce a html-report of the coverage, run ```coverage html```
+  
+Now the report ```index.html``` is located in the htmlcov directory.
