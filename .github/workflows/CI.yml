@@ -30,8 +30,6 @@ jobs:
           python-version: 3.9
       - name: Install Poetry
         run: pip3 install poetry
-#      - name: Install Django
-#        run: pip3 install django
       - name: Install dependencies
         run: poetry install
       - name: Run tests
