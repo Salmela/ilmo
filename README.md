@@ -22,9 +22,9 @@ Go to the directory containing the ```manage.py``` file.
 Now the report ```index.html``` is located in the htmlcov directory.
 
 ## Connect to a test database
-- Go to the app/config and create .env -file
+- Go to the app/config and create ```.env``` -file
 
-.env should include to following information:
+```.env``` should include to following information:
 NAME=[database_name]
 USER=[database_user] or NONE
 PASSWORD=[database_password] or NONE
