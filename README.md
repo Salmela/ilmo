@@ -37,7 +37,7 @@ PORT=[database_port] usually 5432
   
 - Run ```python manage.py migrate ```
 
-- Run ```python manage.py createsuperuser ``` and follow the instructions
+- Run ```python manage.py createsuperuser ``` and follow the instructions.
 
 Now the application should be connected to your database. 
 
