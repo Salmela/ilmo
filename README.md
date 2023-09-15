@@ -7,6 +7,8 @@
 
 [Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
 
+[Documentation](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
+
 ## Run tests
 To run unit tests manually, go to app-directory and run ```./manage.py test ilmoweb``` 
 
