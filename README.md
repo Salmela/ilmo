@@ -20,3 +20,34 @@ Go to the directory containing the ```manage.py``` file.
 - To produce a html-report of the coverage, run ```coverage html```
   
 Now the report ```index.html``` is located in the htmlcov directory.
+
+## Connect to a test database
+- Go to the app/config and create .env -file
+
+.env should include to following information:
+NAME=[database_name]
+USER=[database_user] or NONE
+PASSWORD=[database_password] or NONE
+HOST=[database_host] usually [localhost] or [path/to/socket]
+PORT=[database_port] usually 5432
+
+- Run ```python manage.py makemigrations ```
+  
+- Run ```python manage.py migrate ```
+
+- Run ```python manage.py createsuperuser ``` and follow the instructions
+
+Now the application should be connected to your database. 
+
+- Open the application and go to .../admin.
+- Log in as the superuser you just created. If it works, the connection is stable.
+
+## Populate the test database
+- Go to app/
+
+- Run ```python config/populate.py ```
+
+- Open the application and go to .../database_test
+
+if the site shows you the database information, populating was successful.
+
