@@ -26,6 +26,7 @@ Now the report ```index.html``` is located in the htmlcov directory.
 
 
 ```.env``` should include to following information:
+
 NAME=[database_name] <br/>
 USER=[database_user] or NONE <br/>
 PASSWORD=[database_password] or NONE <br/>
