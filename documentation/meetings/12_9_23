@@ -1,0 +1,22 @@
+# Asiakastapaaminen 12.9.2023
+
+## Tapaamisessa ollut vielä demottavaa, selitetty user storyt sekä MPV (minimal viable product) asiakkaalle
+sekä mitä tulevissa tapaamisissa tullaan käymään läpo.
+
+## User storyt seuraavaan sprinttiin
+
+- Sisäänkirjautuminen yliopistotunnuksilla 
+- Opettaja pystyy avaamaan laboratoriotöitä ilmoittautumista varten 
+- Opiskelija pystyy ilmoittamaan laboratoriotöihin 
+
+## Ideoita tulevaan järjestelmään:
+
+- Ulkoasuun ei erityistä toivetta, vapaat kädet tähän, toiveena mahdollisesti yliopiston tiedekunnan värit.
+- Ulkoasu kiva sekä mielekäs opiskelijoille
+- Kirjautuminen Shibboleth vai OpenID? Tavoitteena, että toimii mahdollisimman pitkään.
+
+## Muuta
+
+- Kysysytty vanhoja tunnuksia --> datan kopioimiseen.
+- Seuraava asiakastapaaminen 26.9. klo9
+ 
