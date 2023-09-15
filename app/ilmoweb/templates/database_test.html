@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+{%for user in users%}
+{{ user.student_id}}
+{{ user.username }}
+{{ user.name}}
+{{ user.surname }}
+{{ user.email}}
+<p></p>
+{%endfor%}
+{% endblock %}
