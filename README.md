@@ -25,7 +25,7 @@ Now the report ```index.html``` is located in the htmlcov directory.
 - Go to the app/config and create ```.env``` -file
 
 ```.env``` should include to following information:
-NAME=[database_name]
+NAME=[database_name] <br/>
 USER=[database_user] or NONE
 PASSWORD=[database_password] or NONE
 HOST=[database_host] usually [localhost] or [path/to/socket]
