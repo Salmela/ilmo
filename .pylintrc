@@ -631,4 +631,4 @@ init-import=no
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
 
 # Custom rules for IlmoWeb
-ignore=tests
+ignore=tests, migrations

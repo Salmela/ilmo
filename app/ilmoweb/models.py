@@ -45,3 +45,4 @@ class LabGroups(models.Model):
     end_time = models.TimeField()
     place = models.CharField(max_length = 100)
     is_visible = models.BooleanField()
+    

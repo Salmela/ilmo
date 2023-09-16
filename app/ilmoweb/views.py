@@ -21,3 +21,4 @@ def database_test_view(request):
     print(context)
 
     return render(request, 'database_test.html', context)
+    
