@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
+{% block title %} Login page for IlmoWeb {% endblock %}
+
 {% block content %}
-  <head>
-    <title>Hello world</title>
-  </head>
-  <body>
-   <h1>Hello world</h1>
-  </body>
+<h1>Welcome to IlmoWeb!</h1>
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+{% endif %}
+
 {% endblock %}
 
