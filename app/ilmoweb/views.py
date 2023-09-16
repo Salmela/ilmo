@@ -16,9 +16,8 @@ def database_test_view(request):
     """
         Database test template
     """
-    test_data = User.objects.all()
+    test_data = User.objects.all()    # pylint: disable=no-member
     context = {"users":test_data}
     print(context)
 
     return render(request, 'database_test.html', context)
-    
