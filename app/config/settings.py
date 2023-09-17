@@ -92,7 +92,7 @@ DATABASES = {
 if env('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
-           'ENGINE': 'django.db.backends.postgresql',
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
            'NAME': 'github_actions',
            'USER': 'postgres',
            'PASSWORD': 'postgres',
