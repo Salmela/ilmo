@@ -1,9 +1,9 @@
 """Module for models."""
-from django.db import models    # pylint: disable=unused-import
+from django.db import models
 
 class User(models.Model):
     """
-        Model for user-data.
+        Model for user-data
 
     """
     student_id = models.IntegerField()
