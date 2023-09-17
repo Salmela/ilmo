@@ -46,7 +46,7 @@ jobs:
       
       # Run Migrations
       - name: Run migrations
-        run: python app/manage.py migrate
+        run: poetry run python app/manage.py migrate
 
       # Run tests
       - name: Run tests
