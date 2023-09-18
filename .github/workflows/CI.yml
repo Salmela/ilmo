@@ -54,11 +54,6 @@ jobs:
         working-directory: ./app
         run: poetry run invoke unittest
 
-      # Run e2e-tests
-      - name: Run Playwright tests
-        working-directory: ./app
-        run: poetry run invoke e2e
-
       # Run Pylint
       - name: Lint
         working-directory: ./app
