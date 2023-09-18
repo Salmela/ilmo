@@ -46,12 +46,15 @@ jobs:
       
       # Run Migrations
       - name: Run migrations
-        run: poetry run python app/manage.py migrate
+        working-directory: ./app
+        run: poetry run invoke migrate
 
       # Run tests
-      - name: Run tests
-        run: poetry run python app/manage.py test ilmoweb
-      
+      - name: Run unittests
+        working-directory: ./app
+        run: poetry run invoke unittest
+
       # Run Pylint
       - name: Lint
-        run: poetry run pylint app/ilmoweb/
+        working-directory: ./app
+        run: poetry run invoke lint
