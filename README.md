@@ -14,6 +14,7 @@ To run unit tests manually, go to app-directory and run ```./manage.py test ilmo
 
 ## Run playwright tests
 Open the server in a terminal by going to app-directory and running ``` python manage.py runserver```
+
 Open another terminal and run ``` pytest app/ilmoweb/tests/playwright/test_play.py --headed --base-url http://127.0.0.1:8000/```
 
 ## Get unit test coverage
