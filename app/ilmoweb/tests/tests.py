@@ -1,4 +1,5 @@
-from django.test import TestCase
+from django.contrib.auth.models import User as U
+from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups
 
 class FirstTest(TestCase):
@@ -42,6 +43,12 @@ class TestModels(TestCase):
             place = "Chemicum",
             is_visible = False
         )
+        # Creating a superuser for testing login
+        self.superuser1 = U.objects.create_superuser(username='kemianope')
+        self.superuser1.set_password('atomi123')
+        self.superuser1.save()
+
+        self.client=Client()
 
     # Tests for User-model
     def test_user_is_created_with_correct_id(self):
@@ -109,3 +116,30 @@ class TestModels(TestCase):
 
     def test_lab_group_is_created_with_correct_is_visible_value(self):
         self.assertFalse(self.labgroup1.is_visible)
+
+    # Tests for logging in as superuser
+    def test_login_for_superuser(self):
+        logged_in = self.client.login(username='kemianope', password='atomi123')
+
+        self.assertTrue(logged_in)
+
+    def test_login_with_wrong_password(self):
+        logged_in = self.client.login(username='kemianope', password='chemicum')
+
+        self.assertFalse(logged_in)
+
+    def test_login_as_not_superuser(self):
+        logged_in = self.client.login(username=self.user1.username, password=self.user1.password)
+
+        self.assertFalse(logged_in)
+
+    def test_respond_with_correct_status_code(self):
+        response_get = self.client.get("/database_test/accounts/login/", 
+                                    {'username':'kemianope', 'password':'atomi123'})
+        status_code_get = response_get.status_code
+        self.assertEqual(status_code_get, 200) # 200 OK
+
+        response_post = self.client.post("/database_test/accounts/login/", 
+                                    {'username':'kemianope', 'password':'atomi123'})
+        status_code_post = response_post.status_code
+        self.assertEqual(status_code_post, 302) # 302 Found
