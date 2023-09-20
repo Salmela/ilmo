@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block title %} Created labs {% endblock %}
+{% block content %}
+<style>
+table {
+  font-family: Helvetica, arial;
+  border-collapse: collapse;
+  width: 70%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 4px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+h3, h6 {
+  text-align: left;
+}
+</style>
+
+<h1>Luodut kurssit</h1><br>
+
+{% if not courses %}
+Ei kursseja
+
+{% else %}
+
+{% for course in courses %}
+<h3>{{ course.name }}</h3>
+
+{% if not course.labs_set.all %}
+<h6>Ei laboratoriotöitä</h6>
+{% else %}
+
+<table>
+    {% for lab in course.labs_set.all %}
+    <tr>
+        <th>{{ lab.name }}</th>
+        
+        {% if not lab.labgroups_set.all %}
+        </tr>
+        <td>Ei ryhmiä</td>
+        {% else %}
+        
+        <th>Päivämäärä</th>
+        <th>Aika</th>
+        <th>Paikka</th>
+        <th>Aktiivinen</th>
+    </tr>
+
+    {% for group in lab.labgroups_set.all %}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{{ group.date }}</td>
+        <td>{{ group.start_time }} - {{ group.end_time }}</td>
+        <td>{{ group.place }}</td>
+        <td> {% if group.is_visible %} Kyllä {% else %} Ei {% endif %}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+
+    {% endfor %}
+    {% endif %}
+</table>
+<br>
+{% endfor %}
+{% endif %}
+
+{% endblock %}
