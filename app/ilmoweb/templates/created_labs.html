@@ -22,7 +22,7 @@ h3, h6 {
 }
 </style>
 
-<h1>Luodut kurssit</h1><br>
+<h1>Luodut labrat</h1><br>
 
 {% if not courses %}
 Ei kursseja
@@ -31,6 +31,12 @@ Ei kursseja
 
 {% for course in courses %}
 <h3>{{ course.name }}</h3>
+<h7>
+  <form action="/create_lab" method="GET">
+    <input type="hidden" name="course_id" value="{{ course.id }}">
+    <input id="button" type="submit" value="Luo labra">
+  </form>
+</h7>
 
 {% if not course.labs_set.all %}
 <h6>Ei laboratoriotöitä</h6>
@@ -40,12 +46,12 @@ Ei kursseja
     {% for lab in course.labs_set.all %}
     <tr>
         <th>{{ lab.name }}</th>
-        
+
         {% if not lab.labgroups_set.all %}
         </tr>
         <td>Ei ryhmiä</td>
         {% else %}
-        
+
         <th>Päivämäärä</th>
         <th>Aika</th>
         <th>Paikka</th>
