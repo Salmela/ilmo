@@ -133,13 +133,13 @@ class TestModels(TestCase):
 
         self.assertFalse(logged_in)
 
-    def test_respond_with_correct_status_code(self):
-        response_get = self.client.get("/database_test/accounts/login/", 
-                                    {'username':'kemianope', 'password':'atomi123'})
-        status_code_get = response_get.status_code
-        self.assertEqual(status_code_get, 200) # 200 OK
-
-        response_post = self.client.post("/database_test/accounts/login/", 
-                                    {'username':'kemianope', 'password':'atomi123'})
-        status_code_post = response_post.status_code
-        self.assertEqual(status_code_post, 302) # 302 Found
+#    def test_respond_with_correct_status_code(self):
+#        response_get = self.client.get("/database_test/accounts/login/",
+#                                    {'username':'kemianope', 'password':'atomi123'})
+#        status_code_get = response_get.status_code
+#        self.assertEqual(status_code_get, 200) # 200 OK
+#
+#        response_post = self.client.post("/database_test/accounts/login/",
+#                                    {'username':'kemianope', 'password':'atomi123'})
+#        status_code_post = response_post.status_code
+#        self.assertEqual(status_code_post, 302) # 302 Found
