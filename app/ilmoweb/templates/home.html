@@ -3,13 +3,26 @@
 
 {% block content %}
 <h1>Welcome to IlmoWeb!</h1>
+
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
+  <p>Hi {{ user.username }}!</p>
+  <a href="{% url 'created_labs' %}">
+    <button>
+      Luodut labrat
+    </button>
+  </a>
+  <a href="{% url 'logout' %}">
+    <button>
+      Log Out
+    </button>
+  </a>
 {% else %}
   <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
+  <a href="{% url 'login' %}">
+    <button>
+      Log In
+    </button>
+  </a>
 {% endif %}
 
 {% endblock %}
-
