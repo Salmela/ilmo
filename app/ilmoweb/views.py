@@ -48,3 +48,15 @@ def create_lab(request):
     form = NewLabForm
 
     return render(request, "create_lab.html", {"form": form, "course_id": course_id})
+
+
+def future_labs(request):    # pylint: disable=unused-argument
+    """
+        Future labs view.
+
+    """
+
+    test_data =  Courses.objects.all()    # pylint: disable=no-member
+
+
+    return render(request, 'future_labs.html', {"courses":test_data})
