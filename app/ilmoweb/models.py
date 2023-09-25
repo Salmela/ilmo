@@ -1,17 +1,13 @@
 """Module for models."""
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+class User(AbstractUser):
     """
         Model for user-data
 
     """
-    student_id = models.IntegerField()
-    username = models.TextField()
-    password = models.TextField()
-    name = models.TextField()
-    surname = models.TextField()
-    email = models.TextField()
+    student_id = models.IntegerField(default=000000000)
 
 class Courses(models.Model):
     """

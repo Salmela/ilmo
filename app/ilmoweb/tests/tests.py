@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User as U
+from django.contrib.auth.hashers import make_password, check_password
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups
 
@@ -14,9 +14,9 @@ class TestModels(TestCase):
         self.user1 = User.objects.create(
             student_id = 100111222,
             username = "pvirtanen",
-            password = "virtanen",
-            name = "Pekka",
-            surname = "Virtanen",
+            password = make_password("virtanen"),
+            first_name = "Pekka",
+            last_name = "Virtanen",
             email = "pekka.virtanen@ilmoweb.fi"
         )
 
@@ -44,8 +44,10 @@ class TestModels(TestCase):
             is_visible = False
         )
         # Creating a superuser for testing login
-        self.superuser1 = U.objects.create_superuser(username='kemianope')
-        self.superuser1.set_password('atomi123')
+        self.superuser1 = User.objects.create_superuser(
+            username = 'kemianope',
+            password = 'atomi123'
+        )
         self.superuser1.save()
 
         self.client=Client()
@@ -58,13 +60,13 @@ class TestModels(TestCase):
         self.assertEqual(self.user1.username, "pvirtanen")
 
     def test_user_is_created_with_correct_password(self):
-        self.assertEqual(self.user1.password, "virtanen")
+        self.assertTrue(check_password("virtanen", self.user1.password))
 
     def test_user_is_created_with_correct_name(self):
-        self.assertEqual(self.user1.name, "Pekka")
+        self.assertEqual(self.user1.first_name, "Pekka")
 
     def test_user_is_created_with_correct_surname(self):
-        self.assertEqual(self.user1.surname, "Virtanen")
+        self.assertEqual(self.user1.last_name, "Virtanen")
 
     def test_user_is_created_with_correct_email(self):
         self.assertEqual(self.user1.email, "pekka.virtanen@ilmoweb.fi")
@@ -120,17 +122,14 @@ class TestModels(TestCase):
     # Tests for logging in as superuser
     def test_login_for_superuser(self):
         logged_in = self.client.login(username='kemianope', password='atomi123')
-
         self.assertTrue(logged_in)
 
     def test_login_with_wrong_password(self):
         logged_in = self.client.login(username='kemianope', password='chemicum')
-
         self.assertFalse(logged_in)
 
     def test_login_as_not_superuser(self):
         logged_in = self.client.login(username=self.user1.username, password=self.user1.password)
-
         self.assertFalse(logged_in)
 
     def test_respond_with_correct_status_code_login(self):
@@ -145,8 +144,8 @@ class TestModels(TestCase):
         self.assertEqual(status_code_post, 302) # 302 Found
 
     def test_logout(self):
-        logged_in=self.client.login(username='kemianope', password='atomi123')
-        logged_in=self.client.logout()
+        logged_in = self.client.login(username='kemianope', password='atomi123')
+        logged_in = self.client.logout()
         self.assertFalse(logged_in)
 
     def test_respond_with_correct_status_code_logout(self):
