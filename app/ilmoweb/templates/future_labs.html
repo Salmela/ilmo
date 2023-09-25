@@ -9,15 +9,17 @@
 <td><b>Kurssin kuvaus: </b></td>{{ course.description }}
 <br>
 <td><b>Oppilasmäärä: </b></td>{{ course.labs_amount }}
-
 {% if course.is_visible %}
     <p>Kurssi tulossa pian</p>
+    <button>
+        Ilmottaudu
+    </button>
+    <br>
 {% else %}
     <p>Kurssia ei tulossa</p>
 {% endif %}
-
+<br>
 {%endfor%}
-
 {% endblock %}
 
 
