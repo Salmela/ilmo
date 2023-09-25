@@ -7,7 +7,7 @@ class User(AbstractUser):
         Model for user-data
 
     """
-    student_id = models.IntegerField()
+    student_id = models.IntegerField(default=000000000)
 
 class Courses(models.Model):
     """
