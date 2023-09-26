@@ -40,4 +40,5 @@ class LabGroups(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     place = models.CharField(max_length = 100)
-    is_visible = models.BooleanField()
+    status = models.IntegerField(default = 0)
+    ## 0 = not visible to students, 1 = unconfirmed, 2 = confirmed, 3 = canceled
