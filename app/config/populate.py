@@ -37,7 +37,7 @@ with open('config/test_data_2.csv') as file:
         course.save()
 
 """
-    Populates the relation conncted to the Labs with test data.
+    Populates the relation connected to the Labs with test data.
 
 """
 with open('config/test_data_3.csv') as file:
