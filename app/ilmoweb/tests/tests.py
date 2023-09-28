@@ -41,7 +41,7 @@ class TestModels(TestCase):
             start_time = "14:30",
             end_time = "16:30",
             place = "Chemicum",
-            is_visible = False
+            status = False
         )
         # Creating a superuser for testing login
         self.superuser1 = User.objects.create_superuser(
@@ -117,7 +117,7 @@ class TestModels(TestCase):
         self.assertEqual(self.labgroup1.place, "Chemicum")
 
     def test_lab_group_is_created_with_correct_is_visible_value(self):
-        self.assertFalse(self.labgroup1.is_visible)
+        self.assertEqual(self.labgroup1.status, 0)
 
     # Tests for logging in as superuser
     def test_login_for_superuser(self):

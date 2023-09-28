@@ -64,7 +64,7 @@ Ei kursseja
         <td>{{ group.date }}</td>
         <td>{{ group.start_time }} - {{ group.end_time }}</td>
         <td>{{ group.place }}</td>
-        <td> {% if group.is_visible %} Kyllä {% else %} Ei {% endif %}</td>
+        <td> {% if group.status == 0 %} Ei {% else %} Kyllä {% endif %}</td>
     </tr>
     {% endfor %}
     {% endif %}

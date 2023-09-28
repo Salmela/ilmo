@@ -10,7 +10,8 @@ sys.path.append('./')
 """
 import wsgi
 
-from ilmoweb.models import User, Courses
+from ilmoweb.models import User, Courses, Labs, LabGroups
+from datetime import date, time
 
 
 """
@@ -34,3 +35,33 @@ with open('config/test_data_2.csv') as file:
         parts = line.split(';')
         course = Courses(name=parts[0], description=parts[1], labs_amount=parts[2], is_visible=parts[3])
         course.save()
+
+"""
+    Populates the relation connected to the Labs with test data.
+
+"""
+with open('config/test_data_3.csv') as file:
+    for line in file:
+        line = line.replace('\n','')
+        parts = line.split(';')
+        lab = Labs(name=parts[0], description=parts[1], max_students=parts[2], is_visible=parts[3],course_id=parts[4])
+        lab.save()
+
+"""
+    Populates the relation conncted to the LabGroups with test data.
+
+"""
+with open('config/test_data_4.csv') as file:
+    for line in file:
+        line = line.replace('\n','')
+        parts = line.split(';')
+        test_date = [int(i) for i in parts[0].split(',')]
+        group = LabGroups(
+            date=date(test_date[0], test_date[1], test_date[2]),
+            start_time=time(int(parts[1])),
+            end_time=time(int(parts[2])),
+            place=parts[3],
+            status=parts[4],
+            lab_id=parts[5]
+        )
+        group.save()
