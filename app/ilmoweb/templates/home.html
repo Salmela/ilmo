@@ -2,30 +2,16 @@
 {% block title %} Login page for IlmoWeb {% endblock %}
 
 {% block content %}
-<h1>Welcome to IlmoWeb!</h1>
 
 {% if user.is_authenticated %}
-  <p>Hi {{ user.username }}!</p>
-  <a href="{% url 'created_labs' %}">
-    <button>
-      Luodut labrat
-    </button>
-  </a>
-  <a href="{% url 'future_labs' %}">
-    <button>
-      Tulevat labrat
-    </button>
-  </a>
-  <a href="{% url 'logout' %}">
-    <button>
-      Log Out
-    </button>
-  </a>
+<h2>
+  Tervetuloa laboratoriotöiden ilmoittautumis- ja palautusjärjestelmään {{ user.username }}!
+</h2>
 {% else %}
-  <p>You are not logged in</p>
+  <p>Et ole kirjautunut sisään</p>
   <a href="{% url 'login' %}">
     <button>
-      Log In
+      Kirjaudu sisään
     </button>
   </a>
 {% endif %}

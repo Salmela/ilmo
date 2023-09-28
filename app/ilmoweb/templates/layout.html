@@ -10,9 +10,80 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <h1 class="navbar-brand">
+        Fysikaalisen kemian laboratorio - Labra
+      </h1>
+      {% if user.is_authenticated %}
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav m-lg-auto">
+          <li class="nav-item">
+            <a href="{% url 'home' %}" class="nav-link">
+              Etusivu
+            </a>
+          </li>
+          {% if user.is_staff %}
+            <li class="nav-item">
+              <a href="{% url 'created_labs' %}" class="nav-link">
+                Opetus
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                Palautukset
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                Arkisto
+              </a>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a href="{% url 'future_labs' %}" class="nav-link">
+                Ilmoittautuminen
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                Omat palautukset
+              </a>
+            </li>
+          {% endif %}
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              Omat tiedot
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              Ohje
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'logout' %}" class="nav-link">
+              Kirjaudu ulos
+            </a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
   <div class="container">
-    {% block content %}
-    {% endblock %}
+  {% block content %}
+  {% endblock %}
   </div>
+  <nav class="navbar navbar-expand navbar-dark bg-dark fixed-bottom">
+    <div class="container">
+      <h5 class="navbar-brand">
+        A.I. Virtasen aukio 1, PL 55, 00014 Helsingin yliopisto, sähköposti markus.metsala@helsinki.fi
+      </h5>
+  </div>
+  </nav>
 </body>
 </html>

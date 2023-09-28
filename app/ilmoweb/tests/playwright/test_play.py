@@ -3,4 +3,4 @@ import pytest
 
 def test_welcome_message(page: Page):
     page.goto('/')
-    assert page.inner_text('h1') == 'Welcome to IlmoWeb!'
+    assert page.inner_text('h1') == 'Fysikaalisen kemian laboratorio - Labra'

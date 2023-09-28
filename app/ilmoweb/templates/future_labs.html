@@ -12,17 +12,14 @@
 {% if course.is_visible %}
     <p>Kurssi tulossa pian</p>
     <button>
-        Ilmottaudu
+        Ilmoittaudu
     </button>
     <br>
 {% else %}
     <p>Kurssia ei tulossa</p>
 {% endif %}
 <br>
-{%endfor%}
-
-<a href="{% url 'home' %}">Etusivulle</a>
-
+{% endfor %}
 {% endblock %}
 
 
