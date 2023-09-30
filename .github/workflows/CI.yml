@@ -28,7 +28,7 @@ jobs:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python 3.9
@@ -39,11 +39,11 @@ jobs:
       # Install Poetry
       - name: Install Poetry
         run: pip3 install poetry
-  
+
       # Install dependencies
       - name: Install dependencies
         run: poetry install
-      
+
       # Run Migrations
       - name: Run migrations
         working-directory: ./app
@@ -58,3 +58,9 @@ jobs:
       - name: Lint
         working-directory: ./app
         run: poetry run invoke lint
+
+      - name: login to Docker Hub
+        uses: docker/login-actions@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

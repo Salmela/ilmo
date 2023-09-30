@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-k3gnzgip!m#^h14ttcyox)_@t%wy5idj(r-$q-5e*-6kspodmg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '0.0.0.0']
 
 AUTH_USER_MODEL = 'ilmoweb.User'
 
@@ -90,7 +90,18 @@ if os.environ.get('GITHUB_WORKFLOW'):
            'HOST': '127.0.0.1',
            'PORT': '5432',
         }
-    } 
+    }
+elif os.environ.get('DOCKER'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'db',
+            'PORT': '5432',
+        }
+    }
 else:
     DATABASES = {
         'default': {
