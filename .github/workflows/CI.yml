@@ -59,7 +59,7 @@ jobs:
         working-directory: ./app
         run: poetry run invoke lint
 
-    publish:
+  publish:
     runs-on: ubuntu-latest
 
     steps:

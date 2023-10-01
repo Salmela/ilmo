@@ -1,5 +1,5 @@
 # ILMO
-![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)  
+![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)
 
 [Backlog](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?invite=CIPmtn8&pli=1#gid=1)
 
@@ -21,12 +21,12 @@ Open the server in a terminal by going to app-directory and running ``` python m
 Open another terminal and run ``` pytest app/ilmoweb/tests/playwright/test_play.py --headed --base-url http://127.0.0.1:8000/```
 
 ## Get unit test coverage
-Go to the directory containing the ```manage.py``` file.  
+Go to the directory containing the ```manage.py``` file.
 
-- Run ```coverage run --source='.' manage.py test ilmoweb/ ```  
-  
+- Run ```coverage run --source='.' manage.py test ilmoweb/ ```
+
 - To produce a html-report of the coverage, run ```coverage html```
-  
+
 Now the report ```index.html``` is located in the htmlcov directory.
 
 ## Connect to a test database
@@ -42,12 +42,12 @@ HOST=[database_host] usually [localhost] or [path/to/socket] <br/>
 PORT=[database_port] usually 5432
 
 - Run ```python manage.py makemigrations ```
-  
+
 - Run ```python manage.py migrate ```
 
 - Run ```python manage.py createsuperuser ``` and follow the instructions.
 
-Now the application should be connected to your database. 
+Now the application should be connected to your database.
 
 - Open the application and go to .../admin.
 - Log in as the superuser you just created. If it works, the connection is stable.
@@ -61,3 +61,4 @@ Now the application should be connected to your database.
 
 if the site shows you the database information, populating was successful.
 
+Test
