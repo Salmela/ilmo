@@ -2,24 +2,34 @@
 {% block title %} Future labs {% endblock %}
 {% block content %}
 
-<h1>Tulevat labrat</h1><br>
-{%for course in courses%}
-<td><b>Kurssin nimi: </b></td>{{ course.name }}
-<br>
-<td><b>Kurssin kuvaus: </b></td>{{ course.description }}
-<br>
-<td><b>Oppilasmäärä: </b></td>{{ course.labs_amount }}
-{% if course.is_visible %}
-    <p>Kurssi tulossa pian</p>
-    <button>
-        Ilmoittaudu
-    </button>
-    <br>
-{% else %}
-    <p>Kurssia ei tulossa</p>
-{% endif %}
-<br>
-{% endfor %}
+<h1>Tulevat labrat</h1>
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-secondary">
+      <th>Nimi</th>
+      <th>Kuvaus</th>
+      <th>Oppilasmäärä</th>
+      <th>Ajankohta</th>
+      <th>Ilmoittautuminen</th>
+    </tr>
+  </thead>
+  <tbody>
+    {%for course in courses%}
+      <tr>
+        <td>{{ course.name }}</td>
+        <td>{{ course.description }}</td>
+        <td>{{ course.labs_amount }}</td>    
+    {% if course.is_visible %}
+        <td>Kurssi tulossa pian</td>
+        <td>
+          <button class="btn btn-light btn-outline-dark">Ilmoittaudu</button>
+        </td>
+    {% else %}
+        <td>Kurssia ei tulossa</td>
+    {% endif %}
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+<div style="height: 100px;"></div>
 {% endblock %}
-
-
