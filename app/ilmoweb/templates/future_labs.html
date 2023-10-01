@@ -14,11 +14,11 @@
     </tr>
   </thead>
   <tbody>
-    {%for course in courses%}
+    {% for course in courses %}
       <tr>
         <td>{{ course.name }}</td>
         <td>{{ course.description }}</td>
-        <td>{{ course.labs_amount }}</td>    
+        <td>{{ course.labs_amount }}</td>
     {% if course.is_visible %}
         <td>Kurssi tulossa pian</td>
         <td>
@@ -31,5 +31,5 @@
       {% endfor %}
   </tbody>
 </table>
-<div style="height: 100px;"></div>
+<div class="filler_2"></div>
 {% endblock %}
