@@ -44,15 +44,37 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      # Install Playwright dependencies
+      - name: Install Playwright dependencies
+        run: poetry run python -m playwright install --with-deps
+
       # Run Migrations
       - name: Run migrations
         working-directory: ./app
         run: poetry run invoke migrate
 
-      # Run tests
+      # Run unittests
       - name: Run unittests
         working-directory: ./app
         run: poetry run invoke unittest
+
+      # Start Django
+      - name: Start Django development server
+        working-directory: ./app
+        run: poetry run python manage.py runserver &
+
+      # Playwright tests
+      - name: Wait for Django server to start
+        run: |
+          while ! nc -z localhost 8000; do sleep 1; done
+          sleep 5
+
+      - name: Run Playwright tests
+        working-directory: ./app
+        run: poetry run pytest ilmoweb/tests/playwright/ --base-url http://127.0.0.1:8000/
+
+      - name: Stop Django development server
+        run: pkill -f 'python manage.py runserver'
 
       # Run Pylint
       - name: Lint
