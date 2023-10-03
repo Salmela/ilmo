@@ -43,7 +43,7 @@
     {% for lab in labs %}
     {% if lab.course_id == course.id %}
     <tr>
-      {% if lab.is_visible == "true" %}
+      {% if lab.is_visible == 1 %}
       <td>{{lab.name}}</td>
       <td>{{lab.description}}</td>
       <td>{{lab.max_students}}</td>
@@ -71,7 +71,7 @@
    {% if lab.course_id == course.id %}
     {% for lab_group in lab_groups %}
      {% if lab_group.lab_id == lab.id %}
-      {% if lab.is_visible == "true" %}
+      {% if lab.is_visible == 1 %}
        {% if lab_group.status != 0 %}
         <tr>
           <td>{{lab.name}}</td>
