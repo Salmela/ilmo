@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block title %} Open Labs {% endblock %}
 {% block content %}
+
+{% load static %}
+<script src = "{% static 'signup.js' %}"></script>
+
 <h1>Tulevat labrat</h1>
 <table class="table table-bordered">
   <thead>
@@ -80,7 +84,8 @@
           <td>{{lab_group.place}}</td>
           <td>0/{{lab.max_students}}</td>
           <td>
-            <button class="btn btn-light btn-outline-dark">Ilmoittaudu</button>
+            {% csrf_token %}
+            <button class="btn btn-light btn-outline-dark" onclick="signup('{{ user.id }}', '{{ lab_group.id }}','{{ lab.name }}');">Ilmoittaudu</button>
           </td>
           {% if lab_group.status == 1 %}
            <td>Ei vahvistettu</td>
