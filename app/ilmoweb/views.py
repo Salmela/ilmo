@@ -2,7 +2,7 @@
 #from django.http import HttpResponse  #currently unused. Changed to django.shortcuts render.
 #from django.template import loader
 from django.shortcuts import render
-from ilmoweb.models import User, Courses
+from ilmoweb.models import User, Courses, Labs, LabGroups
 from ilmoweb.forms import NewLabForm
 from ilmoweb.logic import labs
 
@@ -49,14 +49,13 @@ def create_lab(request):
 
     return render(request, "create_lab.html", {"form": form, "course_id": course_id})
 
-
-def future_labs(request):    # pylint: disable=unused-argument
+def open_labs(request):     # pylint: disable=unused-argument
     """
-        Future labs view.
-
+        View for labs that are open
     """
+    courses =  Courses.objects.all()    # pylint: disable=no-member
+    course_labs =  Labs.objects.all()    # pylint: disable=no-member
+    lab_groups =  LabGroups.objects.all()    # pylint: disable=no-member
 
-    test_data =  Courses.objects.all()    # pylint: disable=no-member
-
-
-    return render(request, 'future_labs.html', {"courses":test_data})
+    return render(request, 'open_labs.html', {"courses":courses, "labs":course_labs,
+                                              "lab_groups":lab_groups})
