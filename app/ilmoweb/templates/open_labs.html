@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %} Open Labs {% endblock %}
+{% block content %}
+<h1>Tulevat labrat</h1>
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-secondary">
+      <th>Nimi</th>
+      <th>Kuvaus</th>
+      <th>Labrojen määrä</th>
+      <th>Ajankohta</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for course in courses %}
+      <tr>
+        <td>{{ course.name }}</td>
+        <td>{{ course.description }}</td>
+        <td>{{ course.labs_amount }}</td>
+    {% if course.is_visible %}
+        <td>Kurssi tulossa pian</td>
+    {% else %}
+        <td>Kurssia ei tulossa</td>
+    {% endif %}
+      </tr>
+      {% endfor %}
+  </tbody>
+</table>
+
+<h1>Avoimet labrat</h1>
+{% for course in courses %}
+<h3>Kurssi: {{course.name}}</h3>
+<p>Suoritettavat laboratoriotyöt</p>
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-secondary">
+      <th>Työ</th>
+      <th>Kuvaus</th>
+      <th>Oppilasmäärä / ryhmä</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lab in labs %}
+    {% if lab.course_id == course.id %}
+    <tr>
+      {% if lab.is_visible == "true" %}
+      <td>{{lab.name}}</td>
+      <td>{{lab.description}}</td>
+      <td>{{lab.max_students}}</td>
+      {% endif %}
+    </tr>
+    {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+<p>Avoimet ryhmät</p>
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-secondary">
+      <th>Laboratoriotyöt</th>
+      <th>Päivämäärä</th>
+      <th>Aika</th>
+      <th>Paikka</th>
+      <th>Ilmoittautuneita</th>
+      <th>Ilmottautuminen</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for lab in labs %}
+   {% if lab.course_id == course.id %}
+    {% for lab_group in lab_groups %}
+     {% if lab_group.lab_id == lab.id %}
+      {% if lab.is_visible == "true" %}
+       {% if lab_group.status != 0 %}
+        <tr>
+          <td>{{lab.name}}</td>
+          <td>{{lab_group.date}}</td>
+          <td>{{lab_group.start_time}} - {{lab_group.end_time}}</td>
+          <td>{{lab_group.place}}</td>
+          <td>0/{{lab.max_students}}</td>
+          <td>
+            <button class="btn btn-light btn-outline-dark">Ilmoittaudu</button>
+          </td>
+          {% if lab_group.status == 1 %}
+           <td>Ei vahvistettu</td>
+          {% elif lab_group.status == 2 %}
+           <td>Vahvistettu</td>
+          {% elif lab_group.status == 3 %}
+           <td>Peruttu</td>
+          {% endif %}
+         </tr>
+       {% endif %}
+      {% endif %}
+     {% endif %}
+    {% endfor %}
+   {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+{% endfor %}
+
+{% endblock %}
