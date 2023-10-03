@@ -8,6 +8,11 @@
       <h2>
         Tervetuloa laboratoriotöiden ilmoittautumis- ja palautusjärjestelmään {{ user.username }}!
       </h2>
+      {% if user.is_staff %}
+        <h6>Olet admin roolissa</h3>
+      {% else %}
+        <h6>Olet käyttäjäroolissa</h3>
+      {% endif %}
     </div>
   {% else %}
     <div class="row mb-2">
