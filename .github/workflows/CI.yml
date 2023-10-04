@@ -95,21 +95,9 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Start containers
-        run: docker-compose -f "docker-compose.yml" up -d --build
+      # Build docker image and push it to Docker Hub
+      - name: Build image
+        run: sudo docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
 
-      - name: Tag ilmoweb image
-        run: docker tag ilmoweb:ilmo ellaverak/ilmoweb:ilmo
-
-      - name: Tag postgres image
-        run: docker tag postgres:latest ellaverak/ilmoweb:postgres
-
-      - name: Push ilmoweb image to docker hub
+      - name: Push image to Docker Hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
-
-      - name: Push postgres image to docker hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:postgres
-
-      - name: Stop containers
-        if: always()
-        run: docker-compose -f "docker-compose.yml" down
