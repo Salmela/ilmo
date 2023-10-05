@@ -48,6 +48,10 @@ jobs:
       - name: Install Playwright dependencies
         run: poetry run python -m playwright install --with-deps
 
+      # Install Django
+      - name: Install Django
+        run: pip3 install django
+
       # Run Migrations
       - name: Run migrations
         working-directory: ./app
