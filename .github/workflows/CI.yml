@@ -53,6 +53,11 @@ jobs:
         working-directory: ./app
         run: poetry run invoke migrate
 
+      # Populate the Database
+      - name: Populate the database
+        working-directory: ./app
+        run: python config/populate.py
+
       # Run unittests
       - name: Run unittests
         working-directory: ./app
