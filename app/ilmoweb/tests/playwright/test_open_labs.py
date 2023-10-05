@@ -6,7 +6,7 @@ def test_has_title_and_heading(page: Page):
     expect(page).to_have_title(re.compile('Open Labs'))
     assert page.inner_text('h1') == 'Fysikaalisen kemian laboratorio - Labra'
 
-def test_laboratoriotyöt_button(page: Page):
+def test_laboratoriotyot_button(page: Page):
     page.goto('/')
     page.get_by_role('button', name='Kirjaudu sisään').click()
     page.get_by_role('textbox', name='Username').fill('kemianopiskelija')
