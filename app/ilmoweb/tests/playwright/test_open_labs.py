@@ -12,5 +12,5 @@ def test_laboratoriotyöt_button(page: Page):
     page.get_by_role('textbox', name='Username').fill('kemianopiskelija')
     page.get_by_role('textbox', name='Password').fill('salasana123')
     page.get_by_role('button', name='Log In').click()
-    page.get_by_role('link', name='laboratoriotyöt').click()
+    page.get_by_role('link', name='Laboratoriotyöt').click()
     expect(page.get_by_role('heading', name='Tulevat labrat')).to_be_visible()
