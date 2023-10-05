@@ -94,11 +94,11 @@ if os.environ.get('GITHUB_WORKFLOW'):
 elif os.environ.get('DOCKER'):
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
-            'HOST': 'db',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'dockerdb',
+            'USER': env("USER"),
+            'PASSWORD': None,
+            'HOST': 'host.docker.internal',
             'PORT': '5432',
         }
     }
