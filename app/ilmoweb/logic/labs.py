@@ -7,5 +7,11 @@ def create_new_lab(content, course_id):
 
     """
     course = Courses.objects.get(pk=course_id)
-    lab = Labs(course=course, name=content["name"], description=content["description"], max_students=content["max_students"], is_visible=False)
+    max_students = content["max_students"]
+
+    if max_students <= 0:
+        max_students = 1
+
+    lab = Labs(course=course, name=content["name"],
+               description=content["description"], max_students=max_students, is_visible=False)
     lab.save()

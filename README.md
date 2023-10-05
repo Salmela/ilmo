@@ -10,55 +10,50 @@
 [Documentation](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
 
 ## Run tests
-To run unit tests manually, go to app-directory and run ```./manage.py test ilmoweb```
+To run unit tests manually, go to app-directory and run ```poetry run invoke unittest```
 
 ## Run playwright tests
 Poetry doesn't install playwright automatically since playwright installs its own browser configurations. <br/>
 The first time you pull playwright to your local repository you need to run ```playwright install ``` in poetry shell.
 
-Open the server in a terminal by going to app-directory and running ``` python manage.py runserver```
+Open the server in a terminal by going to app-directory and running ```poetry run invoke start```
 
-Open another terminal and run ``` pytest app/ilmoweb/tests/playwright/test_play.py --headed --base-url http://127.0.0.1:8000/```
+Open another terminal and run ```poetry run invoke e2e```
 
 ## Get unit test coverage
-Go to the directory containing the ```manage.py``` file.
+- Go to app/
 
-- Run ```coverage run --source='.' manage.py test ilmoweb/ ```
+- Run ```poetry run invoke coverage```
 
-- To produce a html-report of the coverage, run ```coverage html```
+HTML-report is produced automatically.
 
-Now the report ```index.html``` is located in the htmlcov directory.
+The report ```index.html``` is located in the htmlcov directory.
 
 ## Connect to a test database
+For this step, you need a Postgres database locally.
+You can use instructions from the University of Helsinki webpage: [Local database](https://github.com/hy-tsoha/local-pg)  
+- Start the local database.
 - Go to the app/config and create ```.env``` -file
 
 
 ```.env``` should include to following information:
 
-NAME=[database_name] <br/>
-USER=[database_user] or NONE <br/>
-PASSWORD=[database_password] or NONE <br/>
-HOST=[database_host] usually [localhost] or [path/to/socket] <br/>
-PORT=[database_port] usually 5432
+NAME= ```database_name```  
+USER= ```database_user``` or NONE  
+PASSWORD= ```database_password``` or NONE  
+HOST= ```database_host``` usually ```localhost``` or ```path/to/socket```  
+PORT= ```database_port``` usually 5432  
 
-- Run ```python manage.py makemigrations ```
-
-- Run ```python manage.py migrate ```
-
-- Run ```python manage.py createsuperuser ``` and follow the instructions.
+- Run ```poetry run invoke migrate```
+- Start the application  
 
 Now the application should be connected to your database.
-
-- Open the application and go to .../admin.
-- Log in as the superuser you just created. If it works, the connection is stable.
 
 ## Populate the test database
 - Go to app/
 
-- Run ```python config/populate.py ```
+- Run ```poetry run invoke populate ```
 
-- Open the application and go to .../database_test
-
-if the site shows you the database information, populating was successful.
-
-Test
+## Create a superuser
+- Go to app/
+- Run ```python manage.py createsuperuser ``` and follow the instructions.
