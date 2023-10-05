@@ -47,15 +47,15 @@ jobs:
       # Install Playwright dependencies
       - name: Install Playwright dependencies
         run: poetry run python -m playwright install --with-deps
-
-      # Install Django
-      - name: Install Django
-        run: pip3 install django
-
+        
       # Run Migrations
       - name: Run migrations
         working-directory: ./app
         run: poetry run invoke migrate
+
+      # Poetry Shell
+      - name: Poetry shell
+        run: poetry shell
 
       # Populate the Database
       - name: Populate the database
