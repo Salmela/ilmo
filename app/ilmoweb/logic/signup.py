@@ -1,5 +1,5 @@
 """Module for app logic."""
-from ilmoweb.models import  SignUp# pylint: disable=unused-import
+from ilmoweb.models import SignUp
 
 
 def signup(user, group):
@@ -8,6 +8,6 @@ def signup(user, group):
 
     """
     if SignUp.objects.filter(user=user, labgroups = group):
-        raise Exception
-    signup = SignUp(user=user, labgroups=group)
-    signup.save()
+        raise ValueError('Already signed up')
+    signup_to_group = SignUp(user=user, labgroups=group)
+    signup_to_group.save()
