@@ -53,9 +53,13 @@ jobs:
         working-directory: ./app
         run: poetry run invoke migrate
 
-      # Poetry Shell
-      - name: Poetry shell
-        run: poetry shell
+      # Install Django
+      - name: Install Django
+        run: pip3 install django
+
+      # Install environ
+      - name: Install environ
+        run: pip3 install environ
 
       # Populate the Database
       - name: Populate the database
