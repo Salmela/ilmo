@@ -15,14 +15,6 @@ def home_page_view(request):    # pylint: disable=unused-argument
     """
     return render(request, 'home.html')
 
-def database_test_view(request):
-    """
-        Database test view.
-    """
-    test_data = User.objects.all()    # pylint: disable=no-member
-
-    return render(request, 'database_test.html', {"users":test_data})
-
 def created_labs(request):
     """
         View for all created labs.
