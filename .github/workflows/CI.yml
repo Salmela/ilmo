@@ -47,11 +47,16 @@ jobs:
       # Install Playwright dependencies
       - name: Install Playwright dependencies
         run: poetry run python -m playwright install --with-deps
-
+        
       # Run Migrations
       - name: Run migrations
         working-directory: ./app
         run: poetry run invoke migrate
+
+      # Populate the Database
+      - name: Populate the database
+        working-directory: ./app
+        run: poetry run python config/populate.py
 
       # Run unittests
       - name: Run unittests
