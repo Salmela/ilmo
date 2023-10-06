@@ -3,7 +3,7 @@
 #from django.template import loader
 import json
 from django.shortcuts import render, get_object_or_404
-from ilmoweb.models import User, Courses, Labs, LabGroups
+from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
 from ilmoweb.forms import NewLabForm
 from ilmoweb.logic import labs, signup
 
@@ -49,6 +49,7 @@ def open_labs(request):     # pylint: disable=unused-argument
     courses =  Courses.objects.all()    # pylint: disable=no-member
     course_labs =  Labs.objects.all()    # pylint: disable=no-member
     lab_groups =  LabGroups.objects.all()    # pylint: disable=no-member
+    signedup = SignUp.objects.all()   # pylint: disable=no-member
 
     if request.method == "POST":
         data = json.loads(request.body)
@@ -59,4 +60,4 @@ def open_labs(request):     # pylint: disable=unused-argument
         signup.signup(user=user, group=group)
 
     return render(request, 'open_labs.html', {"courses":courses, "labs":course_labs,
-                                              "lab_groups":lab_groups})
+                                              "lab_groups":lab_groups, "signedup":signedup})
