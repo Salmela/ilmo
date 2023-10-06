@@ -79,14 +79,43 @@
        {% if lab_group.status != 0 %}
         <tr>
           <td>{{lab.name}}</td>
-          <td>{{lab_group.date}}</td>
-          <td>{{lab_group.start_time}} - {{lab_group.end_time}}</td>
+          <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+          <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
           <td>{{lab_group.place}}</td>
           <td>0/{{lab.max_students}}</td>
+          {% if user.is_staff %}
+          <td>
+           <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
+            Katso ilmoittautuneet
+           </button>
+            <div class="modal fade" id="students{{lab_group.id}}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="studentsLabel" aria-hidden="true">
+             <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+               <div class="modal-header">
+                <h1 class="modal-title fs-5" id="studentsLabel">
+                 Kurssin {{course.name}} laboratoriotyöhön {{lab.name}} ilmoittautuneet opiskelijat
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+               </div>
+               <div class="modal-body">
+                {% for signup in signedup %}
+                 {% if signup.labgroups_id == lab_group.id %} 
+                  <p><b>{{signup.user}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
+                 {% endif %}
+                {% endfor %}
+               </div>
+               <div class="modal-footer">
+               </div>
+              </div>
+             </div>
+            </div>
+           </td>
+          {% else %}
           <td>
             {% csrf_token %}
             <button class="btn btn-light btn-outline-dark" onclick="signup('{{ user.id }}', '{{ lab_group.id }}','{{ lab.name }}');">Ilmoittaudu</button>
           </td>
+          {% endif %}
           {% if lab_group.status == 1 %}
            <td>Ei vahvistettu</td>
           {% elif lab_group.status == 2 %}
