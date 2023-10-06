@@ -91,17 +91,17 @@ if os.environ.get('GITHUB_WORKFLOW'):
            'PORT': '5432',
         }
     }
-elif os.environ.get('DOCKER'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'dockerdb',
-            'USER': env("USER"),
-            'PASSWORD': None,
-            'HOST': 'host.docker.internal',
-            'PORT': '5432',
-        }
-    }
+#elif os.environ.get('DOCKER'):
+#    DATABASES = {
+#        'default': {
+#            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#            'NAME': 'dockerdb',
+#            'USER': env("USER"),
+#            'PASSWORD': None,
+#            'HOST': 'host.docker.internal',
+#            'PORT': '5432',
+#        }
+#    }
 else:
     DATABASES = {
         'default': {
