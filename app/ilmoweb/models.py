@@ -28,6 +28,7 @@ class Labs(models.Model):
     name = models.CharField(max_length = 100)
     description = models.TextField()
     max_students = models.IntegerField()
+    minim_students = models.IntegerField(default=2)
     is_visible = models.BooleanField()
 
 class LabGroups(models.Model):
@@ -42,6 +43,7 @@ class LabGroups(models.Model):
     place = models.CharField(max_length = 100)
     status = models.IntegerField(default = 0)
     ## 0 = not visible to students, 1 = unconfirmed, 2 = confirmed, 3 = canceled
+    signed_up_students = models.IntegerField(default=0)
 
 class SignUp(models.Model):
     """

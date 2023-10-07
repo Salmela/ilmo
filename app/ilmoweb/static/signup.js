@@ -12,6 +12,7 @@ function signup(user_id, group_id, lab_name) {
     http.onreadystatechange = function () {
       if (http.readyState === 4){
         if (http.status === 200) {
+          update_signed_up_students(group_id);
           alert("ilmoittautuminen työhön " + lab_name + " onnistui");
         }
         else {
@@ -21,3 +22,9 @@ function signup(user_id, group_id, lab_name) {
     }
     http.send(JSON.stringify(data));
   }
+
+function update_signed_up_students(group_id) {
+    students = parseInt(document.getElementById("signed_up" + group_id).innerHTML);
+    document.getElementById("signed_up" + group_id).innerHTML = students + 1;
+  }
+  

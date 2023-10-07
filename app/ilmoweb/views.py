@@ -1,11 +1,11 @@
 """Module for page rendering."""
-#from django.http import HttpResponse  #currently unused. Changed to django.shortcuts render.
-#from django.template import loader
 import json
+from django.http import HttpResponseRedirect
+#from django.template import loader
 from django.shortcuts import render, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
 from ilmoweb.forms import NewLabForm
-from ilmoweb.logic import labs, signup
+from ilmoweb.logic import labs, signup, labgroups
 
 
 def home_page_view(request):    # pylint: disable=unused-argument
@@ -61,3 +61,13 @@ def open_labs(request):     # pylint: disable=unused-argument
 
     return render(request, 'open_labs.html', {"courses":courses, "labs":course_labs,
                                               "lab_groups":lab_groups, "signedup":signedup})
+
+def confirm(request):
+    """
+        request for confirming a labgroup
+    """
+    if request.method == "POST":
+        group_id = json.loads(request.body)
+        labgroups.confirm(group_id)
+
+    return HttpResponseRedirect("/open_labs")

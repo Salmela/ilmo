@@ -11,3 +11,6 @@ def signup(user, group):
         raise ValueError('Already signed up')
     signup_to_group = SignUp(user=user, labgroups=group)
     signup_to_group.save()
+
+    group.signed_up_students += 1
+    group.save()
