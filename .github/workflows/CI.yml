@@ -102,7 +102,7 @@ jobs:
 
       # Build docker image and push it to Docker Hub
       - name: Build image
-        run: sudo docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
+        run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
 
       - name: Push image to Docker Hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
