@@ -28,7 +28,6 @@ class Labs(models.Model):
     name = models.CharField(max_length = 100)
     description = models.TextField()
     max_students = models.IntegerField()
-    minim_students = models.IntegerField(default=2)
     is_visible = models.BooleanField()
 
 class LabGroups(models.Model):
