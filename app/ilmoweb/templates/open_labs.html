@@ -126,7 +126,7 @@
           {% if lab_group.status == 1 %}
             {% if user.is_staff %}
             <td>
-              {% if lab_group.signed_up_students == lab.max_students %}
+              {% if lab_group.signed_up_students > 0 %}
               <div id = "confirm{{ lab_group.id }}">
               {% csrf_token %}
               <button class="btn btn-light btn-outline-dark" onclick="confirm('{{ lab_group.id }}');">Vahvista</button>
