@@ -1,5 +1,4 @@
 from playwright.sync_api import Page, expect
-import pytest
 
 def test_welcome_message(page: Page):
     page.goto('/')
@@ -7,8 +6,8 @@ def test_welcome_message(page: Page):
 
 def test_login_link(page: Page):
     page.goto('/')
-    page.get_by_role("link", name="Kirjaudu sisään").click()
-    expect(page.get_by_role("heading", name="Log In")).to_be_visible()
+    page.get_by_role('link', name='Kirjaudu sisään').click()
+    expect(page.get_by_role('heading', name='Log In')).to_be_visible()
 """
 def test_admin_view(page: Page):
     page.goto('/')

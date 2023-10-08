@@ -22,7 +22,7 @@ with open('config/test_data_1.csv') as file:
     for line in file:
         line = line.replace('\n','')
         parts = line.split(';')
-        user = User(student_id=parts[0], username=parts[1], password=make_password(parts[2]), first_name=parts[3], last_name=parts[4], email=parts[5])
+        user = User(student_id=parts[0], username=parts[1], password=make_password(parts[2]), first_name=parts[3], last_name=parts[4], email=parts[5], is_staff=parts[6])
         user.save()
 
 """

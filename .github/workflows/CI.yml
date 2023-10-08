@@ -76,7 +76,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: ./app
-        run: poetry run pytest ilmoweb/tests/playwright/ --base-url http://127.0.0.1:8000/
+        run: poetry run xvfb-run pytest ilmoweb/tests/playwright/ --headed --base-url http://127.0.0.1:8000/
 
       - name: Stop Django development server
         run: pkill -f 'python manage.py runserver'
