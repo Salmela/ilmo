@@ -33,11 +33,10 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'ilmoweb.User'
 
-#USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_HOST = True
 
-#SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-CSRF_TRUSTED_ORIGINS = 'https://*.helsinki.fi'
 
 # Application definition
 
