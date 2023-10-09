@@ -33,6 +33,10 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'ilmoweb.User'
 
+USE_X_FORWARDED_HOST = True
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 # Application definition
 
