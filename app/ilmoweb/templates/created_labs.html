@@ -13,7 +13,7 @@ Ei kursseja
 <table class="table table-bordered">
   <thead>
     <tr class="table-secondary">
-      <th colspan="2">{{ course.name }}</th>
+      <th colspan="3">{{ course.name }}</th>
       <th>
         <form action="/create_lab" method="GET">
           <input type="hidden" name="course_id" value="{{ course.id }}">
@@ -25,31 +25,26 @@ Ei kursseja
       <th>Työn nimi</th>
       <th>Oppilasmäärä</th>
       <th>Toiminnot</th>
+      <th>Muokkaa</th>
     </tr>
   </thead>
   <tbody>
     {% if not course.labs_set.all %}
       <tr>
-        <td colspan="3">Ei laboratoriotöitä</td>
+        <td colspan="4">Ei laboratoriotöitä</td>
       </tr>
     {% else %}
       {% for lab in course.labs_set.all %}
+        {% if lab.deleted == 0 %}
         <tr>
           <td>{{ lab.name }}</td>
           <td>{{ lab.max_students }}</td>
           <td>COMING SOON</td>
+          <th>
+          <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
+          </th>
         </tr>
-
-        <!-- {% for group in lab.labgroups_set.all %}
-        <tr>
-            <td>&nbsp;</td>
-            <td>{{ group.date }}</td>
-            <td>{{ group.start_time }} - {{ group.end_time }}</td>
-            <td>{{ group.place }}</td>
-            <td> {% if group.status == 0 %} Ei {% else %} Kyllä {% endif %}</td>
-        </tr>
-        {% endfor %} -->
-
+        {% endif %}
       {% endfor %}
     {% endif %}
   </tbody>

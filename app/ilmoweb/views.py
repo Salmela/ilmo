@@ -78,3 +78,14 @@ def confirm(request):
         labgroups.confirm(group_id)
 
     return HttpResponseRedirect("/open_labs")
+
+def delete_lab(request, course_id):
+    """
+        Delete lab from database.
+    """    
+    lab = Labs.objects.get(pk=course_id)
+    lab.deleted=1
+    lab.save()
+    courses = Courses.objects.all()
+
+    return render(request, "created_labs.html", {"lab":lab, "courses":courses})
