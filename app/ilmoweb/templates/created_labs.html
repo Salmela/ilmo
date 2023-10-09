@@ -39,17 +39,6 @@ Ei kursseja
           <td>{{ lab.max_students }}</td>
           <td>COMING SOON</td>
         </tr>
-
-        <!-- {% for group in lab.labgroups_set.all %}
-        <tr>
-            <td>&nbsp;</td>
-            <td>{{ group.date }}</td>
-            <td>{{ group.start_time }} - {{ group.end_time }}</td>
-            <td>{{ group.place }}</td>
-            <td> {% if group.status == 0 %} Ei {% else %} Kyllä {% endif %}</td>
-        </tr>
-        {% endfor %} -->
-
       {% endfor %}
     {% endif %}
   </tbody>

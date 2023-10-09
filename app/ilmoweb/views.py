@@ -1,6 +1,6 @@
 """Module for page rendering."""
 import json
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 #from django.template import loader
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
@@ -75,6 +75,8 @@ def confirm(request):
     """
     if request.method == "POST":
         group_id = json.loads(request.body)
-        labgroups.confirm(group_id)
-
-    return HttpResponseRedirect("/open_labs")
+        labgroup = LabGroups.objects.get(pk=group_id)
+        if labgroup.signed_up_students > 0:
+            labgroups.confirm(group_id)
+            return HttpResponseRedirect("/open_labs")
+    return HttpResponseBadRequest('Ryhmä on tyhjä, joten vahvistaminen epäonnistui.')
