@@ -25,7 +25,8 @@ CREATE TABLE ilmoweb_labs(
     description TEXT,
     max_students INTEGER,
     is_visible TEXT,
-    course_id INTEGER);
+    course_id INTEGER
+    deleted BOOL DEFAULT false);
 
 CREATE TABLE ilmoweb_labgroups(
     id SERIAL PRIMARY KEY,
