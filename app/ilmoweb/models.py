@@ -29,6 +29,7 @@ class Labs(models.Model):
     description = models.TextField()
     max_students = models.IntegerField()
     is_visible = models.BooleanField()
+    deleted = models.BooleanField(default=0)
 
 class LabGroups(models.Model):
     """
