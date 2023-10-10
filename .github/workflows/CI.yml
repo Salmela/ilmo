@@ -15,17 +15,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NAME: github_actions
+      USER: postgres
+      PASSWORD: postgres
+      HOST: 127.0.0.1
+      PORT: 5432
 
     # Service for Postgres DB
     services:
       postgres:
         image: postgres:latest
         env:
-          NAME: github_actions
-          USER: postgres
-          PASSWORD: postgres
-          HOST: 127.0.0.1
-          PORT: 5432
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
