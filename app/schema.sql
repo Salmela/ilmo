@@ -34,4 +34,5 @@ CREATE TABLE ilmoweb_labgroups(
     end_time TIME,
     place TEXT,
     status INTEGER,
+    signed_up_students INTEGER,
     lab_id INTEGER);

@@ -35,6 +35,7 @@ class TestModels(TestCase):
             is_visible = True
         )
 
+        # empty labgroup
         self.labgroup1 = LabGroups.objects.create(
             lab = self.lab1,
             date = "2023-06-01",
@@ -42,6 +43,17 @@ class TestModels(TestCase):
             end_time = "16:30",
             place = "Chemicum",
             status = False
+        )
+
+        # nonempty labgroup
+        self.labgroup2 = LabGroups.objects.create(
+            lab = self.lab1,
+            date = "2023-06-02",
+            start_time = "14:30",
+            end_time = "16:30",
+            place = "Chemicum",
+            status = False,
+            signed_up_students = 1
         )
         # Creating a superuser for testing login
         self.superuser1 = User.objects.create_superuser(
@@ -153,3 +165,42 @@ class TestModels(TestCase):
                                     {'username':'kemianope', 'password':'atomi123'})
         status_code_get = response_get.status_code
         self.assertEqual(status_code_get, 302) # 302 Found
+
+    # Tests for labgroup enrollment
+
+    def test_student_can_enroll_to_labgroup(self):
+        self.client.login(username=self.user1.username, password=self.user1.password)
+        data = {
+            'user_id': self.user1.id,
+            'group_id': self.labgroup1.id
+        }
+        response_post = self.client.post('/open_labs/', data, 'application/json')
+        self.assertEqual(response_post.status_code, 200)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.signed_up_students, 1)
+    
+    def test_student_cannot_enroll_twice_to_same_labgroup(self):
+        self.client.login(username=self.user1.username, password=self.user1.password)
+        data = {
+            'user_id': self.user1.id,
+            'group_id': self.labgroup1.id
+        }
+        self.client.post('/open_labs/', data, 'application/json')
+        with self.assertRaises(ValueError):
+            self.client.post('/open_labs/', data, 'application/json')
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.signed_up_students, 1)
+    
+    def test_teacher_can_confirm_nonempty_labgroup(self):
+        self.client.login(username=self.superuser1.username, password=self.superuser1.password)
+        response_post = self.client.post('/open_labs/confirm/', self.labgroup2.id, 'application/json')
+        self.assertEqual(response_post.status_code, 302)
+        self.labgroup2.refresh_from_db()
+        self.assertEqual(self.labgroup2.status, 2)
+    
+    def test_teacher_cannot_confirm_empty_labgroup(self):
+        self.client.login(username=self.superuser1.username, password=self.superuser1.password)
+        response_post = self.client.post('/open_labs/confirm/', self.labgroup1.id, 'application/json')
+        self.assertEqual(response_post.status_code, 400)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.status, False)
