@@ -91,4 +91,3 @@ def delete_lab(request, course_id):
     courses = Courses.objects.all()
 
     return render(request, "created_labs.html", {"lab":lab, "courses":courses})
-
