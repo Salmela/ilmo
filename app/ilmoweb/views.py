@@ -92,3 +92,8 @@ def delete_lab(request, course_id):
 
     return render(request, "created_labs.html", {"lab":lab, "courses":courses})
 
+def my_labs(request):
+    """
+        my labs view
+    """
+    return render(request, "my_labs.html")
