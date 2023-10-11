@@ -17,7 +17,7 @@ Ei kursseja
       <th>
         <form action="/create_lab" method="GET">
           <input type="hidden" name="course_id" value="{{ course.id }}">
-          <input class="btn btn-light btn-outline-dark" id="button" type="submit" value="Luo uusi työ">
+          <input class="btn btn-light btn-outline-dark" id="button" data-testid="{{ course.id }}" type="submit" value="Luo uusi työ">
         </form>
       </th>
     </tr>
@@ -37,8 +37,8 @@ Ei kursseja
       {% for lab in course.labs_set.all %}
         {% if lab.deleted == 0 %}
         <tr>
-          <td>{{ lab.name }}</td>
-          <td>{{ lab.max_students }}</td>
+          <td type="text" name="lab_name">{{ lab.name }}</td>
+          <td type="number" name="max_students">{{ lab.max_students }}</td>
           <td>COMING SOON</td>
           <th>
           <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
