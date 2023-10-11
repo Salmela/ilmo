@@ -87,7 +87,7 @@
           <td><div id = "signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}</div>/{{lab.max_students}}</td>
           {% if user.is_staff %}
           <td>
-           <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
+           <button type="button" class="btn btn-light btn-outline-dark" data-testid="{{ lab.id }}" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
             Katso ilmoittautuneet
            </button>
             <div class="modal fade" id="students{{lab_group.id}}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="studentsLabel" aria-hidden="true">
@@ -117,7 +117,7 @@
           {% else %}
           <td>
             {% csrf_token %}
-            <button class="btn btn-light btn-outline-dark" onclick="signup(
+            <button class="btn btn-light btn-outline-dark" data-testid="{{ lab.id }}" onclick="signup(
               '{{ user.id }}', '{{ lab_group.id }}', '{{ lab.name }}',
               '{{ lab_group.signed_up_students }}', '{{ lab.max_students }}'
               );">Ilmoittaudu</button>

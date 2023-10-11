@@ -52,4 +52,3 @@ class SignUp(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     labgroups = models.ForeignKey(LabGroups, on_delete=models.CASCADE)
-    
