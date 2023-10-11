@@ -15,6 +15,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NAME: github_actions
+      USER: postgres
+      PASSWORD: postgres
+      HOST: 127.0.0.1
+      PORT: 5432
 
     # Service for Postgres DB
     services:
@@ -47,7 +53,7 @@ jobs:
       # Install Playwright dependencies
       - name: Install Playwright dependencies
         run: poetry run python -m playwright install --with-deps
-        
+
       # Run Migrations
       - name: Run migrations
         working-directory: ./app
