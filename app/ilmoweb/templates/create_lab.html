@@ -12,9 +12,9 @@
             </tr>
         </thead>
         <tbody>
-            <td><input type="text" name="lab_name" size="30" maxlength="100"></td>
-            <td><textarea name="description" rows="5" cols="45" maxlength="1000"></textarea></td>
-            <td><input type="number" name="max_students" value="1" size="4" min="1" max="99"></td>
+            <td><input type="text" name="lab_name" data-testid="lab_name" size="30" maxlength="100"></td>
+            <td><textarea name="description" data-testid="description" rows="5" cols="45" maxlength="1000"></textarea></td>
+            <td><input type="number" name="max_students" data-testid="max_students" value="1" size="4" min="1" max="99"></td>
         </tbody>
     </table>
     <input type="hidden" name="course_id" value="{{ course_id }}">
