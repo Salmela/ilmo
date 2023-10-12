@@ -1,7 +1,7 @@
 """Module for page rendering."""
 import json
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
-#from django.template import loader
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
 from ilmoweb.forms import NewLabForm
@@ -15,6 +15,7 @@ def home_page_view(request):
     """
     return render(request, "home.html")
 
+@login_required
 def created_labs(request):
     """
         View for all created labs.
@@ -25,6 +26,7 @@ def created_labs(request):
     courses = Courses.objects.all()
     return render(request, "created_labs.html", {"courses":courses})
 
+@login_required
 def create_lab(request):
     """
         View for creating a new lab.
@@ -49,6 +51,7 @@ def create_lab(request):
 
     return render(request, "create_lab.html", {"form": form, "course_id": course_id})
 
+@login_required
 def open_labs(request):
     """
         View for labs that are open
@@ -59,6 +62,8 @@ def open_labs(request):
     signedup = SignUp.objects.all()
 
     if request.method == "POST":
+        if request.user.is_staff:
+            return HttpResponseBadRequest('Opettaja ei voi ilmoittautua laboratoriotyöhön.')
         data = json.loads(request.body)
         user_id = data.get('user_id')
         group_id = data.get('group_id')
@@ -69,18 +74,23 @@ def open_labs(request):
     return render(request, 'open_labs.html', {"courses":courses, "labs":course_labs,
                                               "lab_groups":lab_groups, "signedup":signedup})
 
+@login_required
 def confirm(request):
     """
         request for confirming a labgroup
     """
     if request.method == "POST":
-        group_id = json.loads(request.body)
-        labgroup = LabGroups.objects.get(pk=group_id)
-        if labgroup.signed_up_students > 0:
-            labgroups.confirm(group_id)
-            return HttpResponseRedirect("/open_labs")
+        if request.user.is_staff:
+            group_id = json.loads(request.body)
+            labgroup = LabGroups.objects.get(pk=group_id)
+            if labgroup.signed_up_students > 0:
+                labgroups.confirm(group_id)
+                return HttpResponseRedirect("/open_labs")
+        else:
+            return HttpResponseBadRequest('Oppilas ei voi vahvistaa laboratoriotyötä.')
     return HttpResponseBadRequest('Ryhmä on tyhjä, joten vahvistaminen epäonnistui.')
 
+@login_required
 def delete_lab(request, course_id):
     """
         Delete lab from created_labs view.
@@ -92,6 +102,7 @@ def delete_lab(request, course_id):
 
     return render(request, "created_labs.html", {"lab":lab, "courses":courses})
 
+@login_required
 def my_labs(request):
     """
         my labs view
