@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password, check_password
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups
+from ilmoweb.logic import labgroups
 
 class FirstTest(TestCase):
     def setUp(self):
@@ -224,3 +225,32 @@ class TestModels(TestCase):
         self.assertEqual(response_post.status_code, 400)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, False)
+    
+    # Tests for creating labgroups
+
+    def test_start_end_times_8_to_12(self):
+        lab = self.lab1
+        date = '2023-10-13'
+        time = '8-12'
+        place = 'B105'
+
+        labgroups.create(lab, date, time, place)
+
+        group = LabGroups.objects.get(lab=lab, date=date, place=place)
+
+        self.assertEqual(group.start_time.hour, 8)
+        self.assertEqual(group.end_time.hour, 12)
+
+    def test_start_end_times_12_to_16(self):
+        lab = self.lab1
+        date = '2023-10-13'
+        time = '12-16'
+        place = 'B105'
+
+        labgroups.create(lab, date, time, place)
+
+        group = LabGroups.objects.get(lab=lab, date=date, place=place)
+
+        self.assertEqual(group.start_time.hour, 12)
+        self.assertEqual(group.end_time.hour, 16)
+

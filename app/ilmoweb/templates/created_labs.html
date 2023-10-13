@@ -2,6 +2,58 @@
 {% block title %} Created labs {% endblock %}
 {% block content %}
 
+<h1>Harjoitusryhmät kursseittain</h1>
+{% for course in courses %}
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-secondary">
+      <th colspan="4">{{course.name}}</th>
+      <th>
+        <form action="/create_group" method="GET">
+          <input type="hidden" name="course_id" value="{{ course.id }}">
+          <input type="hidden" name="course_name" value="{{ course.name }}">
+          <input class="btn btn-light btn-outline-dark" id="button" type="submit" value="Luo uusi ryhmä">
+        </form>
+      </th>
+    </tr>
+    <tr class="table-light">
+      <th>Laboratoriotyöt</th>
+      <th>Päivämäärä</th>
+      <th>Aika</th>
+      <th>Paikka</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for lab in labs %}
+   {% if lab.course_id == course.id %}
+    {% for lab_group in lab_groups %}
+     {% if lab_group.lab_id == lab.id %}
+      {% if lab.is_visible == 1 %}
+        <tr>
+          <td>{{lab.name}}</td>
+          <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+          <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
+          <td>{{lab_group.place}}</td>
+          {% if lab_group.status == 0 %}
+           <td>Ei aktivoitu</td>
+          {% elif lab_group.status == 1 %}
+           <td>Ryhmä aktivoitu</td>
+          {% elif lab_group.status == 2 %}
+           <td>Vahvistettu</td>
+          {% elif lab_group.status == 3 %}
+           <td>Peruttu</td>
+          {% endif %}
+         </tr>
+      {% endif %}
+     {% endif %}
+    {% endfor %}
+   {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+{% endfor %}
+
 <h1>Harjoitustyöt kursseittain</h1><br>
 
 {% if not courses %}
@@ -13,7 +65,7 @@ Ei kursseja
 <table class="table table-bordered">
   <thead>
     <tr class="table-secondary">
-      <th colspan="3">{{ course.name }}</th>
+      <th colspan="2">{{ course.name }}</th>
       <th>
         <form action="/create_lab" method="GET">
           <input type="hidden" name="course_id" value="{{ course.id }}">
@@ -24,7 +76,6 @@ Ei kursseja
     <tr class="table-light">
       <th>Työn nimi</th>
       <th>Oppilasmäärä</th>
-      <th>Toiminnot</th>
       <th>Muokkaa</th>
     </tr>
   </thead>
@@ -39,7 +90,6 @@ Ei kursseja
         <tr>
           <td type="text" name="lab_name">{{ lab.name }}</td>
           <td type="number" name="max_students">{{ lab.max_students }}</td>
-          <td>COMING SOON</td>
           <th>
           <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
           </th>
@@ -51,4 +101,6 @@ Ei kursseja
 </table>
 {% endfor %}
 {% endif %}
+
+
 {% endblock %}
