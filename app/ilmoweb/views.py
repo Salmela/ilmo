@@ -47,7 +47,7 @@ def create_lab(request):
 
         labs.create_new_lab(content, course_id)
 
-        return redirect("/created_labs")
+        return created_labs(request)
     course_id = request.GET.get("course_id")
     form = NewLabForm
 
