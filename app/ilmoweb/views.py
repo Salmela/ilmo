@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
-from ilmoweb.forms import NewLabForm
+#from ilmoweb.forms import NewLabForm
 from ilmoweb.logic import labs, signup, labgroups
 
 
@@ -36,20 +36,18 @@ def create_lab(request):
             return redirect("/open_labs")
 
     if request.method == "POST":
-        form = NewLabForm(request.POST)
+        lab_name = request.POST.get("lab_name")
+        description = request.POST.get("description")
+        max_students = int(request.POST.get("max_students"))
         course_id = request.POST.get("course_id")
 
-        if form.is_valid():
-            content = form.cleaned_data
-
-        labs.create_new_lab(content, course_id)
+        labs.create_new_lab(lab_name, description, max_students, course_id)
 
         return created_labs(request)
 
     course_id = request.GET.get("course_id")
-    form = NewLabForm
 
-    return render(request, "create_lab.html", {"form": form, "course_id": course_id})
+    return render(request, "create_lab.html", {"course_id": course_id})
 
 @login_required
 def open_labs(request):
