@@ -61,7 +61,7 @@ def create_group(request):
             return redirect("/open_labs")
 
     if request.method == "POST":
-        course_labs = request.POST.getlist('labs[]')
+        course_labs = request.POST.getlist("labs[]")
         place = request.POST.get("place")
         date = request.POST.get("date")
         time = request.POST.get("time")
@@ -78,6 +78,7 @@ def create_group(request):
 
     return render(request, "create_group.html", {"labs":course_labs, "course":course})
 
+@login_required
 def open_labs(request):
     """
         View for labs that are open
@@ -117,16 +118,26 @@ def confirm(request):
     return HttpResponseBadRequest('Ryhmä on tyhjä, joten vahvistaminen epäonnistui.')
 
 @login_required
-def delete_lab(request, course_id):
+def make_lab_visible(request, lab_id):
+    """
+        Make lab visible.
+    """
+    lab = Labs.objects.get(pk=lab_id)
+    lab.is_visible = not lab.is_visible
+    lab.save()
+
+    return created_labs(request)
+
+@login_required
+def delete_lab(request, lab_id):
     """
         Delete lab from created_labs view.
     """
-    lab = Labs.objects.get(pk=course_id)
-    lab.deleted=1
+    lab = Labs.objects.get(pk=lab_id)
+    lab.deleted = 1
     lab.save()
-    courses = Courses.objects.all()
 
-    return render(request, "created_labs.html", {"lab":lab, "courses":courses})
+    return created_labs(request)
 
 @login_required
 def my_labs(request):
