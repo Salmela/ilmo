@@ -23,7 +23,10 @@ def created_labs(request):
         return redirect("/open_labs")
 
     courses = Courses.objects.all()
-    return render(request, "created_labs.html", {"courses":courses})
+    course_labs = Labs.objects.all()
+    lab_groups = LabGroups.objects.all()
+    return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
+                                                 "lab_groups":lab_groups})
 
 def create_lab(request):
     """
@@ -42,12 +45,37 @@ def create_lab(request):
 
         labs.create_new_lab(content, course_id)
 
-        return created_labs(request)
-
+        return redirect("/created_labs")
     course_id = request.GET.get("course_id")
     form = NewLabForm
 
     return render(request, "create_lab.html", {"form": form, "course_id": course_id})
+
+def create_group(request):
+    """
+        View for creating a new labgroup
+    """
+    if request.method == "GET":
+        if request.user.is_staff is not True:
+            return redirect("/open_labs")
+
+    if request.method == "POST":
+        course_labs = request.POST.getlist('labs[]')
+        place = request.POST.get("place")
+        date = request.POST.get("date")
+        time = request.POST.get("time")
+
+        for lab in course_labs:
+            this_lab = Labs.objects.get(pk=lab)
+            labgroups.create(this_lab, date, time, place)
+
+        return created_labs(request)
+
+    course_id = request.GET.get("course_id")
+    course = Courses.objects.get(pk=course_id)
+    course_labs = Labs.objects.all()
+
+    return render(request, "create_group.html", {"labs":course_labs, "course":course})
 
 def open_labs(request):
     """
