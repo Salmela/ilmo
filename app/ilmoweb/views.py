@@ -120,13 +120,14 @@ def confirm(request):
 @login_required
 def make_lab_visible(request, lab_id):
     """
-        Make lab visible.
+        Toggle the lab's visibility based on its current state.
     """
-    lab = Labs.objects.get(pk=lab_id)
-    lab.is_visible = not lab.is_visible
-    lab.save()
+    if request.user.is_staff:
+        lab = Labs.objects.get(pk=lab_id)
+        lab.is_visible = not lab.is_visible
+        lab.save()
 
-    return created_labs(request)
+    return redirect(created_labs)
 
 @login_required
 def delete_lab(request, lab_id):

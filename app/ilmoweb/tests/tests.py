@@ -1,5 +1,6 @@
 from django.contrib.auth.hashers import make_password, check_password
 from django.test import TestCase, Client
+from django.urls import reverse
 from ilmoweb.models import User, Courses, Labs, LabGroups
 from ilmoweb.logic import labgroups
 
@@ -28,12 +29,22 @@ class TestModels(TestCase):
             is_visible = False
         )
 
+        # visible lab
         self.lab1 = Labs.objects.create(
             course = self.course1,
             name = "Kemian Labratyö-kurssi labra 1",
             description = "Labratyö-kurssin ensimmäinen labra",
             max_students = 20,
             is_visible = True
+        )
+
+        # invisible lab
+        self.lab2 = Labs.objects.create(
+            course = self.course1,
+            name = "Kemian Labratyö-kurssi labra 2",
+            description = "Labratyö-kurssin toinen labra",
+            max_students = 20,
+            is_visible = False
         )
 
         # empty labgroup
@@ -254,3 +265,28 @@ class TestModels(TestCase):
         self.assertEqual(group.start_time.hour, 12)
         self.assertEqual(group.end_time.hour, 16)
 
+    # Tests for activating labs
+
+    def test_teacher_can_activate_lab(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('make_lab_visible', args=[str(self.lab2.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab2.refresh_from_db()
+        self.assertEqual(self.lab2.is_visible, True)
+    
+    def test_teacher_can_deactivate_lab(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('make_lab_visible', args=[str(self.lab1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab1.refresh_from_db()
+        self.assertEqual(self.lab1.is_visible, False)
+    
+    def test_student_cannot_activate_lab(self):
+        self.client.force_login(self.user1)
+        url = reverse('make_lab_visible', args=[str(self.lab2.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab2.refresh_from_db()
+        self.assertEqual(self.lab2.is_visible, False)
