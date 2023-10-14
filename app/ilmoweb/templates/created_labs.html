@@ -88,11 +88,20 @@ Ei kursseja
       {% for lab in course.labs_set.all %}
         {% if lab.deleted == 0 %}
         <tr>
-          <td type="text" name="lab_name">{{ lab.name }}</td>
-          <td type="number" name="max_students">{{ lab.max_students }}</td>
-          <th>
-          <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
-          </th>
+          <td type="text" name="lab_name" {% if lab.is_visible == 0 %} class="text-muted" {% endif %}>
+            {{ lab.name }}
+          </td>
+          <td type="number" name="max_students" {% if lab.is_visible == 0 %} class="text-muted" {% endif %}>
+            {{ lab.max_students }}
+          </td>
+          <td>
+            {% if lab.is_visible == 0 %}
+              <a href='/make_lab_visible/{{ lab.id }}' class="btn btn-light btn-outline-dark">Aktivoi</a>
+            {% else %}
+              <a href='/make_lab_visible/{{ lab.id }}' class="btn btn-light btn-outline-dark">Deaktivoi</a>
+            {% endif %}
+            <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
+          </td>
         </tr>
         {% endif %}
       {% endfor %}
@@ -101,6 +110,5 @@ Ei kursseja
 </table>
 {% endfor %}
 {% endif %}
-
 
 {% endblock %}

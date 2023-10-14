@@ -16,7 +16,7 @@ def create(lab, date, time, place):
     if time == '8-12':
         start_time = '08'
         end_time = '12'
-    if time == "12-16":
+    if time == '12-16':
         start_time = '12'
         end_time = '16'
 
