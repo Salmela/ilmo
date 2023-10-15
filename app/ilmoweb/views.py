@@ -89,15 +89,15 @@ def open_labs(request):
 
     if request.method == "POST":
         if request.user.is_staff:
-            return HttpResponseBadRequest('Opettaja ei voi ilmoittautua laboratoriotyöhön.')
+            return HttpResponseBadRequest("Opettaja ei voi ilmoittautua laboratoriotyöhön.")
         data = json.loads(request.body)
-        user_id = data.get('user_id')
-        group_id = data.get('group_id')
+        user_id = data.get("user_id")
+        group_id = data.get("group_id")
         user = get_object_or_404(User, pk = user_id)
         group = get_object_or_404(LabGroups, pk = group_id)
         signup.signup(user=user, group=group)
 
-    return render(request, 'open_labs.html', {"courses":courses, "labs":course_labs,
+    return render(request, "open_labs.html", {"courses":courses, "labs":course_labs,
                                               "lab_groups":lab_groups, "signedup":signedup})
 
 @login_required
@@ -113,8 +113,8 @@ def confirm(request):
                 labgroups.confirm(group_id)
                 return HttpResponseRedirect("/open_labs")
         else:
-            return HttpResponseBadRequest('Oppilas ei voi vahvistaa laboratoriotyötä.')
-    return HttpResponseBadRequest('Ryhmä on tyhjä, joten vahvistaminen epäonnistui.')
+            return HttpResponseBadRequest("Oppilas ei voi vahvistaa laboratoriotyötä.")
+    return HttpResponseBadRequest("Ryhmä on tyhjä, joten vahvistaminen epäonnistui.")
 
 @login_required
 def make_lab_visible(request, lab_id):
@@ -145,4 +145,6 @@ def my_labs(request):
     """
         my labs view
     """
-    return render(request, "my_labs.html")
+    labgroup_id_list = signup.get_labgroups(request.user.id)
+    labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
+    return render(request, "my_labs.html", {"labgroups":labgroups})
