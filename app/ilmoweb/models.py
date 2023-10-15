@@ -27,7 +27,7 @@ class Labs(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE)
     name = models.CharField(max_length = 100)
     description = models.TextField()
-    max_students = models.IntegerField()
+    max_students = models.IntegerField(default= 1)
     is_visible = models.BooleanField()
     deleted = models.BooleanField(default=0)
 

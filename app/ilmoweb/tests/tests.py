@@ -1,6 +1,8 @@
 from django.contrib.auth.hashers import make_password, check_password
+from django.urls import reverse
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups, Report
+from ilmoweb.logic import labgroups
 import datetime
 
 class FirstTest(TestCase):
@@ -28,12 +30,22 @@ class TestModels(TestCase):
             is_visible = False
         )
 
+        # visible lab
         self.lab1 = Labs.objects.create(
             course = self.course1,
             name = "Kemian Labratyö-kurssi labra 1",
             description = "Labratyö-kurssin ensimmäinen labra",
             max_students = 20,
             is_visible = True
+        )
+
+        # invisible lab
+        self.lab2 = Labs.objects.create(
+            course = self.course1,
+            name = "Kemian Labratyö-kurssi labra 2",
+            description = "Labratyö-kurssin toinen labra",
+            max_students = 20,
+            is_visible = False
         )
 
         # empty labgroup
@@ -181,7 +193,7 @@ class TestModels(TestCase):
     # Tests for labgroup enrollment
 
     def test_student_can_enroll_to_labgroup(self):
-        self.client.login(username=self.user1.username, password=self.user1.password)
+        self.client.force_login(self.user1)
         data = {
             'user_id': self.user1.id,
             'group_id': self.labgroup1.id
@@ -191,8 +203,19 @@ class TestModels(TestCase):
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.signed_up_students, 1)
     
+    def test_teacher_cannot_enroll_to_labgroup(self):
+        self.client.force_login(self.superuser1)
+        data = {
+            'user_id': self.superuser1.id,
+            'group_id': self.labgroup1.id
+        }
+        response_post = self.client.post('/open_labs/', data, 'application/json')
+        self.assertEqual(response_post.status_code, 400)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.signed_up_students, 0)
+    
     def test_student_cannot_enroll_twice_to_same_labgroup(self):
-        self.client.login(username=self.user1.username, password=self.user1.password)
+        self.client.force_login(self.user1)
         data = {
             'user_id': self.user1.id,
             'group_id': self.labgroup1.id
@@ -202,16 +225,25 @@ class TestModels(TestCase):
             self.client.post('/open_labs/', data, 'application/json')
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.signed_up_students, 1)
+
+    # Tests for confirming labgroup
     
     def test_teacher_can_confirm_nonempty_labgroup(self):
-        self.client.login(username=self.superuser1.username, password=self.superuser1.password)
+        self.client.force_login(self.superuser1)
         response_post = self.client.post('/open_labs/confirm/', self.labgroup2.id, 'application/json')
         self.assertEqual(response_post.status_code, 302)
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 2)
     
     def test_teacher_cannot_confirm_empty_labgroup(self):
-        self.client.login(username=self.superuser1.username, password=self.superuser1.password)
+        self.client.force_login(self.superuser1)
+        response_post = self.client.post('/open_labs/confirm/', self.labgroup1.id, 'application/json')
+        self.assertEqual(response_post.status_code, 400)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.status, False)
+    
+    def test_student_cannot_confirm_labgroup(self):
+        self.client.force_login(self.user1)
         response_post = self.client.post('/open_labs/confirm/', self.labgroup1.id, 'application/json')
         self.assertEqual(response_post.status_code, 400)
         self.labgroup1.refresh_from_db()
@@ -230,3 +262,75 @@ class TestModels(TestCase):
         self.assertEqual(self.all_reports[0].filename, "raportti.pdf")
         self.assertEqual(self.all_reports[0].comments, "")
         self.assertEqual(self.all_reports[0].graded_by, None)
+    
+    # Tests for creating labgroups
+
+    def test_start_end_times_8_to_12(self):
+        lab = self.lab1
+        date = '2023-10-13'
+        time = '8-12'
+        place = 'B105'
+
+        labgroups.create(lab, date, time, place)
+
+        group = LabGroups.objects.get(lab=lab, date=date, place=place)
+
+        self.assertEqual(group.start_time.hour, 8)
+        self.assertEqual(group.end_time.hour, 12)
+
+    def test_start_end_times_12_to_16(self):
+        lab = self.lab1
+        date = '2023-10-13'
+        time = '12-16'
+        place = 'B105'
+
+        labgroups.create(lab, date, time, place)
+
+        group = LabGroups.objects.get(lab=lab, date=date, place=place)
+
+        self.assertEqual(group.start_time.hour, 12)
+        self.assertEqual(group.end_time.hour, 16)
+
+    # Tests for activating labs
+
+    def test_teacher_can_activate_lab(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('make_lab_visible', args=[str(self.lab2.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab2.refresh_from_db()
+        self.assertEqual(self.lab2.is_visible, True)
+    
+    def test_teacher_can_deactivate_lab(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('make_lab_visible', args=[str(self.lab1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab1.refresh_from_db()
+        self.assertEqual(self.lab1.is_visible, False)
+    
+    def test_student_cannot_activate_lab(self):
+        self.client.force_login(self.user1)
+        url = reverse('make_lab_visible', args=[str(self.lab2.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab2.refresh_from_db()
+        self.assertEqual(self.lab2.is_visible, False)
+
+    # Tests for deleting labs
+
+    def test_teacher_can_delete_lab(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('delete_lab', args=[str(self.lab1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab1.refresh_from_db()
+        self.assertEqual(self.lab1.deleted, True)
+    
+    def test_student_cannot_delete_lab(self):
+        self.client.force_login(self.user1)
+        url = reverse('delete_lab', args=[str(self.lab1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab1.refresh_from_db()
+        self.assertEqual(self.lab1.deleted, False)
