@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
-#from ilmoweb.forms import NewLabForm
 from ilmoweb.logic import labs, signup, labgroups
 
 
@@ -46,7 +45,7 @@ def create_lab(request):
 
         labs.create_new_lab(lab_name, description, max_students, course_id)
 
-        return created_labs(request)
+        return redirect(created_labs)
     course_id = request.GET.get("course_id")
 
     return render(request, "create_lab.html", {"course_id": course_id})
@@ -70,7 +69,7 @@ def create_group(request):
             this_lab = Labs.objects.get(pk=lab)
             labgroups.create(this_lab, date, time, place)
 
-        return created_labs(request)
+        return redirect(created_labs)
 
     course_id = request.GET.get("course_id")
     course = Courses.objects.get(pk=course_id)
@@ -134,11 +133,12 @@ def delete_lab(request, lab_id):
     """
         Delete lab from created_labs view.
     """
-    lab = Labs.objects.get(pk=lab_id)
-    lab.deleted = 1
-    lab.save()
+    if request.user.is_staff:
+        lab = Labs.objects.get(pk=lab_id)
+        lab.deleted = 1
+        lab.save()
 
-    return created_labs(request)
+    return redirect(created_labs)
 
 @login_required
 def my_labs(request):

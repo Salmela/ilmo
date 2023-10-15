@@ -290,3 +290,21 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.lab2.refresh_from_db()
         self.assertEqual(self.lab2.is_visible, False)
+
+    # Tests for deleting labs
+
+    def test_teacher_can_delete_lab(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('delete_lab', args=[str(self.lab1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab1.refresh_from_db()
+        self.assertEqual(self.lab1.deleted, True)
+    
+    def test_student_cannot_delete_lab(self):
+        self.client.force_login(self.user1)
+        url = reverse('delete_lab', args=[str(self.lab1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.lab1.refresh_from_db()
+        self.assertEqual(self.lab1.deleted, False)
