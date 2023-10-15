@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password, check_password
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups, Report
+import datetime
 
 class FirstTest(TestCase):
     def setUp(self):
@@ -225,7 +226,7 @@ class TestModels(TestCase):
         self.all_reports = Report.objects.all()
         self.assertEqual(self.all_reports[0].student, self.user1)
         self.assertEqual(self.all_reports[0].lab_group, self.labgroup1)
-        self.assertEqual(self.all_reports[0].send_date, "2023-06-10")
+        self.assertEqual(self.all_reports[0].send_date, datetime.date(2023, 6, 10))
         self.assertEqual(self.all_reports[0].filename, "raportti.pdf")
         self.assertEqual(self.all_reports[0].comments, "")
-        self.assertEqual(self.all_reports[0].graded_by, "null")
+        self.assertEqual(self.all_reports[0].graded_by, None)

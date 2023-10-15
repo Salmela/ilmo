@@ -65,7 +65,12 @@ class Report(models.Model):
     report_status = models.IntegerField()
     # 0 = no file, 1 = report returned, 2 = revisions proposed, 3 = fixed report
     comments = models.TextField()
-    grade = models.IntegerField()
+    grade = models.IntegerField(null=True)
     # 0 = revisions needed, 1-5 = grade, empty = not graded
-    grading_date = models.DateField()
-    graded_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name = "grader")
+    grading_date = models.DateField(null=True)
+    graded_by = models.ForeignKey(
+        User,
+        null=True,
+        on_delete=models.SET_NULL,
+        related_name = "grader"
+    )
