@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password, check_password
 from django.test import TestCase, Client
-from ilmoweb.models import User, Courses, Labs, LabGroups
+from ilmoweb.models import User, Courses, Labs, LabGroups, Report
 
 class FirstTest(TestCase):
     def setUp(self):
@@ -55,10 +55,21 @@ class TestModels(TestCase):
             status = False,
             signed_up_students = 1
         )
-        # Creating a superuser for testing login
+
+        # report for testing
+        self.report1 = Report.objects.create(
+            student = self.user1,
+            lab_group = self.labgroup1,
+            send_date = "2023-06-10",
+            filename = "raportti.pdf",
+            report_status = 1,
+            comments = "",
+        )
+
+        # creating a superuser for testing login
         self.superuser1 = User.objects.create_superuser(
-            username = 'kemianope',
-            password = 'atomi123'
+            username = "kemianope",
+            password = "atomi123"
         )
         self.superuser1.save()
 
@@ -204,3 +215,17 @@ class TestModels(TestCase):
         self.assertEqual(response_post.status_code, 400)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, False)
+
+    # Tests for reports
+    def test_report_is_saved_to_db(self):
+        self.all_reports = Report.objects.all()
+        self.assertEqual(len(self.all_reports), 1)
+
+    def test_saved_report_has_correct_fields(self):
+        self.all_reports = Report.objects.all()
+        self.assertEqual(self.all_reports[0].student, self.user1)
+        self.assertEqual(self.all_reports[0].lab_group, self.labgroup1)
+        self.assertEqual(self.all_reports[0].send_date, "2023-06-10")
+        self.assertEqual(self.all_reports[0].filename, "raportti.pdf")
+        self.assertEqual(self.all_reports[0].comments, "")
+        self.assertEqual(self.all_reports[0].graded_by, "null")
