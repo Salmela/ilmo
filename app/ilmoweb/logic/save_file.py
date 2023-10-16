@@ -10,7 +10,7 @@ def save_report(user, lab_group, filename):
     else:
         report_status = 0
 
-    send_date = 
+    #send_date = 
 
     report = Report(user=user, lab_group=lab_group, send_date=send_date, filename=filename, report_status=report_status)
     report.save()
