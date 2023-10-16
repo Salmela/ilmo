@@ -14,4 +14,5 @@ urlpatterns = [
     path("delete_lab/<int:lab_id>", views.delete_lab, name="delete_lab"),
     path("my_labs/", views.my_labs, name="my_labs"),
     path("create_group/", views.create_group, name="create_group"),
+    path("return_report/", views.return_report, name="return_report")
 ]

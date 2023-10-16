@@ -1,6 +1,6 @@
 """Module for page rendering."""
 import json
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
@@ -157,4 +157,7 @@ def return_report(request):
     if request.method != "POST":
         return redirect("/")
 
-    #save_file(request.user, reques)
+    lab_group_id = request.lab_group.id
+    lab_group = LabGroups.objects.get(pk=lab_group_id)
+    save_file(request.user, lab_group, request.FILES)
+    return HttpResponse("Raportti tallennettu onnistuneesti")

@@ -31,8 +31,9 @@
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                          <form method="POST" action="/return_report" enctype="multipart/form-data">
+                          <form method="POST" action="/return_report/" enctype="multipart/form-data">
                             {% csrf_token %}
+                            <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}">
                             <input type="file" name="file">
                             <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
                           </form>
