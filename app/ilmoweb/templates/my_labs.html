@@ -2,7 +2,7 @@
 {% block title %} Omat labrat {% endblock %}
 
 {% block content %}
-    <h2>Omat ilmoittautumiset</h2>
+  <h2>Omat ilmoittautumiset</h2>
     <table class="table table-sm table-bordered">
         <thead>
           <tr>
@@ -19,24 +19,46 @@
                 <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
-                <td></td>
+                <td>
+                  <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal">
+                    Palauta raportti
+                  </button>
+                  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="reportModalLabel">Palauta työsi tänne</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="POST" action="/return_report" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="file" name="file">
+                            <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
               </tr>
             {% elif lab_group.status == 3 %}
               <tr class="table-danger">
                 <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
-                <td></td>
+                <td>Labra peruttu</td>
               </tr>
             {% else %}
               <tr>
                 <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
-                <td></td>
+                <td>Odota labran vahvistusta</td>
               </tr>
             {% endif %}
           {% endfor %}
         </tbody>
     </table>
+  <div class="filler"></div>
 {% endblock %}

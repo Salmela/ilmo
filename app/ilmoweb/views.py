@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
-from ilmoweb.logic import labs, signup, labgroups
+from ilmoweb.logic import labs, signup, labgroups, save_file
 
 
 def home_page_view(request):
@@ -143,8 +143,18 @@ def delete_lab(request, lab_id):
 @login_required
 def my_labs(request):
     """
-        my labs view
+        My labs view
     """
     labgroup_id_list = signup.get_labgroups(request.user.id)
     labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
     return render(request, "my_labs.html", {"labgroups":labgroups})
+
+@login_required
+def return_report(request):
+    """
+        Path for returning reports
+    """
+    if request.method != "POST":
+        return redirect("/")
+
+    #save_file(request.user, reques)
