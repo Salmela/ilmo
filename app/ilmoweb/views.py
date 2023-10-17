@@ -144,10 +144,9 @@ def my_labs(request):
     """
         My labs view
     """
-    labgroup_id_list = signup.get_labgroups(request.user.id)
+    labgroup_id_list = signup.get_labgroups(request.user)
     labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    returned_reports = Report.objects.filter(student=request.user)
-    return render(request, "my_labs.html", {"labgroups":labgroups, "returned_reports":returned_reports})
+    return render(request, "my_labs.html", {"labgroups":labgroups})
 
 @login_required
 def return_report(request):
@@ -160,8 +159,8 @@ def return_report(request):
     group_id = request.POST.get("lab_group_id")
     lab_group = LabGroups.objects.get(pk=group_id)
     file = request.FILES["file"]
-
-    files.save_file(file)
-    report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
-    report.save()
+    if file.name.lower().endswith(('.pdf', '.docx')):
+        files.save_file(file)
+        report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
+        report.save()
     return redirect("/my_labs")

@@ -20,13 +20,13 @@ def signup(user, group):
     else:
         raise ValueError('The group has no open spots left')
 
-def get_labgroups(user_id):
+def get_labgroups(u):
     """
         Fetches all labgroups based on user_id
     """
-    labgroups = SignUp.objects.filter(user_id=user_id)
+    labgroups = SignUp.objects.filter(user=u).values()
     labgroups_id = []
     if labgroups:
         for object in labgroups:
-            labgroups_id.append(object.id)
+            labgroups_id.append(object["labgroups_id"])
     return labgroups_id
