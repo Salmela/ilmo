@@ -2,11 +2,72 @@
 {% block title %} Omat labrat {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Ilmoittautumiset</h2>
-    <p>Lisää taulu töistä, joihin opiskelija on ilmoittautunut.</p>
-    <h2>Vahvistetut/aktiiviset laboratoriotyöt</h2>
-    <p>Lisää taulu töistä, joille opiskelija on vahvistettu.</p>
-    <p>Jokaiseen työhön nappi "palauta", jonka kautta työn voi palauttaa.</p>
-</div>
+  <h2>Omat ilmoittautumiset</h2>
+    <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Kurssi</th>
+            <th scope="col">Työn nimi</th>
+            <th scope="col">Päivämäärä</th>
+            <th scope="col">Aika</th>
+            <th scope="col">Paikka</th>
+            <th scope="col">Palautus</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for lab_group in labgroups %}
+            {% if lab_group.status == 2 %}
+              <tr class="table-success">
+                <td>{{lab_group.lab.course.name}}</td>
+                <td>{{lab_group.lab.name}}</td>
+                <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+                <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
+                <td>{{lab_group.place}}</td>
+                <td>
+                  <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal">
+                    Palauta raportti
+                  </button>
+                  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="reportModalLabel">Palauta työsi tänne</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="POST" action="/return_report/" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}"> 
+                            <input type="file" name="file">
+                            <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            {% elif lab_group.status == 3 %}
+              <tr class="table-danger">
+                <td>{{lab_group.lab.course.name}}</td>
+                <td>{{lab_group.lab.name}}</td>
+                <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+                <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
+                <td>{{lab_group.place}}</td>
+                <td>Labra peruttu</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td>{{lab_group.lab.course.name}}</td>
+                <td>{{lab_group.lab.name}}</td>
+                <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+                <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
+                <td>{{lab_group.place}}</td>
+                <td>Odota tilaisuuden vahvistusta</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+    </table>
+  <div class="filler"></div>
 {% endblock %}

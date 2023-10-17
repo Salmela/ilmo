@@ -19,3 +19,14 @@ def signup(user, group):
         group.save()
     else:
         raise ValueError('The group has no open spots left')
+
+def get_labgroups(usr):
+    """
+        Fetches all labgroups based on user_id
+    """
+    labgroups = SignUp.objects.filter(user=usr).values()
+    labgroups_id = []
+    if labgroups:
+        for obj in labgroups:
+            labgroups_id.append(obj["labgroups_id"])
+    return labgroups_id

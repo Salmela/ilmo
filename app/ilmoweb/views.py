@@ -3,9 +3,8 @@ import json
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
-from ilmoweb.logic import labs, signup, labgroups
-
+from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
+from ilmoweb.logic import labs, signup, labgroups, files
 
 def home_page_view(request):
     """
@@ -89,15 +88,15 @@ def open_labs(request):
 
     if request.method == "POST":
         if request.user.is_staff:
-            return HttpResponseBadRequest('Opettaja ei voi ilmoittautua laboratoriotyöhön.')
+            return HttpResponseBadRequest("Opettaja ei voi ilmoittautua laboratoriotyöhön.")
         data = json.loads(request.body)
-        user_id = data.get('user_id')
-        group_id = data.get('group_id')
+        user_id = data.get("user_id")
+        group_id = data.get("group_id")
         user = get_object_or_404(User, pk = user_id)
         group = get_object_or_404(LabGroups, pk = group_id)
         signup.signup(user=user, group=group)
 
-    return render(request, 'open_labs.html', {"courses":courses, "labs":course_labs,
+    return render(request, "open_labs.html", {"courses":courses, "labs":course_labs,
                                               "lab_groups":lab_groups, "signedup":signedup})
 
 @login_required
@@ -113,8 +112,8 @@ def confirm(request):
                 labgroups.confirm(group_id)
                 return HttpResponseRedirect("/open_labs")
         else:
-            return HttpResponseBadRequest('Oppilas ei voi vahvistaa laboratoriotyötä.')
-    return HttpResponseBadRequest('Ryhmä on tyhjä, joten vahvistaminen epäonnistui.')
+            return HttpResponseBadRequest("Oppilas ei voi vahvistaa laboratoriotyötä.")
+    return HttpResponseBadRequest("Ryhmä on tyhjä, joten vahvistaminen epäonnistui.")
 
 @login_required
 def make_lab_visible(request, lab_id):
@@ -143,6 +142,25 @@ def delete_lab(request, lab_id):
 @login_required
 def my_labs(request):
     """
-        my labs view
+        My labs view
     """
-    return render(request, "my_labs.html")
+    labgroup_id_list = signup.get_labgroups(request.user)
+    students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
+    return render(request, "my_labs.html", {"labgroups":students_labgroups})
+
+@login_required
+def return_report(request):
+    """
+        Path for returning reports
+    """
+    if request.method != "POST":
+        return redirect("/")
+
+    group_id = request.POST.get("lab_group_id")
+    lab_group = LabGroups.objects.get(pk=group_id)
+    file = request.FILES["file"]
+    if file.name.lower().endswith(('.pdf', '.docx')):
+        files.save_file(file)
+        report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
+        report.save()
+    return redirect("/my_labs")
