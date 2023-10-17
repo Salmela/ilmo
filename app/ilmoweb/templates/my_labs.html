@@ -6,6 +6,7 @@
     <table class="table table-sm table-bordered">
         <thead>
           <tr>
+            <th scope="col">Aihe</th>
             <th scope="col">Päivämäärä</th>
             <th scope="col">Aika</th>
             <th scope="col">Paikka</th>
@@ -16,10 +17,15 @@
           {% for lab_group in labgroups %}
             {% if lab_group.status == 2 %}
               <tr class="table-success">
+                <td>{{lab_group.lab.name}}</td>
                 <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
                 <td>
+                  {% for report in returned_reports %}
+                  {% if report.lab_group == lab_group %}
+                    <p>Palautettu</p>
+                  {% else %}
                   <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal">
                     Palauta raportti
                   </button>
@@ -33,7 +39,7 @@
                         <div class="modal-body">
                           <form method="POST" action="/return_report/" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}">
+                            <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}"> 
                             <input type="file" name="file">
                             <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
                           </form>
@@ -41,10 +47,13 @@
                       </div>
                     </div>
                   </div>
+                  {% endif %}
+                  {% endfor %}
                 </td>
               </tr>
             {% elif lab_group.status == 3 %}
               <tr class="table-danger">
+                <td>{{lab_group.lab.name}}</td>
                 <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
@@ -52,10 +61,11 @@
               </tr>
             {% else %}
               <tr>
+                <td>{{lab_group.lab.name}}</td>
                 <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
-                <td>Odota labran vahvistusta</td>
+                <td>Odota tilaisuuden vahvistusta</td>
               </tr>
             {% endif %}
           {% endfor %}

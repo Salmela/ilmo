@@ -3,9 +3,8 @@ import json
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp
-from ilmoweb.logic import labs, signup, labgroups, save_file
-
+from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
+from ilmoweb.logic import labs, signup, labgroups, files
 
 def home_page_view(request):
     """
@@ -147,7 +146,8 @@ def my_labs(request):
     """
     labgroup_id_list = signup.get_labgroups(request.user.id)
     labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    return render(request, "my_labs.html", {"labgroups":labgroups})
+    returned_reports = Report.objects.filter(student=request.user)
+    return render(request, "my_labs.html", {"labgroups":labgroups, "returned_reports":returned_reports})
 
 @login_required
 def return_report(request):
@@ -157,7 +157,11 @@ def return_report(request):
     if request.method != "POST":
         return redirect("/")
 
-    lab_group_id = request.lab_group.id
-    lab_group = LabGroups.objects.get(pk=lab_group_id)
-    save_file(request.user, lab_group, request.FILES)
-    return HttpResponse("Raportti tallennettu onnistuneesti")
+    group_id = request.POST.get("lab_group_id")
+    lab_group = LabGroups.objects.get(pk=group_id)
+    file = request.FILES["file"]
+
+    files.save_file(file)
+    report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
+    report.save()
+    return redirect("/my_labs")
