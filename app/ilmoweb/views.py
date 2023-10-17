@@ -1,6 +1,6 @@
 """Module for page rendering."""
 import json
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
@@ -145,8 +145,8 @@ def my_labs(request):
         My labs view
     """
     labgroup_id_list = signup.get_labgroups(request.user)
-    labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    return render(request, "my_labs.html", {"labgroups":labgroups})
+    students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
+    return render(request, "my_labs.html", {"labgroups":students_labgroups})
 
 @login_required
 def return_report(request):
