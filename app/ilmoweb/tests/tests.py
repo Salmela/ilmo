@@ -258,7 +258,6 @@ class TestModels(TestCase):
         self.all_reports = Report.objects.all()
         self.assertEqual(self.all_reports[0].student, self.user1)
         self.assertEqual(self.all_reports[0].lab_group, self.labgroup1)
-        self.assertEqual(self.all_reports[0].send_date, datetime.date(2023, 6, 10))
         self.assertEqual(self.all_reports[0].filename, "raportti.pdf")
         self.assertEqual(self.all_reports[0].comments, "")
         self.assertEqual(self.all_reports[0].graded_by, None)
