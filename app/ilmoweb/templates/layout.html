@@ -17,10 +17,15 @@
   <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-black">
     <div class="container">
-      <h1 class="navbar-brand">
-        Fysikaalisen kemian laboratorio - Labra
+      <div id="logo">
+        <a href="{% url 'home' %}">
+          <img src="{% static 'images/logo.png' %}" height="60px" id="hy_logo">
+        </a>
+      </div>
+      <h1 class="navbar-brand" id="main_title">
+        <b>Fysikaalisen kemian laboratorio - Labra</b>
       </h1>
       {% if user.is_authenticated %}
       <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
