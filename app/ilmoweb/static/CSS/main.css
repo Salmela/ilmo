@@ -3,8 +3,14 @@
     font-family: 'Helvetica', 'Arial', sans-serif;
     line-height: 1.5;
     padding: 4em 1em;
-    color:#555;
+    color:#000000;
     text-align: center;
+}
+
+#main_title {
+    position: absolute;
+    left: 67px;
+    top: 80px;
 }
 
 .footer {
@@ -17,4 +23,16 @@
 
 .filler_2 {
     height: 100px; 
+}
+
+
+
+.logo {
+    position: relative;
+}
+
+#hy_logo {
+    position: absolute;
+    left: 5px;
+    top: 5px;
 }
