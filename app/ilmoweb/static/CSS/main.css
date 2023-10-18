@@ -7,6 +7,14 @@
     text-align: center;
 }
 
+.body-container {
+    margin: 20;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    line-height: 1.5;
+    padding: 20em 1em;
+    text-align: center;
+}
+
 #main_title {
     position: absolute;
     left: 67px;
@@ -14,18 +22,9 @@
 }
 
 .footer {
-    padding: 4em;
+    padding: 3em;
+    color:white;
 }
-
-.filler {
-    height: 500px;
-}
-
-.filler_2 {
-    height: 100px; 
-}
-
-
 
 .logo {
     position: relative;
@@ -35,4 +34,9 @@
     position: absolute;
     left: 5px;
     top: 5px;
+}
+
+h1 {
+    position:relative;
+    top: 0px
 }
