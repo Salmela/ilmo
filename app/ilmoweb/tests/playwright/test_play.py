@@ -2,7 +2,7 @@ from playwright.sync_api import Page, expect
 
 def test_welcome_message(page: Page):
     page.goto('/')
-    assert page.inner_text('h1') == 'Fysikaalisen kemian laboratorio - Labra'
+    assert page.inner_text('h1') == 'Fysikaalisen kemian ilmoittautumisjärjestelmä'
 
 def test_login_link(page: Page):
     page.goto('/')

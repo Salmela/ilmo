@@ -17,6 +17,11 @@
   <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    @media (max-width: 768px) {
+      .navbar {
+          display: none;
+      }
+  }
   <nav class="navbar navbar-expand-lg navbar-dark bg-black">
     <div class="container">
       <div id="logo">
@@ -28,6 +33,7 @@
         <b>Fysikaalisen kemian ilmoittautumisjärjestelmä</b>
       </h1>
       {% if user.is_authenticated %}
+      <div>
       <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
       </button>
