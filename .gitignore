@@ -2,4 +2,3 @@ __pycache__/
 app/.coverage
 app/htmlcov
 .env
-app/static/upload/
