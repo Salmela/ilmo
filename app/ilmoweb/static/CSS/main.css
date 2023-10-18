@@ -7,7 +7,7 @@
 }
 
 .body-container {
-    margin: 20;
+    margin: 30;
     font-family: 'Helvetica', 'Arial', sans-serif;
     line-height: 1.5;
     padding: 20em 1em;
@@ -34,3 +34,4 @@
     left: 5px;
     top: 5px;
 }
+
