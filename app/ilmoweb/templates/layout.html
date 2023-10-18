@@ -17,6 +17,11 @@
   <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+    @media (max-width: 768px) {
+      .navbar {
+          display: none;
+      }
+  }
   <nav class="navbar navbar-expand-lg navbar-dark bg-black">
     <div class="container">
       <div id="logo">
@@ -25,9 +30,10 @@
         </a>
       </div>
       <h1 class="navbar-brand" id="main_title">
-        <b>Fysikaalisen kemian laboratorio - Labra</b>
+        <b>Fysikaalisen kemian ilmoittautumisjärjestelmä</b>
       </h1>
       {% if user.is_authenticated %}
+      <div>
       <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -91,11 +97,11 @@
       {% endif %}
     </div>
   </nav>
-  <div class="container">
-  {% block content %}
-  {% endblock %}
+  <div class="body-container">
+    {% block content %}
+    {% endblock %}
   </div>
-  <footer class="bg-dark text-center text-white">
+  <footer class="bg-black text-center">
     <div class="footer">
       A.I. Virtasen aukio 1, PL 55, 00014 Helsingin yliopisto, sähköposti markus.metsala@helsinki.fi
     </div>

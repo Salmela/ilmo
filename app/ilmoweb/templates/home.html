@@ -2,7 +2,6 @@
 {% block title %} Login page for IlmoWeb {% endblock %}
 
 {% block content %}
-<div class="container">
   {% if user.is_authenticated %}
     <div class="row">
       <h2>
@@ -26,6 +25,4 @@
     </a>
   </div>
   {% endif %}
-</div>
-<div class="filler"></div>
 {% endblock %}
