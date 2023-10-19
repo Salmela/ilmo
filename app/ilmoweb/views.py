@@ -173,13 +173,14 @@ def returned_reports(request):
     """
     if request.user.is_staff is not True:
         return redirect("/my_labs")
-    
+
     courses = Courses.objects.all()
-    labs = Labs.objects.all()
+    course_labs = Labs.objects.all()
     lab_groups = LabGroups.objects.all()
     reports = Report.objects.all()
     users = User.objects.all()
-    return render(request, "returned_reports.html", {"courses":courses, "labs":labs, "lab_groups":lab_groups, "reports":reports, "users":users})
+    return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
+    "lab_groups":lab_groups, "reports":reports, "users":users})
 
 @login_required
 def evaluate_report(request, report_id):
@@ -208,4 +209,5 @@ def evaluate_report(request, report_id):
 
         return redirect(returned_reports)
 
-    return render(request, "evaluate_report.html", {"course":course, "lab":lab, "lab_group":lab_group, "report":report, "user":user})
+    return render(request, "evaluate_report.html", {"course":course, "lab":lab,
+    "lab_group":lab_group, "report":report, "user":user})
