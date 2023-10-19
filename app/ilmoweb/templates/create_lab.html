@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %} Create lab {% endblock %}
 {% block content %}
+<div class="container-sm">
 <form action="/create_lab/" method="POST">
     {% csrf_token %}
     <table class="table table-bordered">
@@ -20,4 +21,5 @@
     <input type="hidden" name="course_id" value="{{ course_id }}">
     <input class="btn btn-light btn-outline-dark" type="submit" value="Luo labra">
 </form>
+</div>
 {% endblock %}

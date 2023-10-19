@@ -4,6 +4,7 @@
 
 <h1>Harjoitusryhmät kursseittain</h1>
 {% for course in courses %}
+<div class="container-sm" id="table-sm">
 <table class="table table-bordered">
   <thead>
     <tr class="table-secondary">
@@ -52,6 +53,7 @@
   {% endfor %}
   </tbody>
 </table>
+</div>
 {% endfor %}
 
 <h1>Harjoitustyöt kursseittain</h1><br>
@@ -62,6 +64,7 @@ Ei kursseja
 {% else %}
 
 {% for course in courses %}
+<div class="container-sm">
 <table class="table table-bordered">
   <thead>
     <tr class="table-secondary">
@@ -108,6 +111,7 @@ Ei kursseja
     {% endif %}
   </tbody>
 </table>
+</div>
 {% endfor %}
 {% endif %}
 {% endblock %}

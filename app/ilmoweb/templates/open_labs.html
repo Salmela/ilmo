@@ -8,6 +8,7 @@
 
 
 <h1>Tulevat labrat</h1>
+<div class="container-sm">
 <table class="table table-bordered">
   <thead>
     <tr class="table-secondary">
@@ -32,11 +33,13 @@
       {% endfor %}
   </tbody>
 </table>
+</div>
 
 <h1>Avoimet labrat</h1>
 {% for course in courses %}
 <h3>Kurssi: {{course.name}}</h3>
 <p>Suoritettavat laboratoriotyöt</p>
+<div class="container-sm">
 <table class="table table-bordered">
   <thead>
     <tr class="table-secondary">
@@ -152,5 +155,6 @@
   {% endfor %}
   </tbody>
 </table>
+</div>
 {% endfor %}
 {% endblock %}
