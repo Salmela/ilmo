@@ -289,6 +289,68 @@ class TestModels(TestCase):
 
         self.assertEqual(group.start_time.hour, 12)
         self.assertEqual(group.end_time.hour, 16)
+    
+    def test_labgroup_is_saved_to_db(self):
+        lab = self.lab1
+        date = '2023-10-13'
+        time = '8-12'
+        place = 'B105'
+
+        prev = len(LabGroups.objects.all())
+        labgroups.create(lab, date, time, place)
+        new = len(LabGroups.objects.all())
+
+        self.assertEqual(prev + 1, new)
+    
+    def test_teacher_can_create_labgroup(self):
+        lab = self.lab1.id
+        date = '2023-10-13'
+        time = '8-12'
+        place = 'B105'
+
+        self.client.force_login(self.superuser1)
+        prev = len(LabGroups.objects.all())
+        get_response = self.client.get("/create_group/", {'course_id':self.course1.id})
+        self.assertEqual(get_response.status_code, 200)
+
+        post_response = self.client.post("/create_group/", {'labs[]':lab, 'place':place, 'date':date, 'time':time})
+        self.assertEqual(post_response.status_code, 302)
+        new = len(LabGroups.objects.all())
+        self.assertEqual(prev + 1, new)
+
+    def test_teacher_can_create_multiple_labgroups(self):
+        labs = [self.lab1.id, self.lab2.id]
+        date = '2023-10-13'
+        time = '8-12'
+        place = 'B105'
+
+        self.client.force_login(self.superuser1)
+        prev = len(LabGroups.objects.all())
+        get_response = self.client.get("/create_group/", {'course_id':self.course1.id})
+        self.assertEqual(get_response.status_code, 200)
+
+        post_response = self.client.post("/create_group/", {'labs[]':labs, 'place':place, 'date':date, 'time':time})
+        self.assertEqual(post_response.status_code, 302)
+        new = len(LabGroups.objects.all())
+        self.assertEqual(prev + 2, new)
+    
+    def test_student_cannot_access_create_labgroup(self):
+        self.client.force_login(self.user1)
+
+        response = self.client.get("/create_group/", {'course_id':self.course1.id})
+        self.assertEqual(response.url, '/open_labs')
+    
+    def test_cannot_create_labgroup_if_not_logged_in(self):
+        lab = self.lab1.id
+        date = '2023-10-13'
+        time = '8-12'
+        place = 'B105'
+
+        prev = len(LabGroups.objects.all())
+        post_response = self.client.post("/create_group/", {'labs[]':lab, 'place':place, 'date':date, 'time':time})
+        self.assertEqual(post_response.status_code, 302)
+        new = len(LabGroups.objects.all())
+        self.assertEqual(prev, new)
 
     # Tests for activating labs
 

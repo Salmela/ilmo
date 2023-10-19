@@ -19,7 +19,7 @@
       <label for="date" class="col-sm-1 col-form-label">Päivä</label>
        <div class="col-4">
         <div class="input-group date" id="datepicker">
-         <input type="text" class="form-control" name="date">
+         <input type="text" class="form-control" data-testid="date" name="date">
           <span class="input-group-append">
            <span class="input-group-text bg-white d-block">
             <i class="fa fa-calendar"></i>
@@ -32,7 +32,7 @@
      <div class="row">
       <label for="inputTime" class="col-sm-1 col-form-label">Aika</label>
        <div class="col-3">
-        <select id="inputTime" class="form-control" name="time">
+        <select id="inputTime" class="form-control" data-testid="time" name="time">
           <option selected>8-12</option>
           <option>12-16</option>
         </select>
@@ -42,7 +42,7 @@
      <div class="row">
       <label for="inputPlace" class="col-sm-1 col-form-label">Paikka</label>
        <div class="col-3">
-        <select id="inputPlace" class="form-control" name="place">
+        <select id="inputPlace" class="form-control" data-testid="place" name="place">
          <option selected>B152</option>
          <option>D210 (Phy)</option>
          <option>D211 (Phy)</option>
@@ -56,7 +56,7 @@
           {% for lab in labs %}
             {% if lab.course_id == course.id %}
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="{{lab.id}}" id="{{lab.id}}" name="labs[]">
+                <input class="form-check-input" type="checkbox" value="{{lab.id}}" data-testid = "{{lab.id}}" id="{{lab.id}}" name="labs[]">
                 <label class="form-check-label row-cols-auto" for="{{lab.id}}">
                   {{lab.name}}
                 </label>
