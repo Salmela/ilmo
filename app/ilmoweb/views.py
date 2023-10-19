@@ -1,5 +1,6 @@
 """Module for page rendering."""
 import json
+import datetime
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -164,3 +165,47 @@ def return_report(request):
         report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
         report.save()
     return redirect("/my_labs")
+
+@login_required
+def returned_reports(request):
+    """
+        Teacher's view of all returned reports.
+    """
+    if request.user.is_staff is not True:
+        return redirect("/my_labs")
+    
+    courses = Courses.objects.all()
+    labs = Labs.objects.all()
+    lab_groups = LabGroups.objects.all()
+    reports = Report.objects.all()
+    users = User.objects.all()
+    return render(request, "returned_reports.html", {"courses":courses, "labs":labs, "lab_groups":lab_groups, "reports":reports, "users":users})
+
+@login_required
+def evaluate_report(request, report_id):
+    """
+        Teacher's view for evaluating a certain report.
+    """
+    if request.user.is_staff is not True:
+        return redirect("/my_labs")
+
+    report = Report.objects.get(pk=report_id)
+    lab_group = LabGroups.objects.get(pk=report.lab_group_id)
+    lab = Labs.objects.get(pk=lab_group.lab_id)
+    course = Courses.objects.get(pk=lab.course_id)
+    user = User.objects.get(pk=report.student_id)
+
+    if request.method == "POST":
+        grade = int(request.POST.get("grade"))
+        report.grade = grade
+        report.grading_date = datetime.date.today()
+        report.graded_by_id = request.user.id
+        if grade == 0:
+            report.report_status = 2
+        else:
+            report.report_status = 4
+        report.save()
+
+        return redirect(returned_reports)
+
+    return render(request, "evaluate_report.html", {"course":course, "lab":lab, "lab_group":lab_group, "report":report, "user":user})

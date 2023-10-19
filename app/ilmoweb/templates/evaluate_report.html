@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %} Arvostele työ {% endblock %}
+{% block content %}
+<div class="container-sm">
+  <h1>Arvostele työ</h1>
+  <form action="/evaluate_report/{{ report.id }}" method="POST">
+    {% csrf_token %}
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>Opiskelija</td>
+          <td>{{ user.first_name }} {{ user.last_name }}</td>
+        </tr>
+        <tr>
+          <td>Kurssi</td>
+          <td>{{ course.name }}</td>
+        </tr>
+        <tr>
+          <td>Työ</td>
+          <td>{{ lab.name }}</td>
+        </tr>
+        <tr>
+          <td>Ryhmä</td>
+          <td>{{ lab_group.date }}</td>
+        </tr>
+        <tr>
+          <td>Palautuspäivä</td>
+          <td>{{ report.send_date }}</td>
+        </tr>
+        <tr>
+          <td>Raportti</td>
+          <td>{{ report.filename }}</td>
+        </tr>
+        <tr>
+          <td>Arvosana</td>
+          <td>
+            <select class="form-select" name="grade">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="0">vaatii korjausta</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input class="btn btn-light btn-outline-dark" type="submit" value="Arvostele">
+          </td>
+        </tr>
+        </tbody>
+    </table>
+  </form>
+</div>
+{% endblock %}

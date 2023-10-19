@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block title %} Palautukset {% endblock %}
+{% block content %}
+<div class="container-sm">
+<h1>Oppilaiden palautukset</h1>
+{% for course in courses %}
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-secondary">
+        <th colspan="6">{{ course.name }}</th>
+    </tr>
+    <tr class="table-light">
+      <th>Ryhmä</th>
+      <th>Työ</th>
+      <th>Tekijä</th>
+      <th>Assistentti</th>
+      <th>Status</th>
+      <th>Arvostelu</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lab in labs %}
+      {% if lab.course_id == course.id %}
+        {% for lab_group in lab_groups %}
+          {% if lab_group.lab_id == lab.id %}
+            {% for report in reports %}
+              {% if report.lab_group_id == lab_group.id %}
+                {% for user in users %}
+                  {% if user.id == report.student_id %}
+                    <tr>
+                      <td>{{ lab_group.date }}</td>
+                      <td>{{ lab.name }}</td>
+                      <td>{{ user.first_name }} {{ user.last_name }}</td>
+                      {% if report.graded_by == None %}
+                        <td>Ei assistenttia</td>
+                      {% else %}
+                        <td>{{ report.graded_by }}</td>
+                      {% endif %}
+                      {% if report.report_status == 0 %}
+                        <td>Kesken</td>
+                      {% elif report.report_status == 1 %}
+                        <td>Palautettu</td>
+                      {% elif report.report_status == 2 %}
+                        <td>Korjauksessa</td>
+                      {% elif report.report_status == 3 %}
+                        <td>Korjattu</td>
+                      {% else %}
+                        <td>Arvosteltu ({{ report.grade }}/5)</td>
+                      {% endif %}
+                      <td>
+                        <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark">Avaa</a>
+                      </td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+{% endfor %}
+</div>
+{% endblock %}

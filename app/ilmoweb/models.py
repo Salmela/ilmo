@@ -63,7 +63,7 @@ class Report(models.Model):
     send_date = models.DateField(auto_now_add=True)
     filename = models.FileField(null=True)
     report_status = models.IntegerField()
-    # 0 = no file, 1 = report returned, 2 = revisions proposed, 3 = fixed report
+    # 0 = no file, 1 = report returned, 2 = revisions proposed, 3 = fixed report, 4 = report graded
     comments = models.TextField()
     grade = models.IntegerField(null=True)
     # 0 = revisions needed, 1-5 = grade, empty = not graded

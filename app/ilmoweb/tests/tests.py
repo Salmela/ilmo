@@ -333,3 +333,16 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.lab1.refresh_from_db()
         self.assertEqual(self.lab1.deleted, False)
+
+    # Tests for evaluating labs
+
+    def test_teacher_can_grade_reports(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('evaluate_report', args=[str(self.report1.id)])
+        response = self.client.post(url, {'grade': 5})
+        self.assertEqual(response.status_code, 302)
+        self.report1.refresh_from_db()
+        self.assertEqual(self.report1.grade, 5)
+        self.assertEqual(self.report1.graded_by_id, self.superuser1.id)
+        self.assertEqual(self.report1.grading_date, datetime.date.today())
+        self.assertEqual(self.report1.report_status, 4)
