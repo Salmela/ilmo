@@ -1,6 +1,5 @@
 """Module for app logic."""
 from django.http import HttpResponse
-import os
 
 def save_file(file):
     """
