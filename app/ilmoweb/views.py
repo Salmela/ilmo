@@ -4,6 +4,7 @@ import datetime
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
 from ilmoweb.logic import labs, signup, labgroups, files
 
@@ -160,10 +161,12 @@ def return_report(request):
     group_id = request.POST.get("lab_group_id")
     lab_group = LabGroups.objects.get(pk=group_id)
     file = request.FILES["file"]
-    if file.name.lower().endswith(('.pdf', '.docx')):
-        files.save_file(file)
-        report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
-        report.save()
+    if not file.name.lower().endswith(('.pdf', '.docx')):
+        messages.warning(request, "Tiedoston tulee olla pdf tai docx muodossa")
+        return redirect("/my_labs")
+    report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
+    report.save()
+    messages.success(request, "Tiedosto lähetetty onnistuneesti")
     return redirect("/my_labs")
 
 @login_required
