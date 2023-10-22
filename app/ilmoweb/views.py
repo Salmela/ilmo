@@ -218,5 +218,4 @@ def download_report(request, filename):
         Teacher can download reports through this view.
     """
     response = files.download_file(filename)
-    print(response)
     return response
