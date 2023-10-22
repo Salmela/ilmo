@@ -27,7 +27,7 @@ body {
 }
 
 #main_title {
-    position: absolute;
+    position: relative;
     left: 67px;
     top: 80px;
 }
