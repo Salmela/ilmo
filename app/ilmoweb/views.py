@@ -161,7 +161,6 @@ def return_report(request):
     lab_group = LabGroups.objects.get(pk=group_id)
     file = request.FILES["file"]
     if file.name.lower().endswith(('.pdf', '.docx')):
-        files.save_file(file)
         report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
         report.save()
     return redirect("/my_labs")

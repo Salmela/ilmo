@@ -1,14 +1,6 @@
 """Module for app logic."""
 from django.http import HttpResponse
 
-def save_file(file):
-    """
-        save file to filesystem
-    """
-    with open("ilmoweb/static/upload/" + file.name, "wb+") as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-
 def download_file(filename):
     """
         download file from filesystem
