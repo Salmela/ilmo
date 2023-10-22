@@ -93,8 +93,16 @@
     </div>
   </nav>
   <div class="body-container">
+    {% include "messages.html" %}
     {% block content %}
     {% endblock %}
+    <script>
+      setTimeout(function(){
+          if ($('#msg').length > 0) {
+              $('#msg').remove();
+          }
+      }, 3000)
+    </script>
   </div>
   <footer class="bg-black text-center">
     <div class="footer">
