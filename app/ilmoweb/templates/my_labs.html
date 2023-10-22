@@ -39,7 +39,7 @@
                           <form method="POST" action="/return_report/" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}"> 
-                            <input type="file" name="file">
+                            <input type="file" name="file" data-testid="file">
                             <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
                           </form>
                         </div>
