@@ -25,10 +25,10 @@
                 <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
                 <td>{{lab_group.place}}</td>
                 <td>
-                  <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal">
+                  <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal_{{ lab_group.id }}">
                     Palauta raportti
                   </button>
-                  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+                  <div class="modal fade" id="reportModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
                         <div class="modal-header">

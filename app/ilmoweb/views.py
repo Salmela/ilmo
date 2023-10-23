@@ -1,6 +1,7 @@
 """Module for page rendering."""
 import json
 import datetime
+import os
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -198,6 +199,7 @@ def evaluate_report(request, report_id):
     lab = Labs.objects.get(pk=lab_group.lab_id)
     course = Courses.objects.get(pk=lab.course_id)
     user = User.objects.get(pk=report.student_id)
+    name = os.path.basename(str(report.filename))
 
     if request.method == "POST":
         grade = int(request.POST.get("grade"))
@@ -213,7 +215,7 @@ def evaluate_report(request, report_id):
         return redirect(returned_reports)
 
     return render(request, "evaluate_report.html", {"course":course, "lab":lab,
-    "lab_group":lab_group, "report":report, "user":user})
+    "lab_group":lab_group, "report":report, "user":user, "filename":name})
 
 @login_required
 def download_report(request, filename):
