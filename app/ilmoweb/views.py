@@ -198,7 +198,7 @@ def evaluate_report(request, report_id):
     lab_group = LabGroups.objects.get(pk=report.lab_group_id)
     lab = Labs.objects.get(pk=lab_group.lab_id)
     course = Courses.objects.get(pk=lab.course_id)
-    user = User.objects.get(pk=report.student_id)
+    student = User.objects.get(pk=report.student_id)
     name = os.path.basename(str(report.filename))
 
     if request.method == "POST":
@@ -215,7 +215,7 @@ def evaluate_report(request, report_id):
         return redirect(returned_reports)
 
     return render(request, "evaluate_report.html", {"course":course, "lab":lab,
-    "lab_group":lab_group, "report":report, "user":user, "filename":name})
+    "lab_group":lab_group, "report":report, "student":student, "filename":name})
 
 @login_required
 def download_report(request, filename):
