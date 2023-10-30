@@ -44,6 +44,7 @@ class LabGroups(models.Model):
     status = models.IntegerField(default = 0)
     # 0 = not visible to students, 1 = unconfirmed, 2 = confirmed, 3 = canceled
     signed_up_students = models.IntegerField(default=0)
+    assistant = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
 class SignUp(models.Model):
     """

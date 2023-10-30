@@ -9,7 +9,7 @@ def confirm(group_id):
     group.status = 2
     group.save()
 
-def create(lab, date, time, place):
+def create(lab, date, time, place, assistant):
     """
         creates new labgroup in database
     """
@@ -20,5 +20,5 @@ def create(lab, date, time, place):
         start_time = '12'
         end_time = '16'
 
-    group = LabGroups(lab=lab, date=date, start_time=start_time, end_time=end_time, place=place)
+    group = LabGroups(lab=lab, date=date, start_time=start_time, end_time=end_time, place=place, assistant=assistant)
     group.save()
