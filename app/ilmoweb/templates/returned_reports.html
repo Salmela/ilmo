@@ -48,7 +48,7 @@
                         <td>Arvosteltu ({{ report.grade }}/5)</td>
                       {% endif %}
                       <td>
-                        <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark">Avaa</a>
+                        <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark" data-testid="open_{{report.id}}">Avaa</a>
                       </td>
                     </tr>
                   {% endif %}
