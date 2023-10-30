@@ -9,7 +9,7 @@
       <tbody>
         <tr>
           <td>Opiskelija</td>
-          <td>{{ user.first_name }} {{ user.last_name }}</td>
+          <td>{{ student.first_name }} {{ student.last_name }}</td>
         </tr>
         <tr>
           <td>Kurssi</td>
@@ -29,7 +29,7 @@
         </tr>
         <tr>
           <td>Raportti</td>
-          <td><a href="/download_report/{{ report.filename }}" download>{{ report.filename }}</a></td>
+          <td><a href="/download_report/{{ filename }}" download>{{ filename }}</a></td>
         </tr>
         <tr>
           <td>Arvosana</td>
