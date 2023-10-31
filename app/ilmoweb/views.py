@@ -66,10 +66,12 @@ def create_group(request):
         place = request.POST.get("place")
         date = request.POST.get("date")
         time = request.POST.get("time")
+        assistant_id = request.POST.get("assistant")
 
         for lab in course_labs:
             this_lab = Labs.objects.get(pk=lab)
-            labgroups.create(this_lab, date, time, place)
+            assistant = User.objects.get(pk=assistant_id)
+            labgroups.create(this_lab, date, time, place, assistant)
 
         return redirect(created_labs)
 
@@ -77,7 +79,10 @@ def create_group(request):
     course = Courses.objects.get(pk=course_id)
     course_labs = Labs.objects.all()
 
-    return render(request, "create_group.html", {"labs":course_labs, "course":course})
+    assistants = User.objects.filter(is_staff=True)
+
+    return render(request, "create_group.html", {
+        "labs":course_labs, "course":course, "assistants":assistants})
 
 @login_required
 def open_labs(request):

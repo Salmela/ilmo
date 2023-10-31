@@ -12,64 +12,76 @@
 
 <h1>{{course.name}}</h1><br>
 
-
 <form action="/create_group/" method="POST">
-    {% csrf_token %}
-    <div class="container-fluid">
-     <div class="row"> 
+  {% csrf_token %}
+  <div class="container-fluid">
+    <div class="row justify-content-center">
       <label for="date" class="col-sm-1 col-form-label">Päivä</label>
-       <div class="col-4">
+      <div class="col-4">
         <div class="input-group date" id="datepicker">
-         <input type="text" class="form-control" data-testid="date" name="date">
+          <input type="text" class="form-control" data-testid="date" name="date">
           <span class="input-group-append">
-           <span class="input-group-text bg-white d-block">
-            <i class="fa fa-calendar"></i>
-           </span>
+            <span class="input-group-text bg-white d-block">
+              <i class="fa fa-calendar"></i>
+            </span>
           </span>
         </div>
-       </div>
-     </div>
-     <br>
-     <div class="row">
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
       <label for="inputTime" class="col-sm-1 col-form-label">Aika</label>
-       <div class="col-3">
-        <select id="inputTime" class="form-control" data-testid="time" name="time">
+      <div class="col-3">
+        <select id="inputTime" class="form-control" data-testid="time"
+          name="time">
           <option selected>8-12</option>
           <option>12-16</option>
         </select>
-       </div>
-     </div>
-     <br>
-     <div class="row">
-      <label for="inputPlace" class="col-sm-1 col-form-label">Paikka</label>
-       <div class="col-3">
-        <select id="inputPlace" class="form-control" data-testid="place" name="place">
-         <option selected>B152</option>
-         <option>D210 (Phy)</option>
-         <option>D211 (Phy)</option>
-        </select>
-       </div>
-     </div>
-     <br>
-     <div class="row">
-      <label class="col-sm-1 col-form-label">Valitse työt</label>
-       <div class="col" style="text-align:left">
-          {% for lab in labs %}
-            {% if lab.course_id == course.id %}
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="{{lab.id}}" data-testid = "{{lab.id}}" id="{{lab.id}}" name="labs[]">
-                <label class="form-check-label row-cols-auto" for="{{lab.id}}">
-                  {{lab.name}}
-                </label>
-              </div>
-            {% endif %}
-          {% endfor %}
-       </div>
-     </div>
+      </div>
     </div>
     <br>
-    <input type="hidden" name="course_id" value="course.id">
-    <input type="hidden" name="course_name" value="course.name">
-    <input class="btn btn-light btn-outline-dark" type="submit" value="Luo labra">
+    <div class="row justify-content-center">
+      <label for="inputPlace" class="col-sm-1 col-form-label">Paikka</label>
+      <div class="col-3">
+        <select id="inputPlace" class="form-control" data-testid="place"
+          name="place">
+          <option selected>B152</option>
+          <option>D210 (Phy)</option>
+          <option>D211 (Phy)</option>
+        </select>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <h3>Valitse työt: </h3>
+      <div class="col text-center">
+        {% for lab in labs %}
+        {% if lab.course_id == course.id %}
+        <div class="form-check d-flex justify-content-center">
+          <input class="form-check-input" type="checkbox" value="{{lab.id}}"
+            data-testid="{{lab.id}}" id="{{lab.id}}" name="labs[]">
+          <label class="form-check-label ml-2" for="{{lab.id}}">{{lab.name}}</label>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      <label for="inputPlace" class="col-sm-1 col-form-label">Assistentti</label>
+      <div class="col-3">
+        <select id="inputPlace" class="form-control" data-testid="assistant"
+          name="assistant">
+          {% for assistant in assistants %}
+          <option value="{{assistant.id}}">{{assistant.username}}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+  <br>
+  <input type="hidden" name="course_id" value="course.id">
+  <input type="hidden" name="course_name" value="course.name">
+  <input class="btn btn-light btn-outline-dark" type="submit" value="Luo labra">
 </form>
 {% endblock %}
