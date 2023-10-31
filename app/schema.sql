@@ -17,7 +17,8 @@ CREATE TABLE ilmoweb_courses(
     name TEXT,
     description TEXT,
     labs_amount INTEGER,
-    is_visible BOOL);
+    is_visible BOOL
+    deleted BOOL DEFAULT false);
 
 CREATE TABLE ilmoweb_labs(
     id SERIAL PRIMARY KEY,
