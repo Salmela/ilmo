@@ -242,3 +242,15 @@ def download_report(request, filename):
     """
     response = files.download_file(filename)
     return response
+
+@login_required
+def delete_labgroup(request, labgroup_id):
+    """
+        Delete course from created_labs view.
+    """
+    if request.user.is_staff:
+        labgroup = LabGroups.objects.get(pk=labgroup_id)
+        labgroup.deleted = 1
+        labgroup.save()
+
+    return redirect(created_labs)

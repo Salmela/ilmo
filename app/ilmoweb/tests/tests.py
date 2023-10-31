@@ -424,3 +424,21 @@ class TestModels(TestCase):
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.report_status, 2)
         self.assertEqual(self.report1.comments, 'Korjaa')
+
+    # Test for deleting labgroups
+
+    def test_teacher_can_delete_labgroup(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('delete_labgroup', args=[str(self.labgroup1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.deleted, True)
+
+    def test_student_cannot_delete_labgroup(self):
+        self.client.force_login(self.user1)
+        url = reverse('delete_labgroup', args=[str(self.labgroup1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.deleted, False)
