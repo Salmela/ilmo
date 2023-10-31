@@ -22,6 +22,16 @@ class TestModels(TestCase):
             last_name = "Virtanen",
             email = "pekka.virtanen@ilmoweb.fi"
         )
+        self.user1.save()
+
+        self.assistant1 = User.objects.create(
+            username = "AnttiA",
+            password = make_password("assari"),
+            first_name = "Antti",
+            last_name = "Assari",
+            email = "antti.assari@ilmoweb.fi"
+        )
+        self.assistant1.save()
 
         self.course1 = Courses.objects.create(
             name = "Kemian Labratyö",
@@ -270,7 +280,7 @@ class TestModels(TestCase):
         time = '8-12'
         place = 'B105'
 
-        labgroups.create(lab, date, time, place)
+        labgroups.create(lab, date, time, place, self.assistant1)
 
         group = LabGroups.objects.get(lab=lab, date=date, place=place)
 
@@ -283,7 +293,7 @@ class TestModels(TestCase):
         time = '12-16'
         place = 'B105'
 
-        labgroups.create(lab, date, time, place)
+        labgroups.create(lab, date, time, place, self.assistant1)
 
         group = LabGroups.objects.get(lab=lab, date=date, place=place)
 
@@ -297,7 +307,7 @@ class TestModels(TestCase):
         place = 'B105'
 
         prev = len(LabGroups.objects.all())
-        labgroups.create(lab, date, time, place)
+        labgroups.create(lab, date, time, place, self.assistant1)
         new = len(LabGroups.objects.all())
 
         self.assertEqual(prev + 1, new)
@@ -307,13 +317,14 @@ class TestModels(TestCase):
         date = '2023-10-13'
         time = '8-12'
         place = 'B105'
+        assistant = User.objects.filter(is_staff=True).first()
 
         self.client.force_login(self.superuser1)
         prev = len(LabGroups.objects.all())
         get_response = self.client.get("/create_group/", {'course_id':self.course1.id})
         self.assertEqual(get_response.status_code, 200)
 
-        post_response = self.client.post("/create_group/", {'labs[]':lab, 'place':place, 'date':date, 'time':time})
+        post_response = self.client.post("/create_group/", {'labs[]':lab, 'place':place, 'date':date, 'time':time, 'assistant':assistant.id})
         self.assertEqual(post_response.status_code, 302)
         new = len(LabGroups.objects.all())
         self.assertEqual(prev + 1, new)
@@ -323,13 +334,14 @@ class TestModels(TestCase):
         date = '2023-10-13'
         time = '8-12'
         place = 'B105'
+        assistant = User.objects.filter(is_staff=True).first()
 
         self.client.force_login(self.superuser1)
         prev = len(LabGroups.objects.all())
         get_response = self.client.get("/create_group/", {'course_id':self.course1.id})
         self.assertEqual(get_response.status_code, 200)
 
-        post_response = self.client.post("/create_group/", {'labs[]':labs, 'place':place, 'date':date, 'time':time})
+        post_response = self.client.post("/create_group/", {'labs[]':labs, 'place':place, 'date':date, 'time':time, 'assistant':assistant.id})
         self.assertEqual(post_response.status_code, 302)
         new = len(LabGroups.objects.all())
         self.assertEqual(prev + 2, new)

@@ -81,7 +81,8 @@ def create_group(request):
 
     assistants = User.objects.filter(is_staff=True)
 
-    return render(request, "create_group.html", {"labs":course_labs, "course":course, "assistants":assistants})
+    return render(request, "create_group.html", {
+        "labs":course_labs, "course":course, "assistants":assistants})
 
 @login_required
 def open_labs(request):

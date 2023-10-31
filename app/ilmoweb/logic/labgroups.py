@@ -20,5 +20,10 @@ def create(lab, date, time, place, assistant):
         start_time = '12'
         end_time = '16'
 
-    group = LabGroups(lab=lab, date=date, start_time=start_time, end_time=end_time, place=place, assistant=assistant)
+    group = LabGroups(lab=lab,
+                      date=date,
+                      start_time=start_time,
+                      end_time=end_time,
+                      place=place,
+                      assistant=assistant)
     group.save()
