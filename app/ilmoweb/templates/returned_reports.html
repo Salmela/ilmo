@@ -31,11 +31,39 @@
                       <td>{{ lab_group.date }}</td>
                       <td>{{ lab.name }}</td>
                       <td>{{ user.first_name }} {{ user.last_name }}</td>
-                      {% if report.graded_by == None %}
-                        <td>Ei assistenttia</td>
-                      {% else %}
-                        <td>{{ report.graded_by }}</td>
-                      {% endif %}
+                      <td>
+                        {% if report.graded_by == None %}
+                          Ei assistenttia
+                        {% else %}
+                          {{ report.graded_by.first_name }} {{ report.graded_by.last_name }}
+                        {% endif %}
+                        <button class="btn btn-light btn-outline-dark btn-sm float-end" data-toggle="modal" data-target="#formModal_{{ report.id }}">Vaihda</button>
+                        <div class="modal fade" id="formModal_{{ report.id }}" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="formModalLabel">Vaihda assistenttia</h5>
+                                <button type="button" class="btn-close" data-dismiss="modal"></button>
+                              </div>
+                              <form action="/returned_report/{{ report.id }}" method="POST">
+                              {% csrf_token %}
+                                <div class="modal-body">
+                                  <select class="form-select" name="assistant">
+                                    {% for assistant in users %}
+                                      {% if assistant.is_staff %}
+                                        <option value="{{ assistant.id }}">{{ assistant.first_name }} {{ assistant.last_name }}</option>
+                                      {% endif %}
+                                    {% endfor %}
+                                  </select>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="submit" class="btn btn-light btn-outline-dark">Submit</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
                       {% if report.report_status == 0 %}
                         <td>Kesken</td>
                       {% elif report.report_status == 1 %}

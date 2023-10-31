@@ -398,13 +398,14 @@ class TestModels(TestCase):
 
     # Tests for evaluating labs
 
-    def test_teacher_can_grade_reports(self):
+    def test_teacher_can_evaluate_reports(self):
         self.client.force_login(self.superuser1)
         url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 5})
+        response = self.client.post(url, {'grade': 5, 'comments': 'Perfectly done!'})
         self.assertEqual(response.status_code, 302)
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.grade, 5)
+        self.assertEqual(self.report1.comments, 'Perfectly done!')
         self.assertEqual(self.report1.graded_by_id, self.superuser1.id)
         self.assertEqual(self.report1.grading_date, datetime.date.today())
         self.assertEqual(self.report1.report_status, 4)
@@ -412,15 +413,14 @@ class TestModels(TestCase):
     def test_student_cannot_grade_reports(self):
         self.client.force_login(self.user1)
         url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 5})
+        response = self.client.post(url, {'grade': 5, 'comments': 'Perfectly done!'})
         self.assertEqual(response.url, '/my_labs' )
     
     def test_teacher_can_send_reports_to_be_fixed(self):
         self.client.force_login(self.superuser1)
         url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 0})
+        response = self.client.post(url, {'grade': 0, 'comments': 'Korjaa'})
         self.assertEqual(response.status_code, 302)
-
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.report_status, 2)
-        
+        self.assertEqual(self.report1.comments, 'Korjaa')
