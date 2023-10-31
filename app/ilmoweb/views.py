@@ -193,7 +193,7 @@ def returned_report(request, report_id):
     """
     if request.user.is_staff is not True:
         return redirect("/my_labs")
-    
+
     if request.method == "POST":
         report = Report.objects.get(pk=report_id)
         assistant_id = int(request.POST.get("assistant"))
