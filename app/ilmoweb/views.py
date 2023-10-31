@@ -187,6 +187,22 @@ def returned_reports(request):
     "lab_groups":lab_groups, "reports":reports, "users":users})
 
 @login_required
+def returned_report(request, report_id):
+    """
+        Changes the assistant of a certain report.
+    """
+    if request.user.is_staff is not True:
+        return redirect("/my_labs")
+    
+    if request.method == "POST":
+        report = Report.objects.get(pk=report_id)
+        assistant_id = int(request.POST.get("assistant"))
+        report.graded_by_id = assistant_id
+        report.save()
+
+    return redirect("/returned_reports")
+
+@login_required
 def evaluate_report(request, report_id):
     """
         Teacher's view for evaluating a certain report.
@@ -204,6 +220,8 @@ def evaluate_report(request, report_id):
     if request.method == "POST":
         grade = int(request.POST.get("grade"))
         report.grade = grade
+        comments = request.POST.get("comments")
+        report.comments = comments
         report.grading_date = datetime.date.today()
         report.graded_by_id = request.user.id
         if grade == 0:
