@@ -154,7 +154,8 @@ def my_labs(request):
     """
     labgroup_id_list = signup.get_labgroups(request.user)
     students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    return render(request, "my_labs.html", {"labgroups":students_labgroups})
+    students_reports = Report.objects.filter(student_id=request.user.id)
+    return render(request, "my_labs.html", {"labgroups":students_labgroups, "reports":students_reports})
 
 @login_required
 def return_report(request):
@@ -167,10 +168,12 @@ def return_report(request):
     group_id = request.POST.get("lab_group_id")
     lab_group = LabGroups.objects.get(pk=group_id)
     file = request.FILES["file"]
+    filename = os.path.basename(str(file))
+    print(filename)
     if not file.name.lower().endswith(('.pdf', '.docx')):
         messages.warning(request, "Tiedoston tulee olla pdf tai docx muodossa")
         return redirect("/my_labs")
-    report = Report(student=request.user, lab_group=lab_group, filename=file, report_status=1)
+    report = Report(student=request.user, lab_group=lab_group, filename=filename, report_status=1)
     report.save()
     messages.success(request, "Tiedosto lähetetty onnistuneesti")
     return redirect("/my_labs")
@@ -220,7 +223,6 @@ def evaluate_report(request, report_id):
     lab = Labs.objects.get(pk=lab_group.lab_id)
     course = Courses.objects.get(pk=lab.course_id)
     student = User.objects.get(pk=report.student_id)
-    name = os.path.basename(str(report.filename))
 
     if request.method == "POST":
         grade = int(request.POST.get("grade"))
@@ -238,7 +240,7 @@ def evaluate_report(request, report_id):
         return redirect(returned_reports)
 
     return render(request, "evaluate_report.html", {"course":course, "lab":lab,
-    "lab_group":lab_group, "report":report, "student":student, "filename":name})
+    "lab_group":lab_group, "report":report, "student":student})
 
 @login_required
 def download_report(request, filename):
