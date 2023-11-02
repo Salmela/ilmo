@@ -93,6 +93,7 @@ def open_labs(request):
     course_labs =  Labs.objects.all()
     lab_groups =  LabGroups.objects.all()
     signedup = SignUp.objects.all()
+    users_enrollments = signup.get_labgroups(request.user)
 
     if request.method == "POST":
         if request.user.is_staff:
@@ -105,7 +106,8 @@ def open_labs(request):
         signup.signup(user=user, group=group)
 
     return render(request, "open_labs.html", {"courses":courses, "labs":course_labs,
-                                              "lab_groups":lab_groups, "signedup":signedup})
+                                              "lab_groups":lab_groups, "signedup":signedup,
+                                              "users_enrollments":users_enrollments})
 
 @login_required
 def confirm(request):
@@ -262,3 +264,17 @@ def delete_labgroup(request, labgroup_id):
         labgroup.save()
 
     return redirect(created_labs)
+
+@login_required
+def cancel_enrollment(request, labgroup_id):
+    """
+        Student can cancel an enrollment to a labgroup through this view.
+    """
+    if request.method == "POST":
+        if request.user.is_staff:
+            return HttpResponseBadRequest("Opettaja ei voi peruuttaa ilmoittautumista.")
+        user = request.user
+        signup.cancel(user, labgroup_id)
+        messages.success(request, "Ilmoittautuminen peruutettu")
+
+    return redirect("/open_labs")

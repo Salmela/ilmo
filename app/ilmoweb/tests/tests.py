@@ -2,7 +2,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.urls import reverse
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups, Report
-from ilmoweb.logic import labgroups
+from ilmoweb.logic import labgroups, signup
 import datetime
 
 class FirstTest(TestCase):
@@ -454,3 +454,15 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.deleted, False)
+
+    # Test for cancelling enrollment
+
+    def test_student_can_cancel_enrollment(self):
+        self.client.force_login(self.user1)
+        signup.signup(self.user1, self.labgroup1)
+        self.assertEqual(self.labgroup1.signed_up_students, 1)
+        url = reverse('cancel_enrollment', args=[str(self.labgroup1.id)])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.signed_up_students, 0)
