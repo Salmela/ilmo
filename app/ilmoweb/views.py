@@ -155,7 +155,8 @@ def my_labs(request):
     labgroup_id_list = signup.get_labgroups(request.user)
     students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
     students_reports = Report.objects.filter(student_id=request.user.id)
-    return render(request, "my_labs.html", {"labgroups":students_labgroups, "reports":students_reports})
+    return render(request, "my_labs.html", {"labgroups":students_labgroups,
+                                            "reports":students_reports})
 
 @login_required
 def return_report(request):
