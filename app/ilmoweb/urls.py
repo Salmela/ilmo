@@ -10,6 +10,7 @@ urlpatterns = [
     path("create_lab/", views.create_lab, name="create_lab"),
     path("open_labs/", views.open_labs, name="open_labs"),
     path("open_labs/confirm/", views.confirm, name="confirm"),
+    path("cancel_enrollment/<int:labgroup_id>", views.cancel_enrollment, name="cancel_enrollment"),
     path("make_lab_visible/<int:lab_id>", views.make_lab_visible, name="make_lab_visible"),
     path("delete_lab/<int:lab_id>", views.delete_lab, name="delete_lab"),
     path("my_labs/", views.my_labs, name="my_labs"),

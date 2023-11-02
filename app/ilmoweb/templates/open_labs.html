@@ -117,10 +117,21 @@
            </td>
           {% elif lab_group.signed_up_students == lab.max_students %}
             <td>Täynnä</td>
+          {% elif lab_group.id in users_enrollments %}
+            {% if lab_group.status == 1 %}
+              <td>
+                <form method="POST" action="/cancel_enrollment/{{ lab_group.id }}">
+                  {% csrf_token %}
+                  <button class="btn btn-light btn-outline-dark" type="submit">Peruuta ilmoittautuminen</button>
+                </form>
+              </td>
+              {% else %}
+              <td>Ilmoittauduttu</td>
+              {% endif %}
           {% else %}
           <td>
             {% csrf_token %}
-            <button class="btn btn-light btn-outline-dark" data-testid="{{ lab.id }}" onclick="signup(
+            <button class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}" onclick="signup(
               '{{ user.id }}', '{{ lab_group.id }}', '{{ lab.name }}',
               '{{ lab_group.signed_up_students }}', '{{ lab.max_students }}'
               );">Ilmoittaudu</button>
