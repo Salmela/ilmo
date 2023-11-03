@@ -4,24 +4,27 @@
 <div class="container-sm">
   <form action="/create_lab/" method="POST">
     {% csrf_token %}
-    <table class="table table-bordered">
-      <thead>
-        <tr class="table-secondary">
-          <th>Labran nimi</th>
-          <th>Kuvaus</th>
-          <th>Suurin Oppilasmäärä</th>
-        </tr>
-      </thead>
+    <input type="hidden" name="course_id" value="{{ course_id }}">
+    <table class="table table-borderless">
       <tbody>
         <tr>
-          <td><input type="text" name="lab_name" data-testid="lab_name" size="30" maxlength="100"></td>
-          <td><textarea name="description" data-testid="description" rows="5" cols="45" maxlength="1000"></textarea></td>
-          <td><input type="number" name="max_students" data-testid="max_students" value="1" size="4" min="1" max="99"></td>
+          <th><p class="float-end">Labran nimi</p></th>
+          <td><input class="float-start" type="text" name="lab_name" data-testid="lab_name" size="46" maxlength="100"></td>         
+        </tr>
+        <tr>
+          <th><p class="float-end">Kuvaus</p></th>
+          <td><textarea class="float-start" name="description" data-testid="description" rows="5" cols="45" maxlength="1000"></textarea></td>
+        </tr>
+        <tr>
+          <th><p class="float-end">Ryhmäkoko</p></th>
+          <td><input class="float-start" type="number" name="max_students" data-testid="max_students" value="1" min="1" max="99"></td>
+        </tr>
+        <tr>
+          <th></th>
+          <td><input class="btn btn-light btn-outline-dark float-start" type="submit" value="Luo labra"></td>
         </tr>
       </tbody>
     </table>
-    <input type="hidden" name="course_id" value="{{ course_id }}">
-    <input class="btn btn-light btn-outline-dark" type="submit" value="Luo labra">
   </form>
 </div>
 {% endblock %}
