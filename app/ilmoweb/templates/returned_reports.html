@@ -2,93 +2,93 @@
 {% block title %} Palautukset {% endblock %}
 {% block content %}
 <div class="container-sm">
-<h1>Oppilaiden palautukset</h1>
-{% for course in courses %}
-<table class="table table-bordered">
-  <thead>
-    <tr class="table-secondary">
-        <th colspan="6">{{ course.name }}</th>
-    </tr>
-    <tr class="table-light">
-      <th>Ryhmä</th>
-      <th>Työ</th>
-      <th>Tekijä</th>
-      <th>Assistentti</th>
-      <th>Status</th>
-      <th>Arvostelu</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for lab in labs %}
-      {% if lab.course_id == course.id %}
-        {% for lab_group in lab_groups %}
-          {% if lab_group.lab_id == lab.id %}
-            {% for report in reports %}
-              {% if report.lab_group_id == lab_group.id %}
-                {% for user in users %}
-                  {% if user.id == report.student_id %}
-                    <tr>
-                      <td>{{ lab_group.date }}</td>
-                      <td>{{ lab.name }}</td>
-                      <td>{{ user.first_name }} {{ user.last_name }}</td>
-                      <td>
-                        {% if report.graded_by == None %}
-                          Ei assistenttia
-                        {% else %}
-                          {{ report.graded_by.first_name }} {{ report.graded_by.last_name }}
-                        {% endif %}
-                        <button class="btn btn-light btn-outline-dark btn-sm float-end" data-toggle="modal" data-target="#formModal_{{ report.id }}">Vaihda</button>
-                        <div class="modal fade" id="formModal_{{ report.id }}" tabindex="-1">
-                          <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="formModalLabel">Vaihda assistenttia</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal"></button>
+  <h1>Oppilaiden palautukset</h1>
+  {% for course in courses %}
+    <table class="table table-bordered">
+      <thead>
+        <tr class="table-secondary">
+            <th colspan="6">{{ course.name }}</th>
+        </tr>
+        <tr class="table-light">
+          <th>Ryhmä</th>
+          <th>Työ</th>
+          <th>Tekijä</th>
+          <th>Assistentti</th>
+          <th>Status</th>
+          <th>Arvostelu</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lab in labs %}
+          {% if lab.course_id == course.id %}
+            {% for lab_group in lab_groups %}
+              {% if lab_group.lab_id == lab.id %}
+                {% for report in reports %}
+                  {% if report.lab_group_id == lab_group.id %}
+                    {% for user in users %}
+                      {% if user.id == report.student_id %}
+                        <tr>
+                          <td>{{ lab_group.date }}</td>
+                          <td>{{ lab.name }}</td>
+                          <td>{{ user.first_name }} {{ user.last_name }}</td>
+                          <td>
+                            {% if report.graded_by == None %}
+                              Ei assistenttia
+                            {% else %}
+                              {{ report.graded_by.first_name }} {{ report.graded_by.last_name }}
+                            {% endif %}
+                            <button class="btn btn-light btn-outline-dark btn-sm float-end" data-toggle="modal" data-target="#formModal_{{ report.id }}">Vaihda</button>
+                            <div class="modal fade" id="formModal_{{ report.id }}" tabindex="-1">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="formModalLabel">Vaihda assistenttia</h5>
+                                    <button type="button" class="btn-close" data-dismiss="modal"></button>
+                                  </div>
+                                  <form action="/returned_report/{{ report.id }}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                      <select class="form-select" name="assistant">
+                                        {% for assistant in users %}
+                                          {% if assistant.is_staff %}
+                                            <option value="{{ assistant.id }}">{{ assistant.first_name }} {{ assistant.last_name }}</option>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn btn-light btn-outline-dark">Submit</button>
+                                    </div>
+                                  </form>
+                                </div>
                               </div>
-                              <form action="/returned_report/{{ report.id }}" method="POST">
-                              {% csrf_token %}
-                                <div class="modal-body">
-                                  <select class="form-select" name="assistant">
-                                    {% for assistant in users %}
-                                      {% if assistant.is_staff %}
-                                        <option value="{{ assistant.id }}">{{ assistant.first_name }} {{ assistant.last_name }}</option>
-                                      {% endif %}
-                                    {% endfor %}
-                                  </select>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="submit" class="btn btn-light btn-outline-dark">Submit</button>
-                                </div>
-                              </form>
                             </div>
-                          </div>
-                        </div>
-                      </td>
-                      {% if report.report_status == 0 %}
-                        <td>Kesken</td>
-                      {% elif report.report_status == 1 %}
-                        <td>Palautettu</td>
-                      {% elif report.report_status == 2 %}
-                        <td>Korjauksessa</td>
-                      {% elif report.report_status == 3 %}
-                        <td>Korjattu</td>
-                      {% else %}
-                        <td>Arvosteltu ({{ report.grade }}/5)</td>
+                          </td>
+                          {% if report.report_status == 0 %}
+                            <td>Kesken</td>
+                          {% elif report.report_status == 1 %}
+                            <td>Palautettu</td>
+                          {% elif report.report_status == 2 %}
+                            <td>Korjauksessa</td>
+                          {% elif report.report_status == 3 %}
+                            <td>Korjattu</td>
+                          {% else %}
+                            <td>Arvosteltu ({{ report.grade }}/5)</td>
+                          {% endif %}
+                          <td>
+                            <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark" data-testid="open_{{report.id}}">Avaa</a>
+                          </td>
+                        </tr>
                       {% endif %}
-                      <td>
-                        <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark" data-testid="open_{{report.id}}">Avaa</a>
-                      </td>
-                    </tr>
+                    {% endfor %}
                   {% endif %}
                 {% endfor %}
               {% endif %}
             {% endfor %}
           {% endif %}
         {% endfor %}
-      {% endif %}
-    {% endfor %}
-  </tbody>
-</table>
-{% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
 </div>
 {% endblock %}

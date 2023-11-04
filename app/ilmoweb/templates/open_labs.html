@@ -98,20 +98,18 @@
                           <div class="modal fade" id="students{{lab_group.id}}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="studentsLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
-                                <div class="modal-header">
+                                <div class="modal-header"><input type="hidden" name="course_id" value="{{ course_id }}">
                                   <h1 class="modal-title fs-5" id="studentsLabel">
-                                    Kurssin {{course.name}} laboratoriotyöhön {{lab.name}} ilmoittautuneet opiskelijat
+                                    Ilmoittautuneet opiskelijat
                                   </h1>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                   {% for signup in signedup %}
                                     {% if signup.labgroups_id == lab_group.id %} 
-                                      <p><b>{{signup.user}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
+                                      <p><b>{{signup.user}}:</b> {{signup.user.email}}, {{signup.user.student_id}}<br></p>
                                     {% endif %}
                                   {% endfor %}
-                                </div>
-                                <div class="modal-footer">
                                 </div>
                               </div>
                             </div>
