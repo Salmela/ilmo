@@ -212,10 +212,10 @@ def return_report(request):
     group_id = request.POST.get("lab_group_id")
     lab_group = LabGroups.objects.get(pk=group_id)
     file = request.FILES["file"]
-    filename = os.path.basename(str(file))
-    print(filename)
-    if not file.name.lower().endswith(('.pdf', '.docx')):
-        messages.warning(request, "Tiedoston tulee olla pdf tai docx muodossa")
+    student = request.user
+
+    if not file.name.lower().endswith(('.pdf')):
+        messages.warning(request, "Tiedoston tulee olla pdf-muodossa")
         return redirect("/my_labs")
 
     prev_1 = Report.objects.filter(student=student, lab_group=lab_group, report_status=1)
