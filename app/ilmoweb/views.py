@@ -6,9 +6,8 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.db.models import Q
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files
+from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports
 
 def home_page_view(request):
     """
@@ -155,7 +154,8 @@ def my_labs(request):
     """
     labgroup_id_list = signup.get_labgroups(request.user)
     students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    return render(request, "my_labs.html", {"labgroups":students_labgroups})
+    reports = Report.objects.filter(student=request.user)
+    return render(request, "my_labs.html", {"labgroups":students_labgroups, "reports":reports})
 
 @login_required
 def return_report(request):
@@ -174,36 +174,19 @@ def return_report(request):
         messages.warning(request, "Tiedoston tulee olla pdf tai docx muodossa")
         return redirect("/my_labs")
 
-    previous_report_1 = Report.objects.filter(student=student, lab_group=lab_group, report_status=1)
-    previous_report_2 = Report.objects.filter(student=student, lab_group=lab_group, report_status=2)
-    previous_report_3 = Report.objects.filter(student=student, lab_group=lab_group, report_status=3)
-    previous_report_4 = Report.objects.filter(student=student, lab_group=lab_group, report_status=4)
+    prev_1 = Report.objects.filter(student=student, lab_group=lab_group, report_status=1)
+    prev_2 = Report.objects.filter(student=student, lab_group=lab_group, report_status=2)
+    prev_3 = Report.objects.filter(student=student, lab_group=lab_group, report_status=3)
+    prev_4 = Report.objects.filter(student=student, lab_group=lab_group, report_status=4)
 
-    if previous_report_4:
-        messages.warning(request, "Et voi palauttaa tähän työhön uutta raporttia")
-        return redirect("/my_labs")
-
-    if previous_report_3:
-        Report.objects.filter(pk=previous_report_3.id).delete()
-        report = Report(student=student, lab_group=lab_group, filename=file, report_status=3)
-        report.save()
-
-    if previous_report_2:
-        report = Report(student=student, lab_group=lab_group, filename=file, report_status=3)
-        report.save()
-        messages.success(request, "Korjausehdotukset sisältävä tiedosto lähetetty onnistuneesti")
-        return redirect("/my_labs")
-
-    if previous_report_1:
-        Report.objects.filter(pk=previous_report_1[0].id).delete()
-        report = Report(student=student, lab_group=lab_group, filename=file, report_status=1)
-        report.save()
-        messages.success(request, "Alkuperäisen korvaava tiedosto lähetetty")
-        return redirect("/my_labs")
-
-    report = Report(student=student, lab_group=lab_group, filename=file, report_status=1)
-    report.save()
-    messages.success(request, "Tiedosto lähetetty onnistuneesti")
+    check_previous_reports.check_and_replace(request,
+                                            prev_1,
+                                            prev_2,
+                                            prev_3,
+                                            prev_4,
+                                            student,
+                                            lab_group,
+                                            file)
     return redirect("/my_labs")
 
 @login_required
