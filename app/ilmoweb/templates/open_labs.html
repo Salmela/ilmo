@@ -139,6 +139,8 @@
                               <div id = "confirm{{ lab_group.id }}">
                                 {% csrf_token %}
                                 <button class="btn btn-light btn-outline-dark" onclick="confirm('{{ lab_group.id }}');">Vahvista</button>
+                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}">Vahvista</button>
+                                <input type="hidden" value="{{lab_group.id}}" name="lab_group_id">
                               </div>
                             {% else %} 
                               Ei vielä tarpeeksi ilmoittautuneita
