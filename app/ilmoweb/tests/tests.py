@@ -204,60 +204,109 @@ class TestModels(TestCase):
 
     def test_student_can_enroll_to_labgroup(self):
         self.client.force_login(self.user1)
-        data = {
-            'user_id': self.user1.id,
-            'group_id': self.labgroup1.id
-        }
-        response_post = self.client.post('/open_labs/', data, 'application/json')
-        self.assertEqual(response_post.status_code, 200)
+        user_id = self.user1.id,
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
+
+        response_post = self.client.post('/open_labs/enroll/', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
+        response_get = self.client.get('/open_labs/')
+
+        # correct status codes
+
+        self.assertEqual(response_post.status_code, 302)
+        self.assertEqual(response_get.status_code, 200)
+
+        # check database
+
         self.labgroup1.refresh_from_db()
-        self.assertEqual(self.labgroup1.signed_up_students, 1)
+        students = self.labgroup1.signed_up_students
+        self.assertEqual(students, 1)
+
     
     def test_teacher_cannot_enroll_to_labgroup(self):
         self.client.force_login(self.superuser1)
-        data = {
-            'user_id': self.superuser1.id,
-            'group_id': self.labgroup1.id
-        }
-        response_post = self.client.post('/open_labs/', data, 'application/json')
-        self.assertEqual(response_post.status_code, 400)
+        user_id = self.user1.id,
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
+
+        response_post = self.client.post('/open_labs/enroll', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
+        response_get = self.client.get('/open_labs/')
+
+        # correct status codes
+
+        self.assertEqual(response_post.status_code, 301)
+        self.assertEqual(response_get.status_code, 200)
+
+        # check database
+
         self.labgroup1.refresh_from_db()
-        self.assertEqual(self.labgroup1.signed_up_students, 0)
+        students = self.labgroup1.signed_up_students
+        self.assertEqual(students, 0)
+
     
     def test_student_cannot_enroll_twice_to_same_labgroup(self):
         self.client.force_login(self.user1)
-        data = {
-            'user_id': self.user1.id,
-            'group_id': self.labgroup1.id
-        }
-        self.client.post('/open_labs/', data, 'application/json')
-        with self.assertRaises(ValueError):
-            self.client.post('/open_labs/', data, 'application/json')
+        user_id = self.user1.id,
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
+
+        # student enrolls
+        self.client.post('/open_labs/enroll/', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
+
+        # same student enrolls again
+        response_post = self.client.post('/open_labs/enroll', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
+
+        # correct status code
+
+        self.assertEqual(response_post.status_code, 301)
+
+        # database only has one signed up student
         self.labgroup1.refresh_from_db()
-        self.assertEqual(self.labgroup1.signed_up_students, 1)
+        students = self.labgroup1.signed_up_students
+        self.assertEqual(students, 1)
 
     # Tests for confirming labgroup
     
     def test_teacher_can_confirm_nonempty_labgroup(self):
         self.client.force_login(self.superuser1)
-        response_post = self.client.post('/open_labs/confirm/', self.labgroup2.id, 'application/json')
+        group_id = self.labgroup2.id
+        response_post = self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
+        
+        # correct status code
         self.assertEqual(response_post.status_code, 302)
+
+        # check database update
         self.labgroup2.refresh_from_db()
-        self.assertEqual(self.labgroup2.status, 2)
+        status = self.labgroup2.status
+        self.assertEqual(status, 2)
     
+
     def test_teacher_cannot_confirm_empty_labgroup(self):
         self.client.force_login(self.superuser1)
-        response_post = self.client.post('/open_labs/confirm/', self.labgroup1.id, 'application/json')
-        self.assertEqual(response_post.status_code, 400)
+        group_id = self.labgroup1.id
+
+        # try to confirm
+        self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
+        
+        # check database stays same
         self.labgroup1.refresh_from_db()
-        self.assertEqual(self.labgroup1.status, False)
-    
+        status = self.labgroup1.status
+        self.assertEqual(status, 0)
+
     def test_student_cannot_confirm_labgroup(self):
         self.client.force_login(self.user1)
-        response_post = self.client.post('/open_labs/confirm/', self.labgroup1.id, 'application/json')
-        self.assertEqual(response_post.status_code, 400)
+        group_id = self.labgroup2.id
+
+        # try to confirm
+        self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
+        
+        # check database stays same
         self.labgroup1.refresh_from_db()
-        self.assertEqual(self.labgroup1.status, False)
+        status = self.labgroup2.status
+        self.assertEqual(status, 0)
 
     # Tests for reports
     def test_report_is_saved_to_db(self):
