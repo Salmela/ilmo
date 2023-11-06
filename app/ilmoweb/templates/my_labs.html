@@ -4,7 +4,7 @@
 {% block content %}
 <h1>Omat ilmoittautumiset</h1><br>
 <div class="container-sm">
-  <table class="table table-sm table-bordered">
+  <table class="table table-sm table-bordered align-middle">
     <thead>
       <tr>
         <th scope="col">Kurssi</th>
@@ -57,8 +57,8 @@
                 </button>
               </td>
             {% else %}
-              <td class="position-relative">
-                <button class="btn btn-light btn-outline-dark position-absolute top-50 start-50 translate-middle"
+              <td>
+                <button class="btn btn-light btn-outline-dark"
                 data-toggle="modal" data-target="#infoModal_{{ lab_group.id }}">
                   Avaa
                 </button>
@@ -72,41 +72,40 @@
                       <div class="modal-body">
                         {% for report in reports %}
                           {% if report.lab_group_id == lab_group.id %}
-                            <table class="table">
-                              <tbody>
+                          <table class="table">
+                            <tbody>
+                              <tr>
+                                <th>Raportti</th>
+                                <td><a href="/download_report/{{ report.filename }}" download>{{ report.filename }}</a></td>
+                              </tr>
+                              <tr>
+                                <th>Assistentti</th>
+                                <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+                              </tr>
+                              {% if lab_group.id in labgroup_ids_without_grade %}
                                 <tr>
-                                  <th>Raportti</th>
-                                  <td><a href="/download_report/{{ report.filename }}" download>{{ report.filename }}</a></td>
+                                  <td colspan="2">Odottaa arvostelua</td>
+                                </tr>
+                              {% else %}
+                                <tr>
+                                  <th>Arvosana</th>
+                                  <td>
+                                    {% if report.grade == 0 %}
+                                      Raportti vaatii korjausta
+                                    {% else %}
+                                      {{ report.grade }}
+                                    {% endif %}
+                                  </td>
                                 </tr>
                                 <tr>
-                                  <th>Assistentti</th>
-                                  <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+                                  <th>Kommentit</th>
+                                  <td>{{ report.comments }}</td>
                                 </tr>
-                                {% if lab_group.id in labgroup_ids_without_grade %}
-                                  <tr>
-                                    <td colspan="2">Odottaa arvostelua</td>
-                                  </tr>
-                                {% else %}
-                                  <tr>
-                                    <th>Arvosana</th>
-                                    <td>
-                                      {% if report.grade == 0 %}
-                                        Raportti vaatii korjausta
-                                      {% else %}
-                                        {{ report.grade }}
-                                      {% endif %}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th>Kommentit</th>
-                                    <td>{{ report.comments }}</td>
-                                  </tr>
-                                {% endif %}
-                              </tbody>
-                            </table>
-                          {% endif %}
-                        {% endfor %}
-                      </div>
+                              {% endif %}
+                            </tbody>
+                          </table>
+                        {% endif %}
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
@@ -117,19 +116,35 @@
           <tr class="table-danger">
             <td>{{lab_group.lab.course.name}}</td>
             <td>{{lab_group.lab.name}}</td>
-            <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
-            <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
+            <td>
+              {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+              <br>
+              klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
+            </td>
             <td>{{lab_group.place}}</td>
             <td>Labra peruttu</td>
+            <td>
+              <button class="btn btn-light btn-outline-dark disabled">
+                Avaa
+              </button>
+            </td>
           </tr>
         {% else %}
           <tr>
             <td>{{lab_group.lab.course.name}}</td>
             <td>{{lab_group.lab.name}}</td>
-            <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
-            <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
-            <td>{{lab_group.place}}</td>
+            <td>
+              {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+              <br>
+              klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
+            </td>
+            <td>{{lab_group.place}}</td>             
             <td>Odota tilaisuuden vahvistusta</td>
+            <td>
+              <button class="btn btn-light btn-outline-dark disabled">
+                Avaa
+              </button>
+            </td>
           </tr>
         {% endif %}
       {% endfor %}
