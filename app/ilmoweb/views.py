@@ -1,8 +1,7 @@
 """Module for page rendering."""
-import json
 import datetime
 import os
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -113,23 +112,23 @@ def enroll(request):
         group_id = request.POST.get("group_id")
         user = get_object_or_404(User, pk = user_id)
         group = get_object_or_404(LabGroups, pk = group_id)
-        
+
         if request.user.is_staff:
             messages.warning(request, "Opettaja ei voi ilmoittautua laboratoriotyöhön.")
-        
+
         else:
             for lab_group in users_enrollments:
                 if group_id == lab_group:
-                    messages.warning(request, "Olet jo ilmoittautunut ryhmään")   
+                    messages.warning(request, "Olet jo ilmoittautunut ryhmään")
 
             if num_of_students == max_students:
                 messages.warning(request, "Et voi ilmoittautua täynnä olevaan ryhmään")
-            
+
             try:
                 signup.signup(user=user, group=group)
                 messages.success(request, "Ilmoittautuminen onnistui!")
-            
-            except:
+
+            except ValueError:
                 messages.warning(request, "Ilmoittautuminen epäonnistui")
     return redirect(open_labs)
 
@@ -141,11 +140,11 @@ def confirm(request):
     if request.method == "POST":
         group_id = request.POST.get("lab_group_id")
         labgroup = LabGroups.objects.get(pk=group_id)
-        
+
         if request.user.is_staff:
             if labgroup.signed_up_students == 0:
                 messages.warning(request, "Tyhjää ryhmää ei voida vahvistaa")
-            
+
             elif labgroup.signed_up_students > 0:
                 labgroups.confirm(group_id)
                 messages.success(request, "Ryhmä vahvistettu")
