@@ -127,7 +127,7 @@
                         <td>
                           <form method="POST" action="{% url 'enroll' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}">Ilmoittaudu</button>
+                            <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Ilmoittaudu</button>
                             <input type="hidden" value="{{lab_group.id}}" name="group_id">
                             <input type="hidden" value="{{user.id}}" name="user_id">
                             <input type="hidden" value="{{lab_group.signed_up_students}}" name="students">
@@ -142,7 +142,7 @@
                             <form action="{% url 'confirm' %}" method="POST">
                               <div id = "confirm{{ lab_group.id }}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}">Vahvista</button>
+                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Vahvista</button>
                                 <input type="hidden" value="{{lab_group.id}}" name="lab_group_id">
                               </div>
                             </form>
