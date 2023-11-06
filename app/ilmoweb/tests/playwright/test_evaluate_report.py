@@ -9,7 +9,7 @@ def test_teacher_can_evaluate_a_report(page: Page):
 
     login(page, 'kemianope', 'atomi123')
     page.goto('/open_labs')
-    page.get_by_role('button', name='Vahvista').click()
+    page.locator('[data-testid="1"]').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianopiskelija', 'salasana123')
