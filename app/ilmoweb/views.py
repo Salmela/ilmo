@@ -25,8 +25,8 @@ def created_labs(request):
         return redirect("/open_labs")
 
     courses = Courses.objects.all()
-    course_labs = Labs.objects.all()
-    lab_groups = LabGroups.objects.all()
+    course_labs = Labs.objects.filter(is_visible=1)
+    lab_groups = LabGroups.objects.filter(deleted=0).order_by('date')
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":lab_groups})
 
@@ -310,6 +310,21 @@ def delete_labgroup(request, labgroup_id):
     if request.user.is_staff:
         labgroup = LabGroups.objects.get(pk=labgroup_id)
         labgroup.deleted = 1
+        labgroup.save()
+
+    return redirect(created_labs)
+
+@login_required
+def labgroup_status(request, labgroup_id):
+    """
+        Toggle labgroups status based on its current state.
+    """
+    if request.user.is_staff:
+        labgroup = LabGroups.objects.get(pk=labgroup_id)
+        if labgroup.status == 0:
+            labgroup.status = 1
+        else:
+            labgroup.status = 0
         labgroup.save()
 
     return redirect(created_labs)

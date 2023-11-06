@@ -1,15 +1,16 @@
 {% extends "layout.html" %}
 {% block title %} Created labs {% endblock %}
 {% block content %}
-
-<h1>Harjoitusryhmät kursseittain</h1>
+<div class="container-sm">
+  <h1 class="float-left mb-3">Harjoitusryhmät kursseittain</h1>
+</div>
 {% for course in courses %}
   <div class="container-sm" id="table-sm">
-    <table class="table table-bordered">
+    <table class="table table-bordered align-middle">
       <thead>
         <tr class="table-secondary">
-          <th colspan="5">{{course.name}}</th>
-          <th>
+          <th class="align-middle" colspan="4">{{course.name}}</th>
+          <th colspan="2">
             <form action="/create_group" method="GET">
               <input type="hidden" name="course_id" value="{{ course.id }}">
               <input type="hidden" name="course_name" value="{{ course.name }}">
@@ -18,12 +19,11 @@
           </th>
         </tr>
         <tr class="table-light">
-          <th>Laboratoriotyöt</th>
-          <th>Päivämäärä</th>
-          <th>Aika</th>
-          <th>Paikka</th>
-          <th>Status</th>
-          <th>Muokkaa</th>
+          <th width="10%">Ajankohta</th>
+          <th width="30%">Työ</th>
+          <th width="15%">Paikka</th>
+          <th width="15%">Status</th>
+          <th width="30%" colspan="2">Muokkaa</th>
         </tr>
       </thead>
       <tbody>
@@ -31,29 +31,31 @@
           {% if lab.course_id == course.id %}
             {% for lab_group in lab_groups %}
               {% if lab_group.lab_id == lab.id %}
-                {% if lab.is_visible == 1 %}
-                  {% if lab_group.deleted == 0 %}
-                    <tr>
-                      <td>{{lab.name}}</td>
-                      <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
-                      <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
-                      <td>{{lab_group.place}}</td>
-                      {% if lab_group.status == 0 %}
-                        <td>Ei aktivoitu</td>
-                      {% elif lab_group.status == 1 %}
-                        <td>Ryhmä aktivoitu</td>
-                      {% elif lab_group.status == 2 %}
-                        <td>Vahvistettu</td>
-                      {% elif lab_group.status == 3 %}
-                        <td>Peruttu</td>
-                      {% endif %}
-                      <td>
-                        <a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Poista</a>
-                      </td>
-                    </tr>
-                  {% endif %} 
-                {% endif %}
-              {% endif %}
+                <tr>         
+                  <td>
+                    {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+                    <br>
+                    klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
+                  </td>
+                  <td>{{lab.name}}</td>
+                  <td>{{lab_group.place}}</td>
+                  {% if lab_group.status == 0 %}
+                    <td>Ei aktivoitu</td>
+                  {% elif lab_group.status == 1 %}
+                    <td>Ryhmä aktivoitu</td>
+                  {% elif lab_group.status == 2 %}
+                    <td>Vahvistettu</td>
+                  {% elif lab_group.status == 3 %}
+                    <td>Peruttu</td>
+                  {% endif %}
+                  {% if lab_group.status == 0 %}
+                    <td><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Julkaise</a></td>
+                  {% else %}
+                    <td><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Piilota</a></td>
+                  {% endif %}
+                    <td width="15%"><a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Poista</a></td>
+                </tr>
+             {% endif %}
             {% endfor %}
           {% endif %}
         {% endfor %}
@@ -61,18 +63,19 @@
     </table>
   </div>
 {% endfor %}
-<h1>Harjoitustyöt kursseittain</h1>
-<br>
+<div class="container-sm">
+  <h1 class="float-left mt-4 mb-3">Harjoitustyöt kursseittain</h1>
+</div>
 {% if not courses %}
   Ei kursseja
 {% else %}
   {% for course in courses %}
     <div class="container-sm">
-      <table class="table table-bordered">
+      <table class="table table-bordered align-middle">
         <thead>
           <tr class="table-secondary">
-            <th colspan="2">{{ course.name }}</th>
-            <th>
+            <th class="align-middle" colspan="2">{{ course.name }}</th>
+            <th colspan="2">
               <form action="/create_lab" method="GET">
                 <input type="hidden" name="course_id" value="{{ course.id }}">
                 <input class="btn btn-light btn-outline-dark" id="button" data-testid="{{ course.id }}" type="submit" value="Luo uusi työ">
@@ -80,9 +83,9 @@
             </th>
           </tr>
           <tr class="table-light">
-            <th>Työn nimi</th>
-            <th>Oppilasmäärä</th>
-            <th>Muokkaa</th>
+            <th width="50%">Työ</th>
+            <th width="20%">Oppilasmäärä</th>
+            <th width="30%" colspan="2">Muokkaa</th>
           </tr>
         </thead>
         <tbody>
@@ -100,12 +103,14 @@
                   <td type="number" name="max_students" {% if lab.is_visible == 0 %} class="text-muted" {% endif %}>
                     {{ lab.max_students }}
                   </td>
-                  <td>
+                  <td width="15%">
                     {% if lab.is_visible == 0 %}
                       <a href='/make_lab_visible/{{ lab.id }}' class="btn btn-light btn-outline-dark">Aktivoi</a>
                     {% else %}
                       <a href='/make_lab_visible/{{ lab.id }}' class="btn btn-light btn-outline-dark">Deaktivoi</a>
                     {% endif %}
+                  </td>
+                  <td width="15%">
                     <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
                   </td>
                 </tr>
@@ -114,7 +119,7 @@
           {% endif %}
         </tbody>
       </table>
-    </div>
+    </div>        
   {% endfor %}
 {% endif %}
 {% endblock %}

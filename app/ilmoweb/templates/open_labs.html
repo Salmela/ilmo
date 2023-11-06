@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 {% block title %} Open Labs {% endblock %}
 {% block content %}
-
-<h1>Tulevat labrat</h1>
 <div class="container-sm">
-  <table class="table table-bordered">
+  <h1 class="float-left mb-3">Tulevat labrat</h1>
+</div>
+<div class="container-sm">
+  <table class="table table-bordered align-middle">
     <thead>
-      <tr class="table-secondary">
-        <th>Nimi</th>
+      <tr class="table-secondary align-middle">
+        <th>Kurssi</th>
         <th>Kuvaus</th>
         <th>Labrojen määrä</th>
         <th>Ajankohta</th>
@@ -19,28 +20,30 @@
           <td>{{ course.name }}</td>
           <td>{{ course.description }}</td>
           <td>{{ course.labs_amount }}</td>
-        {% if course.is_visible %}
-          <td>Kurssi tulossa pian</td>
-        {% else %}
-          <td>Kurssia ei tulossa</td>
-        {% endif %}
+          {% if course.is_visible %}
+            <td>Kurssi tulossa pian</td>
+          {% else %}
+            <td>Kurssia ei tulossa</td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
 
-<h1>Avoimet labrat</h1>
+<div class="container-sm">
+  <h1 class="text-left mb-3">Avoimet labrat</h1>
+</div>
 {% for course in courses %}
-  <h3>Kurssi: {{course.name}}</h3>
-  <p>Suoritettavat laboratoriotyöt</p>
   <div class="container-sm">
-    <table class="table table-bordered">
+    <h3 class="text-left">Kurssi: {{course.name}}</h3>
+    <h5 class="text-left">Suoritettavat laboratoriotyöt</h5>
+    <table class="table table-bordered align-middle">
       <thead>
         <tr class="table-secondary">
           <th>Työ</th>
           <th>Kuvaus</th>
-          <th>Oppilasmäärä / ryhmä</th>
+          <th>Oppilasmäärä</th>
         </tr>
       </thead>
       <tbody>
@@ -48,25 +51,24 @@
           {% if lab.course_id == course.id %}
             <tr>
               {% if lab.is_visible == 1 %}
-                <td>{{lab.name}}</td>
-                <td>{{lab.description}}</td>
-                <td>{{lab.max_students}}</td>
+              <td>{{lab.name}}</td>
+              <td>{{lab.description}}</td>
+              <td>{{lab.max_students}}</td>
               {% endif %}
             </tr>
           {% endif %}
         {% endfor %}
       </tbody>
     </table>
-    <p>Avoimet ryhmät</p>
-    <table class="table table-bordered">
+    <h5 class="text-left">Avoimet ryhmät</h5>
+    <table class="table table-bordered align-middle">
       <thead>
         <tr class="table-secondary">
           <th>Laboratoriotyöt</th>
-          <th>Päivämäärä</th>
-          <th>Aika</th>
+          <th>Ajankohta</th>
           <th>Paikka</th>
           <th>Ilmoittautuneita</th>
-          <th>Ilmottautuminen</th>
+          <th>Ilmoittautuminen</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -76,15 +78,16 @@
             {% for lab_group in lab_groups %}
               {% if lab_group.lab_id == lab.id %}
                 {% if lab.is_visible == 1 %}
-                  {% if lab_group.status != 0 %}
+                  {% if lab_group.status == 1 %}
                     <tr>
                       <td>{{lab.name}}</td>
-                      <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
-                      <td>{{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}</td>
-                      <td>{{lab_group.place}}</td>
                       <td>
-                        <div id = "signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}</div>/{{lab.max_students}}
+                        {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+                        <br>
+                        klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
                       </td>
+                      <td>{{lab_group.place}}</td>
+                      <td><div id="signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}</div>/{{lab.max_students}}</td>
                       {% if user.is_staff %}
                         <td>
                           <button type="button" class="btn btn-light btn-outline-dark" data-testid="{{ lab.id }}" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
@@ -93,17 +96,17 @@
                           <div class="modal fade" id="students{{lab_group.id}}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="studentsLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                               <div class="modal-content">
-                                <div class="modal-header"><input type="hidden" name="course_id" value="{{ course_id }}">
+                                <div class="modal-header">
                                   <h1 class="modal-title fs-5" id="studentsLabel">
-                                    Ilmoittautuneet opiskelijat
+                                    Kurssin {{course.name}} laboratoriotyöhön {{lab.name}} ilmoittautuneet opiskelijat
                                   </h1>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                   {% for signup in signedup %}
-                                    {% if signup.labgroups_id == lab_group.id %} 
-                                      <p><b>{{signup.user}}:</b> {{signup.user.email}}, {{signup.user.student_id}}<br></p>
-                                    {% endif %}
+                                  {% if signup.labgroups_id == lab_group.id %} 
+                                    <p><b>{{signup.user}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
+                                  {% endif %}
                                   {% endfor %}
                                 </div>
                               </div>
