@@ -2,11 +2,6 @@
 {% block title %} Open Labs {% endblock %}
 {% block content %}
 
-{% load static %}
-<script src = "{% static 'signup.js' %}"></script>
-<script src = "{% static 'confirm.js' %}"></script>
-
-
 <h1>Tulevat labrat</h1>
 <div class="container-sm">
   <table class="table table-bordered">
@@ -130,21 +125,27 @@
                         {% endif %}
                       {% else %}
                         <td>
-                          {% csrf_token %}
-                          <button class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}" onclick="signup(
-                            '{{ user.id }}', '{{ lab_group.id }}', '{{ lab.name }}',
-                            '{{ lab_group.signed_up_students }}', '{{ lab.max_students }}'
-                            );">Ilmoittaudu</button>
+                          <form method="POST" action="{% url 'enroll' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Ilmoittaudu</button>
+                            <input type="hidden" value="{{lab_group.id}}" name="group_id">
+                            <input type="hidden" value="{{user.id}}" name="user_id">
+                            <input type="hidden" value="{{lab_group.signed_up_students}}" name="students">
+                            <input type="hidden" value="{{lab.max_students}}" name="max_students">
+                          </form>
                         </td>
                       {% endif %}
                       {% if lab_group.status == 1 %}
                         {% if user.is_staff %}
                           <td>
                             {% if lab_group.signed_up_students > 0 %}
+                            <form action="{% url 'confirm' %}" method="POST">
                               <div id = "confirm{{ lab_group.id }}">
                                 {% csrf_token %}
-                                <button class="btn btn-light btn-outline-dark" onclick="confirm('{{ lab_group.id }}');">Vahvista</button>
+                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Vahvista</button>
+                                <input type="hidden" value="{{lab_group.id}}" name="lab_group_id">
                               </div>
+                            </form>
                             {% else %} 
                               Ei vielä tarpeeksi ilmoittautuneita
                             {% endif %}
