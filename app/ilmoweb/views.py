@@ -185,8 +185,12 @@ def my_labs(request):
     labgroup_id_list = signup.get_labgroups(request.user)
     students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
     students_reports = Report.objects.filter(student_id=request.user.id)
+    lg_ids_with_reports = [report.lab_group_id for report in students_reports]
+    ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
     return render(request, "my_labs.html", {"labgroups":students_labgroups,
-                                            "reports":students_reports})
+                                            "reports":students_reports,
+                                            "labgroup_ids_with_reports":lg_ids_with_reports,
+                                            "labgroup_ids_without_grade":ids_without_grade})
 
 @login_required
 def return_report(request):
