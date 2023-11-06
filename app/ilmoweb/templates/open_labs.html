@@ -90,7 +90,7 @@
                       <td><div id="signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}</div>/{{lab.max_students}}</td>
                       {% if user.is_staff %}
                         <td>
-                          <button type="button" class="btn btn-light btn-outline-dark" data-testid="1" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
+                          <button type="button" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
                             Katso ilmoittautuneet
                           </button>
                           <div class="modal fade" id="students{{lab_group.id}}" data-bs-backdrop="static" tabindex="-1" aria-labelledby="studentsLabel" aria-hidden="true">
