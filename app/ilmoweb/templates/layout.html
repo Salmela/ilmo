@@ -21,12 +21,13 @@
       <div class="container">
         <div id="logo">
           <a href="{% url 'home' %}">
-            <img src="{% static 'images/logo.png' %}" height="60px" id="hy_logo">
+            <img src="{% static 'images/logo.png' %}" height="80px" id="hy_logo">
           </a>
         </div>
         <h1 class="navbar-brand" id="main_title">
           <b>Fysikaalisen kemian ilmoittautumisjärjestelmä</b>
         </h1>
+        <li class="nav-item"></li>
         {% if user.is_authenticated %}
         <div>
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
@@ -106,7 +107,7 @@
     </div>
     <footer class="bg-black text-center">
       <div class="footer">
-        A.I. Virtasen aukio 1, PL 55, 00014 Helsingin yliopisto, sähköposti markus.metsala@helsinki.fi
+        A.I. Virtasen aukio 1, PL 55, 00014 Helsingin yliopisto, markus.metsala@helsinki.fi
         <br>
         <a href="https://github.com/ILMOWEB/ilmo/blob/main/Tietosuojaseloste.md">Tietosuojaseloste</a>
       </div>
