@@ -9,6 +9,7 @@ urlpatterns = [
     path("created_labs/", views.created_labs, name="created_labs"),
     path("create_lab/", views.create_lab, name="create_lab"),
     path("open_labs/", views.open_labs, name="open_labs"),
+    path("open_labs/enroll/", views.enroll, name="enroll"),
     path("open_labs/confirm/", views.confirm, name="confirm"),
     path("cancel_enrollment/<int:labgroup_id>", views.cancel_enrollment, name="cancel_enrollment"),
     path("make_lab_visible/<int:lab_id>", views.make_lab_visible, name="make_lab_visible"),
