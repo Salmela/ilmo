@@ -95,19 +95,43 @@ def open_labs(request):
     signedup = SignUp.objects.all()
     users_enrollments = signup.get_labgroups(request.user)
 
-    if request.method == "POST":
-        if request.user.is_staff:
-            return HttpResponseBadRequest("Opettaja ei voi ilmoittautua laboratoriotyöhön.")
-        data = json.loads(request.body)
-        user_id = data.get("user_id")
-        group_id = data.get("group_id")
-        user = get_object_or_404(User, pk = user_id)
-        group = get_object_or_404(LabGroups, pk = group_id)
-        signup.signup(user=user, group=group)
-
     return render(request, "open_labs.html", {"courses":courses, "labs":course_labs,
                                               "lab_groups":lab_groups, "signedup":signedup,
                                               "users_enrollments":users_enrollments})
+
+@login_required
+def enroll(request):
+    """
+        A request for student enrolling in a given lab group
+    """
+    users_enrollments = signup.get_labgroups(request.user)
+
+    if request.method == "POST":
+        max_students = request.POST.get("max_students")
+        num_of_students = request.POST.get("students")
+        user_id = request.POST.get("user_id")
+        group_id = request.POST.get("group_id")
+        user = get_object_or_404(User, pk = user_id)
+        group = get_object_or_404(LabGroups, pk = group_id)
+        
+        if request.user.is_staff:
+            messages.warning(request, "Opettaja ei voi ilmoittautua laboratoriotyöhön.")
+        
+        else:
+            for lab_group in users_enrollments:
+                if group_id == lab_group:
+                    messages.warning(request, "Olet jo ilmoittautunut ryhmään")   
+
+            if num_of_students == max_students:
+                messages.warning(request, "Et voi ilmoittautua täynnä olevaan ryhmään")
+            
+            try:
+                signup.signup(user=user, group=group)
+                messages.success(request, "Ilmoittautuminen onnistui!")
+            
+            except:
+                messages.warning(request, "Ilmoittautuminen epäonnistui")
+    return redirect(open_labs)
 
 @login_required
 def confirm(request):
@@ -115,15 +139,19 @@ def confirm(request):
         request for confirming a labgroup
     """
     if request.method == "POST":
+        group_id = request.POST.get("lab_group_id")
+        labgroup = LabGroups.objects.get(pk=group_id)
+        
         if request.user.is_staff:
-            group_id = json.loads(request.body)
-            labgroup = LabGroups.objects.get(pk=group_id)
-            if labgroup.signed_up_students > 0:
+            if labgroup.signed_up_students == 0:
+                messages.warning(request, "Tyhjää ryhmää ei voida vahvistaa")
+            
+            elif labgroup.signed_up_students > 0:
                 labgroups.confirm(group_id)
-                return HttpResponseRedirect("/open_labs")
+                messages.success(request, "Ryhmä vahvistettu")
         else:
-            return HttpResponseBadRequest("Oppilas ei voi vahvistaa laboratoriotyötä.")
-    return HttpResponseBadRequest("Ryhmä on tyhjä, joten vahvistaminen epäonnistui.")
+            return redirect(open_labs)
+    return redirect(open_labs)
 
 @login_required
 def make_lab_visible(request, lab_id):
