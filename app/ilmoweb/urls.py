@@ -21,5 +21,6 @@ urlpatterns = [
     path("returned_report/<int:report_id>", views.returned_report, name="returned_report"),
     path("evaluate_report/<int:report_id>", views.evaluate_report, name="evaluate_report"),
     path("download_report/<str:filename>", views.download_report, name="download_report"),
-    path("delete_labgroup/<int:labgroup_id>", views.delete_labgroup, name="delete_labgroup")
+    path("delete_labgroup/<int:labgroup_id>", views.delete_labgroup, name="delete_labgroup"),
+    path("labgroup_status/<int:labgroup_id>", views.labgroup_status, name="labgroup_status")
 ]
