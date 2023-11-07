@@ -11,15 +11,19 @@ from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports
 
 def home_page_view(request):
     """
-        Homepage view.
-
+        Homepage view
     """
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect(created_labs)
+        else:
+            return redirect(open_labs)
     return render(request, "home.html")
 
 @login_required
 def created_labs(request):
     """
-        View for all created labs.
+        View for all created labs
     """
     if request.user.is_staff is not True:
         return redirect("/open_labs")
@@ -33,7 +37,7 @@ def created_labs(request):
 @login_required
 def create_lab(request):
     """
-        View for creating a new lab.
+        View for creating a new lab
     """
     if request.method == "GET":
         if request.user.is_staff is not True:
