@@ -6,7 +6,7 @@ def test_has_title_and_heading(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     # page.goto('/open_labs/')
     expect(page).to_have_title(re.compile('Open Labs'))
-    assert page.inner_text('h1') == 'Fysikaalisen kemian ilmoittautumisjärjestelmä'
+    assert page.inner_text('h1') == 'Fysikaalisen kemian'
 
 def test_laboratoriotyot_button(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
