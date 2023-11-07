@@ -27,8 +27,8 @@ body {
 
 #main_title {
     position: absolute;
-    left: 7em;
-    top: 2em;
+    left: 6em;
+    top: 25%;
 }
 
 .footer {
@@ -44,5 +44,6 @@ body {
 #hy_logo {
     position: absolute;
     left: 1em;
-    top: 1em;
+    top: 16%;
+    height: 80px;
 }
