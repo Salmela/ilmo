@@ -21,3 +21,15 @@ def test_student_can_check_report_info(page: Page):
     expect(page.get_by_role('link', name='file.pdf')).to_be_visible()
     expect(page.get_by_text('Kalle Kemisti')).to_be_visible()
     expect(page.locator('td:text("5")')).to_be_visible()
+
+def test_student_can_cancell_enrollment(page: Page):
+    login(page, 'kemianopiskelija', 'salasana123')
+    page.get_by_role('link', name='Laboratoriotyöt').click()
+    page.locator('[data-testid="group_7"]').click()
+    page.get_by_role('link', name='Omat labrat').click()
+    expect(page.get_by_text('labra 1')).to_be_visible()
+    page.get_by_role('link', name='Laboratoriotyöt').click()
+    page.locator('[data-testid="group_7"]').click()
+    page.get_by_role('link', name='Omat labrat').click()
+    expect(page.get_by_text('labra 1')).to_be_hidden()
+

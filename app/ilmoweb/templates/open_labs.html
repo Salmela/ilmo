@@ -120,7 +120,7 @@
                           <td>
                             <form method="POST" action="/cancel_enrollment/{{ lab_group.id }}">
                               {% csrf_token %}
-                              <button class="btn btn-light btn-outline-dark" type="submit">Peruuta ilmoittautuminen</button>
+                              <button class="btn btn-light btn-outline-dark" type="submit" data-testid="group_{{ lab_group.id }}">Peruuta ilmoittautuminen</button>
                             </form>
                           </td>
                         {% else %}
