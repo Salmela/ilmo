@@ -15,8 +15,7 @@ def home_page_view(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
             return redirect(created_labs)
-        else:
-            return redirect(open_labs)
+        return redirect(open_labs)
     return render(request, "home.html")
 
 @login_required
