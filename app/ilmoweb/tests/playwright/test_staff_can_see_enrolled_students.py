@@ -23,6 +23,7 @@ def test_staff_does_not_see_student_who_cancelled_enrollment(page: Page):
     page.locator('[data-testid="7"]').click()
     student = page.locator('[data-testid="kemianopiskelija"]')
     expect(student).to_be_visible()
+    page.locator('[data-testid="close_7"]').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
     login(page, 'kemianopiskelija', 'salasana123')
     page.get_by_role('link', name='Laboratoriotyöt').click()

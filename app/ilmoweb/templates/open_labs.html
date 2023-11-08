@@ -100,7 +100,7 @@
                                   <h1 class="modal-title fs-5" id="studentsLabel">
                                     Kurssin {{course.name}} laboratoriotyöhön {{lab.name}} ilmoittautuneet opiskelijat
                                   </h1>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-testid="close_{{lab_group.id}}"></button>
                                 </div>
                                 <div class="modal-body">
                                   {% for signup in signedup %}
