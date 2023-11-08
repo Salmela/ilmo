@@ -18,4 +18,4 @@ def test_create_lab_and_check_that_it_is_created(page: Page):
     page.get_by_test_id('max_students').fill('3')
     page.get_by_role('button', name='Luo labra').click()
     page.goto('/created_labs')
-    expect(page.get_by_text('Testilabra')).to_be_visible()
+    expect(page.get_by_role("cell", name="Testilabra"))
