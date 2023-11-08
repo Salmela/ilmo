@@ -3,7 +3,7 @@ from helper_functions import login
 
 def test_welcome_message(page: Page):
     page.goto('/')
-    assert page.inner_text('h1') == 'Fysikaalisen kemian ilmoittautumisjärjestelmä'
+    assert page.inner_html('h1 b') == 'Fysikaalisen kemian<br>ilmoittautumisjärjestelmä'
 
 # def test_login_link(page: Page):
 #     page.goto('/')
