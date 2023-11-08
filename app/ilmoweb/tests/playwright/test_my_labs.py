@@ -27,9 +27,9 @@ def test_student_can_cancell_enrollment(page: Page):
     page.get_by_role('link', name='Laboratoriotyöt').click()
     page.locator('[data-testid="group_7"]').click()
     page.get_by_role('link', name='Omat labrat').click()
-    expect(page.get_by_text('labra 1')).to_be_visible()
+    expect(page.get_by_text('Heisenberg')).to_be_visible()
     page.get_by_role('link', name='Laboratoriotyöt').click()
     page.locator('[data-testid="group_7"]').click()
     page.get_by_role('link', name='Omat labrat').click()
-    expect(page.get_by_text('labra 1')).to_be_hidden()
+    expect(page.get_by_text('Heisenberg')).to_be_hidden()
 
