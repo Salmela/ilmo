@@ -19,5 +19,5 @@ def test_create_labgroup_and_check_that_it_is_created(page: Page):
     page.locator('[data-testid="1"]').click()
     page.get_by_role('button', name='Luo labra').click()
     expect(page).to_have_title('Created labs')
-    expect(page.get_by_text('31.10.2025')).to_be_visible()
+    expect(page.get_by_role("cell", name="31.10.2025 klo 12 - 16"))
     expect(page.get_by_text('D210 (Phy)')).to_be_visible()

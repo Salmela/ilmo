@@ -53,7 +53,25 @@
                   {% else %}
                     <td><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Piilota</a></td>
                   {% endif %}
-                    <td width="15%"><a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Poista</a></td>
+                    <td width="15%">
+                      <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#deleteLabGroupModal_{{ lab_group.id }}">
+                        Poista
+                      </button>
+                      <div class="modal fade" id="deleteLabGroupModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="deleteLabGroupModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="deleteLabGroupModalLabel">Poistetaanko ryhmä: {{lab.name}}, {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}?</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <button type="button" class="btn btn-light btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">Eiku</button>
+                              <a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Poista</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                 </tr>
              {% endif %}
             {% endfor %}
@@ -111,7 +129,23 @@
                     {% endif %}
                   </td>
                   <td width="15%">
-                    <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a> 
+                    <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#deleteLabModal_{{ lab.id }}">
+                      Poista
+                    </button>
+                    <div class="modal fade" id="deleteLabModal_{{ lab.id }}" tabindex="-1" aria-labelledby="deleteLabModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteLabModalLabel">Poistetaanko {{lab.name}}?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <button type="button" class="btn btn-light btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">Eiku</button>
+                            <a href='/delete_lab/{{ lab.id }}' class="btn btn-light btn-outline-dark">Poista</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               {% endif %}
