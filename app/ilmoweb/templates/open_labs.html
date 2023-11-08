@@ -100,12 +100,12 @@
                                   <h1 class="modal-title fs-5" id="studentsLabel">
                                     Kurssin {{course.name}} laboratoriotyöhön {{lab.name}} ilmoittautuneet opiskelijat
                                   </h1>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-testid="close_{{lab_group.id}}"></button>
                                 </div>
                                 <div class="modal-body">
                                   {% for signup in signedup %}
                                   {% if signup.labgroups_id == lab_group.id %} 
-                                    <p><b>{{signup.user}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
+                                    <p><b  data-testid="{{signup.user}}">{{signup.user}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
                                   {% endif %}
                                   {% endfor %}
                                 </div>
@@ -120,7 +120,7 @@
                           <td>
                             <form method="POST" action="/cancel_enrollment/{{ lab_group.id }}">
                               {% csrf_token %}
-                              <button class="btn btn-light btn-outline-dark" type="submit">Peruuta ilmoittautuminen</button>
+                              <button class="btn btn-light btn-outline-dark" type="submit" data-testid="group_{{ lab_group.id }}">Peruuta ilmoittautuminen</button>
                             </form>
                           </td>
                         {% else %}
