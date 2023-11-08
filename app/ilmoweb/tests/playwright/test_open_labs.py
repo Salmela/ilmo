@@ -4,7 +4,6 @@ from helper_functions import login
 
 def test_has_title_and_heading(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
-    # page.goto('/open_labs/')
     expect(page).to_have_title(re.compile('Open Labs'))
     assert page.inner_html('h1 b') == 'Fysikaalisen kemian<br>ilmoittautumisjärjestelmä'
 
