@@ -128,11 +128,30 @@
                         {% endif %}
                       {% else %}
                         <td>
-                          {% csrf_token %}
-                          <button class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}" onclick="signup(
-                            '{{ user.id }}', '{{ lab_group.id }}', '{{ lab.name }}',
-                            '{{ lab_group.signed_up_students }}', '{{ lab.max_students }}'
-                            );">Ilmoittaudu</button>
+                          <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#enrollModal_{{ lab_group.id }}" data-testid="group_{{ lab_group.id }}">
+                            Ilmoittaudu
+                          </button>
+                          <div class="modal fade" id="enrollModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="enrollModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="enrollModalLabel">Ilmoittaudutaanko ryhmään: {{lab.name}}, {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}?</h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <button type="button" class="btn btn-light btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">Eiku</button>
+                                  <form method="POST" action="{% url 'enroll' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-light btn-outline-dark" data-testid="enroll_group_{{ lab_group.id }}">Ilmoittaudu</button>
+                                    <input type="hidden" value="{{lab_group.id}}" name="group_id">
+                                    <input type="hidden" value="{{user.id}}" name="user_id">
+                                    <input type="hidden" value="{{lab_group.signed_up_students}}" name="students">
+                                    <input type="hidden" value="{{lab.max_students}}" name="max_students">
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </td>
                       {% endif %}
                       {% if lab_group.status == 1 %}
