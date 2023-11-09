@@ -47,3 +47,7 @@ body {
     top: 16%;
     height: 80px;
 }
+
+form {
+    display: inline;
+}
