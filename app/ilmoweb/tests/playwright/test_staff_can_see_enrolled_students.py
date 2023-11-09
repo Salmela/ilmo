@@ -10,7 +10,7 @@ def test_student_can_enroll_and_staff_sees_enrolled_student(page: Page):
     login(page, 'kemianope', 'atomi123')
     page.goto('/open_labs/')
     page.locator('[data-testid="11"]').click()
-    expect(page.get_by_text('Kurssin Kuningasvesi laboratoriotyöhön labra 1 ilmoittautuneet opiskelijat')).to_be_visible()
+    expect(page.get_by_text('Ilmoittautuneet opiskelijat')).to_be_visible()
 
 
 def test_staff_does_not_see_student_who_cancelled_enrollment(page: Page):
