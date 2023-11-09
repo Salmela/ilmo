@@ -70,5 +70,42 @@
           {% endfor %}
         </tbody>
     </table>
+    {% if reports %}
+    <h3>Palautetut tiedostot</h3>
+    <table class="table table-hover table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Työ</th>
+          <th scope="col">Päivämäärä</th>
+          <th scope="col">Status</th>
+          <th scope="col">Lataa tiedosto</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lab_group in labgroups %}
+        {% for report in reports %}
+          <tr>
+            {% if lab_group.id == report.lab_group.id %}
+            <td>{{lab_group.lab.name}}</td>
+            <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+            {% if report.report_status == 4 %}
+            <td>Raportin arvosana: {{report.grade}}</td>
+            {% elif report.report_status == 3 %}
+            <td>Korjattu raportti palautettu</td>
+            {% elif report.report_status == 2 %}
+            <td>Palautukseen ehdotettu korjauksia</td>
+            {% elif report.report_status == 1 %}
+            <td>Raportti palautettu</td>
+            {% else %}
+            <td>Raporttia ei ole palautettu</td>
+            {% endif %}
+            <td><a href="/download_report/{{ report.filename }}" download>Lataa</a></td>
+          </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
   </div>
 {% endblock %}

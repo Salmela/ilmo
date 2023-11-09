@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.db.models import Max, F, Subquery, OuterRef
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
 from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports
 
@@ -155,7 +156,12 @@ def my_labs(request):
     labgroup_id_list = signup.get_labgroups(request.user)
     students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
     reports = Report.objects.filter(student=request.user)
-    return render(request, "my_labs.html", {"labgroups":students_labgroups, "reports":reports})
+    subquery = reports.filter(lab_group=OuterRef('lab_group')).values('lab_group').annotate(max_report_status=Max(
+        'report_status')).values('max_report_status')
+    reports = reports.annotate(max_report_status=Subquery(subquery))
+    filtered_reports = reports.filter(report_status=F('max_report_status'))
+
+    return render(request, "my_labs.html", {"labgroups":students_labgroups, "reports":filtered_reports})
 
 @login_required
 def return_report(request):
@@ -170,8 +176,8 @@ def return_report(request):
     file = request.FILES["file"]
     student = request.user
 
-    if not file.name.lower().endswith(('.pdf', '.docx')):
-        messages.warning(request, "Tiedoston tulee olla pdf tai docx muodossa")
+    if not file.name.lower().endswith(('.pdf')):
+        messages.warning(request, "Tiedoston tulee olla pdf-muodossa")
         return redirect("/my_labs")
 
     prev_1 = Report.objects.filter(student=student, lab_group=lab_group, report_status=1)
@@ -186,7 +192,7 @@ def return_report(request):
                                             prev_4,
                                             student,
                                             lab_group,
-                                            file)
+                                            file.name)
     return redirect("/my_labs")
 
 @login_required
