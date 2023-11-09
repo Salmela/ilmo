@@ -5,6 +5,7 @@ def test_teacher_can_evaluate_a_report(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     page.goto('/open_labs')
     page.locator('[data-testid="group_1"]').click()
+    page.locator('[data-testid="enroll_group_1"]').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianope', 'atomi123')
