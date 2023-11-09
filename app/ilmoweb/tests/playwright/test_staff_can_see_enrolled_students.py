@@ -17,6 +17,7 @@ def test_staff_does_not_see_student_who_cancelled_enrollment(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     page.get_by_role('link', name='Laboratoriotyöt').click()
     page.locator('[data-testid="group_7"]').click()
+    page.locator('[data-testid="enroll_group_7"]').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
     login(page, 'kemianope', 'atomi123')
     page.goto('/open_labs/')
