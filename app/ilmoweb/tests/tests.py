@@ -65,7 +65,7 @@ class TestModels(TestCase):
             start_time = "14:30",
             end_time = "16:30",
             place = "Chemicum",
-            status = False
+            status = 0
         )
 
         # nonempty labgroup
@@ -75,7 +75,7 @@ class TestModels(TestCase):
             start_time = "14:30",
             end_time = "16:30",
             place = "Chemicum",
-            status = False,
+            status = 1,
             signed_up_students = 1
         )
 
@@ -298,14 +298,14 @@ class TestModels(TestCase):
 
     def test_student_cannot_confirm_labgroup(self):
         self.client.force_login(self.user1)
-        group_id = self.labgroup2.id
+        group_id = self.labgroup1.id
 
         # try to confirm
         self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
         
         # check database stays same
         self.labgroup1.refresh_from_db()
-        status = self.labgroup2.status
+        status = self.labgroup1.status
         self.assertEqual(status, 0)
 
     # Tests for reports
@@ -498,7 +498,7 @@ class TestModels(TestCase):
         self.assertEqual(self.report1.report_status, 2)
         self.assertEqual(self.report1.comments, 'Fix the report')
 
-    # Test for deleting labgroups
+    # Tests for deleting labgroups
 
     def test_teacher_can_delete_labgroup(self):
         self.client.force_login(self.superuser1)
@@ -527,3 +527,29 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.signed_up_students, 0)
+    
+    # Tests for publishing/hiding labgroups
+
+    def test_teacher_can_publish_labgroup(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('labgroup_status', args=[str(self.labgroup1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.status, 1)
+    
+    def test_teacher_can_hide_labgroup(self):
+        self.client.force_login(self.superuser1)
+        url = reverse('labgroup_status', args=[str(self.labgroup2.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.labgroup2.refresh_from_db()
+        self.assertEqual(self.labgroup2.status, 0)
+    
+    def test_student_cannot_publish_labgroup(self):
+        self.client.force_login(self.user1)
+        url = reverse('labgroup_status', args=[str(self.labgroup1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.status, 0)
