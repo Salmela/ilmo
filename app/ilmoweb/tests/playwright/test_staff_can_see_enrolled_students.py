@@ -9,7 +9,7 @@ def test_student_can_enroll_and_staff_sees_enrolled_student(page: Page):
     # page.get_by_role('link', name='Kirjaudu ulos').click()
     login(page, 'kemianope', 'atomi123')
     page.goto('/open_labs/')
-    page.locator('[data-testid="11"]').click()
+    page.locator('[data-testid="1"]').click()
     expect(page.get_by_text('Ilmoittautuneet opiskelijat')).to_be_visible()
 
 
