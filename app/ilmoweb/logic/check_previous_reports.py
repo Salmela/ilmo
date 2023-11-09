@@ -7,7 +7,6 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
         messages.warning(request, "Et voi palauttaa tähän työhön uutta raporttia")
         return
 
-
     if prev_3:
         Report.objects.filter(pk=prev_3[0].id).delete()
         report = Report(student=student, lab_group=lab_group, filename=file, report_status=3)
