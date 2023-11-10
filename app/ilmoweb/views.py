@@ -47,10 +47,16 @@ with urllib.request.urlopen("https://login-test.it.helsinki.fi/idp/profile/oidc/
     keys = json.load(url)
 
 def login(request):
+    """
+        University login
+    """
     redirect_uri = request.build_absolute_uri(reverse('auth'))
     return oauth.ilmoweb.authorize_redirect(request, redirect_uri, claims=claims)
 
 def auth(request):
+    """
+        University authentication
+    """
     token = oauth.ilmoweb.authorize_access_token(request)
 
     userinfo = oauth.ilmoweb.userinfo(token=token)
@@ -64,6 +70,9 @@ def auth(request):
     return redirect(home_page_view)
 
 def logout(request):
+    """
+        University logout
+    """
     django_logout(request)
 
     return redirect("https://login-test.it.helsinki.fi/idp/profile/Logout")
