@@ -159,3 +159,9 @@ if env("LOCAL") == 'False':
             'client_secret': env('OIDC_CLIENT_SECRET')
         }
     }
+
+def local():
+    if env("LOCAL") == 'True':
+        return True
+    else:
+        return False

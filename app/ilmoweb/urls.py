@@ -1,13 +1,14 @@
 """Module for routing urls."""
 import environ
 from django.urls import path, include
+import config.settings
 
 from . import views
 
 env = environ.Env()
 environ.Env.read_env()
 
-if env('LOCAL') == 'True':
+if config.settings.local():
     urlpatterns = [
         path("", views.home_page_view, name="home"),
         path("accounts/", include("django.contrib.auth.urls")),
@@ -30,7 +31,7 @@ if env('LOCAL') == 'True':
         path("labgroup_status/<int:labgroup_id>", views.labgroup_status, name="labgroup_status")
     ]
 
-if env('LOCAL') == 'False':
+else:
     urlpatterns = [
         path("", views.home_page_view, name="home"),
         path("accounts/", include("django.contrib.auth.urls")),
