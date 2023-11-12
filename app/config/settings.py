@@ -147,3 +147,15 @@ MESSAGE_TAGS = {
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
 }
+
+if env("LOCAL") == 'False':
+    AUTHENTICATION_BACKENDS = ['ilmoweb.authentication.AuthenticationBackend']
+
+if env("LOCAL") == 'False':
+    # AUTHLIB CLIENTS
+    AUTHLIB_OAUTH_CLIENTS = {
+        'ilmoweb': {
+            'client_id': env('OIDC_CLIENT_ID'),
+            'client_secret': env('OIDC_CLIENT_SECRET')
+        }
+    }

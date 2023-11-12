@@ -21,6 +21,7 @@ jobs:
       PASSWORD: postgres
       HOST: 127.0.0.1
       PORT: 5432
+      LOCAL: True
 
     # Service for Postgres DB
     services:
