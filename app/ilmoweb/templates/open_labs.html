@@ -2,74 +2,21 @@
 {% block title %} Open Labs {% endblock %}
 {% block content %}
 <div class="container-sm">
-  <h1 class="float-left mb-3">Tulevat labrat</h1>
-</div>
-<div class="container-sm">
-  <table class="table table-bordered align-middle">
-    <thead>
-      <tr class="table-secondary align-middle">
-        <th>Kurssi</th>
-        <th>Kuvaus</th>
-        <th>Labrojen määrä</th>
-        <th>Ajankohta</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for course in courses %}
-        <tr>
-          <td>{{ course.name }}</td>
-          <td>{{ course.description }}</td>
-          <td>{{ course.labs_amount }}</td>
-          {% if course.is_visible %}
-            <td>Kurssi tulossa pian</td>
-          {% else %}
-            <td>Kurssia ei tulossa</td>
-          {% endif %}
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<div class="container-sm">
   <h1 class="text-left mb-3">Avoimet labrat</h1>
 </div>
 {% for course in courses %}
   <div class="container-sm">
-    <h3 class="text-left">Kurssi: {{course.name}}</h3>
-    <h5 class="text-left">Suoritettavat laboratoriotyöt</h5>
     <table class="table table-bordered align-middle">
       <thead>
         <tr class="table-secondary">
-          <th>Työ</th>
-          <th>Kuvaus</th>
-          <th>Oppilasmäärä</th>
+          <th class="align-middle" colspan="6">{{course.name}}</th>
         </tr>
-      </thead>
-      <tbody>
-        {% for lab in labs %}
-          {% if lab.course_id == course.id %}
-            <tr>
-              {% if lab.is_visible == 1 %}
-              <td>{{lab.name}}</td>
-              <td>{{lab.description}}</td>
-              <td>{{lab.max_students}}</td>
-              {% endif %}
-            </tr>
-          {% endif %}
-        {% endfor %}
-      </tbody>
-    </table>
-    <h5 class="text-left">Avoimet ryhmät</h5>
-    <table class="table table-bordered align-middle">
-      <thead>
-        <tr class="table-secondary">
-          <th>Laboratoriotyöt</th>
-          <th>Ajankohta</th>
-          <th>Paikka</th>
-          <th>Ilmoittautuneita</th>
-          <th>Ilmoittautuminen</th>
-          <th>Status</th>
+        <tr class="table-light">
+          <th width="30%">Laboratoriotyöt</th>
+          <th width="15%">Ajankohta</th>
+          <th width="10%">Paikka</th>
+          <th width="25%" colspan="2">Ilmoittautuminen</th>
+          <th width="20%">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -87,7 +34,7 @@
                         klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
                       </td>
                       <td>{{lab_group.place}}</td>
-                      <td><div id="signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}</div>/{{lab.max_students}}</td>
+                      <td><div id="signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}/{{lab.max_students}}</div></td>
                       {% if user.is_staff %}
                         <td>
                           <button type="button" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
@@ -98,14 +45,14 @@
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h1 class="modal-title fs-5" id="studentsLabel">
-                                    Kurssin {{course.name}} laboratoriotyöhön {{lab.name}} ilmoittautuneet opiskelijat
+                                    Ilmoittautuneet opiskelijat
                                   </h1>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-testid="close_{{lab_group.id}}"></button>
                                 </div>
                                 <div class="modal-body">
                                   {% for signup in signedup %}
                                   {% if signup.labgroups_id == lab_group.id %} 
-                                    <p><b  data-testid="{{signup.user}}">{{signup.user}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
+                                    <p><b  data-testid="{{signup.user}}">{{signup.user.first_name}} {{signup.user.last_name}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
                                   {% endif %}
                                   {% endfor %}
                                 </div>
@@ -158,12 +105,13 @@
                         {% if user.is_staff %}
                           <td>
                             {% if lab_group.signed_up_students > 0 %}
+                            <form action="{% url 'confirm' %}" method="POST">
                               <div id = "confirm{{ lab_group.id }}">
                                 {% csrf_token %}
-                                <button class="btn btn-light btn-outline-dark" onclick="confirm('{{ lab_group.id }}');">Vahvista</button>
-                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}">Vahvista</button>
+                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Vahvista</button>
                                 <input type="hidden" value="{{lab_group.id}}" name="lab_group_id">
                               </div>
+                            </form>
                             {% else %} 
                               Ei vielä tarpeeksi ilmoittautuneita
                             {% endif %}

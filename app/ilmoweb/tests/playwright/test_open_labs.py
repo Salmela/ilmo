@@ -10,4 +10,4 @@ def test_has_title_and_heading(page: Page):
 def test_laboratoriotyot_button(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     page.get_by_role('link', name='Laboratoriotyöt').click()
-    expect(page.get_by_role('heading', name='Tulevat labrat')).to_be_visible()
+    expect(page.get_by_role('heading', name='Avoimet labrat')).to_be_visible()

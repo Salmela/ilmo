@@ -14,7 +14,7 @@
             <form action="/create_group" method="GET">
               <input type="hidden" name="course_id" value="{{ course.id }}">
               <input type="hidden" name="course_name" value="{{ course.name }}">
-              <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="group_{{course.id}}" value="Luo uusi ryhmä">
+              <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="course_{{course.id}}" value="Luo uusi ryhmä">
             </form>
           </th>
         </tr>
@@ -40,9 +40,9 @@
                   <td>{{lab.name}}</td>
                   <td>{{lab_group.place}}</td>
                   {% if lab_group.status == 0 %}
-                    <td>Ei aktivoitu</td>
+                    <td>Ei julkaistu</td>
                   {% elif lab_group.status == 1 %}
-                    <td>Ryhmä aktivoitu</td>
+                    <td>Ilmoittautuminen käynnissä</td>
                   {% elif lab_group.status == 2 %}
                     <td>Vahvistettu</td>
                   {% elif lab_group.status == 3 %}
@@ -54,7 +54,7 @@
                     <td><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Piilota</a></td>
                   {% endif %}
                     <td width="15%">
-                      <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#deleteLabGroupModal_{{ lab_group.id }}">
+                      <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#deleteLabGroupModal_{{ lab_group.id }}" data-testid="lab_group_{{lab_group.id}}">
                         Poista
                       </button>
                       <div class="modal fade" id="deleteLabGroupModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="deleteLabGroupModalLabel" aria-hidden="true">
@@ -66,7 +66,7 @@
                             </div>
                             <div class="modal-body">
                               <button type="button" class="btn btn-light btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">Eiku</button>
-                              <a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Poista</a>
+                              <a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark" data-testid="delete_lab_group_{{lab_group.id}}">Poista</a>
                             </div>
                           </div>
                         </div>
