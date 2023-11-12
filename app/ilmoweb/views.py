@@ -302,7 +302,7 @@ def evaluate_report(request, report_id):
     "lab_group":lab_group, "report":report, "student":student})
 
 @login_required
-def download_report(filename):
+def download_report(request, filename):
     """
         Teacher can download reports through this view.
     """
