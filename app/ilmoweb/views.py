@@ -186,31 +186,21 @@ def my_labs(request):
         My labs view
     """
     labgroup_id_list = signup.get_labgroups(request.user)
-<<<<<<< HEAD
-    labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
+    students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
+    students_reports = Report.objects.filter(student_id=request.user)
+    lg_ids_with_reports = [report.lab_group_id for report in students_reports]
+    ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
+
+    # Filter the report with the highest status per labgroup
     reports = Report.objects.filter(student=request.user)
     subquery = reports.filter(lab_group=OuterRef('lab_group')).values('lab_group').annotate(max_report_status=Max(
         'report_status')).values('max_report_status')
     reports = reports.annotate(max_report_status=Subquery(subquery))
     filtered_reports = reports.filter(report_status=F('max_report_status'))
 
-    students_reports = Report.objects.filter(student_id=request.user.id)
-    lg_ids_with_reports = [report.lab_group_id for report in students_reports]
-    ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
-    return render(request, "my_labs.html", {"labgroups":labgroups,
-=======
-    students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    students_reports = Report.objects.filter(student_id=request.user)
-    lg_ids_with_reports = [report.lab_group_id for report in students_reports]
-    ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
-
-    subquery = students_reports.filter(lab_group=OuterRef('lab_group')).values('lab_group').annotate(max_report_status=Max(
-        'report_status')).values('max_report_status')
-    reports = reports.annotate(max_report_status=Subquery(subquery))
-    filtered_reports = reports.filter(report_status=F('max_report_status'))
     return render(request, "my_labs.html", {"labgroups":students_labgroups,
->>>>>>> bd97e36 (Rebase to main)
-                                            "reports":filtered_reports,
+                                            "reports":students_reports,
+                                            "filtered_reports":filtered_reports,
                                             "labgroup_ids_with_reports":lg_ids_with_reports,
                                             "labgroup_ids_without_grade":ids_without_grade})
 
@@ -243,7 +233,8 @@ def return_report(request):
                                             prev_4,
                                             student,
                                             lab_group,
-                                            file.name)
+                                            file)
+
     return redirect("/my_labs")
 
 @login_required
@@ -311,7 +302,7 @@ def evaluate_report(request, report_id):
     "lab_group":lab_group, "report":report, "student":student})
 
 @login_required
-def download_report(request, filename):
+def download_report(filename):
     """
         Teacher can download reports through this view.
     """

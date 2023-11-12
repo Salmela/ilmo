@@ -64,6 +64,7 @@ class Report(models.Model):
     lab_group = models.ForeignKey(LabGroups, on_delete=models.CASCADE)
     send_date = models.DateField(auto_now_add=True)
     filename = models.FileField(upload_to="ilmoweb/static/upload/", null=True)
+    report_name = models.CharField(default="")
     report_status = models.IntegerField()
     # 0 = no file, 1 = report returned, 2 = revisions proposed, 3 = fixed report, 4 = report graded
     comments = models.TextField()
