@@ -4,14 +4,14 @@ from helper_functions import login
 def test_login_and_navigate_to_create_labgroup(page: Page):
     page.goto('/')
     login(page, 'kemianope', 'atomi123')
-    page.locator('[data-testid="group_1"]').click()
+    page.locator('[data-testid="course_1"]').click()
     expect(page).to_have_title('Create group')
 
 
 def test_create_labgroup_and_check_that_it_is_created(page: Page):
     page.goto('/')
     login(page, 'kemianope', 'atomi123')
-    page.locator('[data-testid="group_1"]').click()
+    page.locator('[data-testid="course_1"]').click()
     page.get_by_test_id('date').fill('2025-10-31')
     page.keyboard.press('Shift')
     page.get_by_test_id('time').select_option('12-16')
