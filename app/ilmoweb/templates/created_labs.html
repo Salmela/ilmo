@@ -40,9 +40,9 @@
                   <td>{{lab.name}}</td>
                   <td>{{lab_group.place}}</td>
                   {% if lab_group.status == 0 %}
-                    <td>Ei aktivoitu</td>
+                    <td>Ei julkaistu</td>
                   {% elif lab_group.status == 1 %}
-                    <td>Ryhmä aktivoitu</td>
+                    <td>Ilmoittautuminen käynnissä</td>
                   {% elif lab_group.status == 2 %}
                     <td>Vahvistettu</td>
                   {% elif lab_group.status == 3 %}
