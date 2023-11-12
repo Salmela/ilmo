@@ -298,14 +298,14 @@ class TestModels(TestCase):
 
     def test_student_cannot_confirm_labgroup(self):
         self.client.force_login(self.user1)
-        group_id = self.labgroup2.id
+        group_id = self.labgroup1.id
 
         # try to confirm
         self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
         
         # check database stays same
         self.labgroup1.refresh_from_db()
-        status = self.labgroup2.status
+        status = self.labgroup1.status
         self.assertEqual(status, 0)
 
     # Tests for reports
