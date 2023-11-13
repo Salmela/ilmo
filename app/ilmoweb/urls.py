@@ -4,6 +4,7 @@ from django.urls import path, include
 
 from . import views
 
+
 env = environ.Env()
 environ.Env.read_env()
 

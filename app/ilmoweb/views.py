@@ -1,6 +1,5 @@
 """Module for page rendering."""
 import datetime
-import os
 import urllib.request
 import json
 from django.http import HttpResponseBadRequest
@@ -11,11 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Max, F, Subquery, OuterRef
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files
+from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports
 
 
 CONF_URL = 'https://login-test.it.helsinki.fi/.well-known/openid-configuration'
@@ -170,7 +170,9 @@ def open_labs(request):
                                               "lab_groups":lab_groups, "signedup":signedup,
                                               "users_enrollments":users_enrollments})
 
+
 @login_required(login_url='login')
+
 def enroll(request):
     """
         A request for student enrolling in a given lab group
@@ -255,11 +257,20 @@ def my_labs(request):
     """
     labgroup_id_list = signup.get_labgroups(request.user)
     students_labgroups = LabGroups.objects.filter(pk__in=labgroup_id_list)
-    students_reports = Report.objects.filter(student_id=request.user.id)
+    students_reports = Report.objects.filter(student_id=request.user)
     lg_ids_with_reports = [report.lab_group_id for report in students_reports]
     ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
+
+    # Filter the report with the highest status per labgroup
+    reports = Report.objects.filter(student=request.user)
+    subquery = reports.filter(lab_group=OuterRef('lab_group')).values('lab_group').annotate(
+        max_report_status=Max('report_status')).values('max_report_status')
+    reports = reports.annotate(max_report_status=Subquery(subquery))
+    filtered_reports = reports.filter(report_status=F('max_report_status'))
+
     return render(request, "my_labs.html", {"labgroups":students_labgroups,
                                             "reports":students_reports,
+                                            "filtered_reports":filtered_reports,
                                             "labgroup_ids_with_reports":lg_ids_with_reports,
                                             "labgroup_ids_without_grade":ids_without_grade})
 
@@ -274,14 +285,26 @@ def return_report(request):
     group_id = request.POST.get("lab_group_id")
     lab_group = LabGroups.objects.get(pk=group_id)
     file = request.FILES["file"]
-    filename = os.path.basename(str(file))
-    print(filename)
-    if not file.name.lower().endswith(('.pdf', '.docx')):
-        messages.warning(request, "Tiedoston tulee olla pdf tai docx muodossa")
+    student = request.user
+
+    if not file.name.lower().endswith(('.pdf')):
+        messages.warning(request, "Tiedoston tulee olla pdf-muodossa")
         return redirect("/my_labs")
-    report = Report(student=request.user, lab_group=lab_group, filename=filename, report_status=1)
-    report.save()
-    messages.success(request, "Tiedosto lähetetty onnistuneesti")
+
+    prev_1 = Report.objects.filter(student=student, lab_group=lab_group, report_status=1)
+    prev_2 = Report.objects.filter(student=student, lab_group=lab_group, report_status=2)
+    prev_3 = Report.objects.filter(student=student, lab_group=lab_group, report_status=3)
+    prev_4 = Report.objects.filter(student=student, lab_group=lab_group, report_status=4)
+
+    check_previous_reports.check_and_replace(request,
+                                            prev_1,
+                                            prev_2,
+                                            prev_3,
+                                            prev_4,
+                                            student,
+                                            lab_group,
+                                            file)
+
     return redirect("/my_labs")
 
 @login_required(login_url='login')
@@ -367,6 +390,7 @@ def delete_labgroup(request, labgroup_id):
         labgroup.save()
 
     return redirect(created_labs)
+
 
 @login_required(login_url='login')
 def labgroup_status(request, labgroup_id):

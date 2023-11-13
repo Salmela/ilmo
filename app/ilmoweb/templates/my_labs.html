@@ -55,12 +55,10 @@
               </div>
             </td>
             {% if lab_group.id not in labgroup_ids_with_reports %}
-              <td>
-                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Palauta raportti">
-                  <button class="btn btn-light disabled">
-                    Avaa
-                  </button>
-                </span>
+              <td class="position-relative">
+                <button class="btn btn-light position-absolute top-50 start-50 translate-middle disabled">
+                  Avaa
+                </button>
               </td>
             {% else %}
               <td>
@@ -76,13 +74,13 @@
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                       </div>
                       <div class="modal-body">
-                        {% for report in reports %}
+                        {% for report in filtered_reports %}
                           {% if report.lab_group_id == lab_group.id %}
                           <table class="table">
                             <tbody>
                               <tr>
                                 <th>Raportti</th>
-                                <td><a href="/download_report/{{ report.filename }}" download>{{ report.filename }}</a></td>
+                                <td><a href="/download_report/{{ report.report_name}}" download>{{ report.report_name }}</a></td>
                               </tr>
                               <tr>
                                 <th>Assistentti</th>

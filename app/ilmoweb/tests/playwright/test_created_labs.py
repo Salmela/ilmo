@@ -25,4 +25,3 @@ def test_delete_lab_group_and_check_it_is_deleted(page:Page):
     page.locator('[data-testid="delete_lab_group_12"]').click()
     expect(page.get_by_role("cell", name="31.10.2025 klo 12 - 16")).to_be_hidden()
     expect(page.get_by_text('D210 (Phy)')).to_be_hidden()
-    
