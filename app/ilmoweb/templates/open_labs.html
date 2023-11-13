@@ -30,9 +30,9 @@
                           {% if lab.course_id == course.id %}
                             <div class="col-sm-6 pt-2 pb-3">
                               <div class="card h-100">
-                                <h6 class="card-header"><b>{{ lab.name }}</b></h6>
+                                <h6 class="card-header" data-testid="name_{{ lab.id }}"><b>{{ lab.name }}</b></h6>
                                 <div class="card-body p-2 d-flex flex-column">
-                                  <p class="card-text">{{ lab.description }}</p>
+                                  <p class="card-text" data-testid="desc_{{ lab.id }}">{{ lab.description }}</p>
                                 </div>
                               </div>
                             </div>
