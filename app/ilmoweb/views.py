@@ -420,3 +420,36 @@ def cancel_enrollment(request, labgroup_id):
         messages.success(request, "Ilmoittautuminen peruutettu")
 
     return redirect("/open_labs")
+
+@login_required
+def update_group(request, labgroup_id):
+    """
+        View for updating a new labgroup
+    """
+    if request.method == "GET":
+        if request.user.is_staff is not True:
+            return redirect("/open_labs")
+
+    if request.method == "POST":
+        labgroup = LabGroups.objects.get(pk=labgroup_id)
+        course_labs = request.POST.getlist("labs[]")
+        place = request.POST.get("place")
+        date = request.POST.get("date")
+        time = request.POST.get("time")
+        assistant_id = request.POST.get("assistant")
+        assistant = User.objects.get(pk=assistant_id)
+        if not date:
+            date=labgroup.date
+        labgroups.update(date, time, place, assistant, labgroup_id)
+
+        return redirect(created_labs)
+
+    course_id = request.GET.get("course_id")
+    course = Courses.objects.get(pk=course_id)
+    course_labs = Labs.objects.all()
+    labgroup = LabGroups.objects.get(pk=labgroup_id)
+
+    assistants = User.objects.filter(is_staff=True)
+
+    return render(request, "update_group.html", {
+        "labs":course_labs, "course":course, "assistants":assistants, "lab_group":labgroup })
