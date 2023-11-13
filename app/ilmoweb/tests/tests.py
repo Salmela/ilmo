@@ -1,4 +1,5 @@
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.messages import get_messages
 from django.urls import reverse
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups, Report
@@ -29,7 +30,8 @@ class TestModels(TestCase):
             password = make_password("assari"),
             first_name = "Antti",
             last_name = "Assari",
-            email = "antti.assari@ilmoweb.fi"
+            email = "antti.assari@ilmoweb.fi",
+            is_staff = True
         )
         self.assistant1.save()
 
@@ -527,6 +529,21 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.signed_up_students, 0)
+
+    def test_cancelling_enrollment_gives_success_message(self):
+        self.client.force_login(self.user1)
+        signup.signup(self.user1, self.labgroup1)
+        self.assertEqual(self.labgroup1.signed_up_students, 1)
+        url = reverse('cancel_enrollment', args=[str(self.labgroup1.id)])
+        response = self.client.post(url)
+        messages = [m.message for m in get_messages(response.wsgi_request)]
+        self.assertEqual(str(messages[0]), 'Ilmoittautuminen peruutettu')
+
+    def test_staff_can_not_cancel_enrollment(self):
+        self.client.force_login(self.assistant1)
+        url = reverse('cancel_enrollment', args=[str(self.labgroup1.id)])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 400)
     
     # Tests for publishing/hiding labgroups
 
