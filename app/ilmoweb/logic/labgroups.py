@@ -27,3 +27,26 @@ def create(lab, date, time, place, assistant):
                       place=place,
                       assistant=assistant)
     group.save()
+
+def update(date, time, place, assistant, labgroup_id):
+    """
+        updates labgroup in database
+    """
+    if time == '8-12':
+        start_time = '08'
+        end_time = '12'
+    if time == '12-16':
+        start_time = '12'
+        end_time = '16'
+
+    group = LabGroups.objects.get(pk=labgroup_id)
+
+    group.id = labgroup_id
+    group.date = date
+    group.start_time = start_time
+    group.end_time = end_time
+    group.place = place
+    group.assistant = assistant
+
+    group.save()
+    
