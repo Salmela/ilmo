@@ -32,7 +32,6 @@ if env("LOCAL") == 'False':
         path("labgroup_status/<int:labgroup_id>", views.labgroup_status, name="labgroup_status"),
         path('login/', views.login, name='login'),
         path('auth/', views.auth, name='auth'),
-        path('logout/', views.logout, name='logout'),
         path("update_group/<int:labgroup_id>", views.update_group, name="update_group")
 
     ]
