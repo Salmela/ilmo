@@ -69,13 +69,13 @@ def auth(request):
 
     return redirect(home_page_view)
 
-def logout(request):
-    """
-        University logout
-    """
-    django_logout(request)
-
-    return redirect("https://login-test.it.helsinki.fi/idp/profile/Logout")
+#def logout(request):
+#    """
+#        University logout
+#    """
+#    django_logout(request)
+#
+#    return redirect("https://login-test.it.helsinki.fi/idp/profile/Logout")
 
 def home_page_view(request):
     """
