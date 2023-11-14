@@ -26,6 +26,14 @@ with open('config/test_data_1.csv') as file:
         user.save()
 
 """
+    Sets superuser.
+
+"""
+user = User.objects.get(pk=1)
+user.is_superuser=1
+user.save()
+
+"""
     Populates the relation connected to the Courses model with test data.
 
 """
