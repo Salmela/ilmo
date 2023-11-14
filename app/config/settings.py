@@ -142,7 +142,7 @@ LOGIN_REDIRECT_URL = '/'
 if env("LOCAL") == 'False':
     LOGOUT_REDIRECT_URL = 'https://login-test.it.helsinki.fi/idp/profile/Logout'
 else:
-    LOGIN_REDIRECT_URL = '/'
+    LOGOUT_REDIRECT_URL = '/'
 
 MESSAGE_TAGS = {
         messages.DEBUG: 'alert-secondary',
