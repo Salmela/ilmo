@@ -2,7 +2,7 @@ import re
 from playwright.sync_api import Page, expect
 from helper_functions import login
 
-def test_navigate_to_update_labgroup(page: Page):
+def test_navigate_to_update_group(page: Page):
     page.goto('/')
     login(page, 'kemianope', 'atomi123')
     page.locator('[data-testid="group_1"]').click()
