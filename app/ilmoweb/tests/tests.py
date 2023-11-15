@@ -35,6 +35,16 @@ class TestModels(TestCase):
         )
         self.assistant1.save()
 
+        self.assistant2 = User.objects.create(
+            username = "AinoA",
+            password = make_password("assari2"),
+            first_name = "Aino",
+            last_name = "Assari",
+            email = "aino.assari2@ilmoweb.fi",
+            is_staff = True
+        )
+        self.assistant2.save()
+
         self.course1 = Courses.objects.create(
             name = "Kemian Labratyö",
             description = "Kemian Labratyö-kurssi",
@@ -67,7 +77,8 @@ class TestModels(TestCase):
             start_time = "14:30",
             end_time = "16:30",
             place = "Chemicum",
-            status = 0
+            status = 0,
+            assistant = self.assistant1
         )
 
         # nonempty labgroup
@@ -166,6 +177,9 @@ class TestModels(TestCase):
 
     def test_lab_group_is_created_with_correct_is_visible_value(self):
         self.assertEqual(self.labgroup1.status, 0)
+    
+    def test_lab_group_is_created_with_correct_assistant(self):
+        self.assertEqual(self.labgroup1.assistant, self.assistant1)
 
     # Tests for logging in as superuser
     def test_login_for_superuser(self):
@@ -570,3 +584,35 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 0)
+    
+    # Tests for updating labgroups
+
+    def test_teacher_can_update_labgroups(self):
+        date = '2024-11-11'
+        time = '8-12'
+        place = 'B105'
+        assistant = self.assistant2
+
+        self.client.force_login(self.superuser1)
+        url = reverse('update_group', args=[str(self.labgroup1.id)])
+        response = self.client.post(url, {'date': date, 'time':time, 'place':place, 'assistant':assistant.id})
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.date, datetime.date(2024, 11, 11))
+        self.assertEqual(self.labgroup1.start_time, datetime.time(8))
+        self.assertEqual(self.labgroup1.end_time, datetime.time(12))
+        self.assertEqual(self.labgroup1.place, 'B105')
+        self.assertEqual(self.labgroup1.assistant.username, 'AinoA')
+    
+    def test_student_cannot_update_labgroups(self):
+        date = '2024-11-12'
+        time = '12-16'
+        place = 'PHY05'
+        assistant = self.assistant1
+
+        self.client.force_login(self.user1)
+        url = reverse('update_group', args=[str(self.labgroup1.id)])
+        response = self.client.get(url)
+        self.assertEqual(response.url, '/open_labs' )
+        self.assertEqual(self.labgroup1.place, 'Chemicum')
+    
