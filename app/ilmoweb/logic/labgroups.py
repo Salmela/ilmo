@@ -1,6 +1,6 @@
 """Module for app logic."""
-from ilmoweb.models import Labs, LabGroups, SignUp
 from django.core.mail import send_mail
+from ilmoweb.models import Labs, LabGroups, SignUp
 
 def email(lab_group, message_type):
     """
@@ -29,7 +29,8 @@ def email(lab_group, message_type):
     elif message_type == 'cancel':
         subject = 'Laboratoriotyö peruttu'
         message = (
-            f'Laboratoriotyö {lab.name} ({lab_group.date.day}.{lab_group.date.month}.{lab_group.date.year}) on peruttu.'
+            f'Laboratoriotyö {lab.name} ({lab_group.date.day}.{lab_group.date.month}.{lab_group.date.year}) '
+            'on peruttu.'
         )
     send_mail(
     subject,

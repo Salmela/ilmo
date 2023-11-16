@@ -390,7 +390,7 @@ def labgroup_status(request, labgroup_id):
     """
     if request.user.is_staff:
         labgroup = LabGroups.objects.get(pk=labgroup_id)
-        if labgroup.status == 0:
+        if labgroup.status == 0 or labgroup.status == 3:
             labgroup.status = 1
         else:
             labgroup.status = 3
