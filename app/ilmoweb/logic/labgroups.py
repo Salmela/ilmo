@@ -29,7 +29,8 @@ def email(lab_group, message_type):
     elif message_type == 'cancel':
         subject = 'Laboratoriotyö peruttu'
         message = (
-            f'Laboratoriotyö {lab.name} ({lab_group.date.day}.{lab_group.date.month}.{lab_group.date.year}) '
+            f'Laboratoriotyö '
+            f'{lab.name} ({lab_group.date.day}.{lab_group.date.month}.{lab_group.date.year}) '
             'on peruttu.'
         )
     send_mail(
