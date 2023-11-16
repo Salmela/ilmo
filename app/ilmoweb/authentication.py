@@ -12,7 +12,7 @@ class AuthenticationBackend:
             Function for custom authentication
         """
         try:
-            user = User.objects.get(email=userinfo['email'])
+            user = User.objects.get(username=userinfo['uid'])
         except User.DoesNotExist:
             user = User(username=userinfo['uid'], first_name=userinfo['given_name'],
                         last_name=userinfo['family_name'], email=userinfo['email'],

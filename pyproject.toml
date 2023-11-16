@@ -12,6 +12,7 @@ psycopg2 = "^2.9.7"
 django-environ = "^0.11.2"
 invoke = "^2.2.0"
 authlib = "^1.2.1"
+django-cryptography = "^1.1"
 
 
 [tool.poetry.group.dev.dependencies]
