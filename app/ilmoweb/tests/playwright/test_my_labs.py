@@ -37,8 +37,6 @@ def test_login_and_navigate_to_my_labs(page: Page):
 
 def test_enrolled_group_is_visible_in_my_labs(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
-    #page.get_by_role('link', name='Laboratoriotyöt').click()
-    #page.locator('[data-testid="group_1"]').click()
     page.get_by_role('link', name='Omat labrat').click()
     expect(page.get_by_text('labra 1')).to_be_visible()
 
@@ -61,4 +59,3 @@ def test_student_can_cancel_enrollment(page: Page):
     page.locator('[data-testid="group_7"]').click()
     page.get_by_role('link', name='Omat labrat').click()
     expect(page.get_by_text('Heisenberg')).to_be_hidden()
-

@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
     $(function() {
-        $('#datepicker').datepicker({
+        $("#datepicker").datepicker({
           format: "yyyy-mm-dd"}
         );
     });
@@ -30,13 +30,16 @@
     </div>
     <br>
     <div class="row justify-content-center">
-      <label for="inputTime" class="col-sm-1 col-form-label">Aika</label>
+      <label for="startTime" class="col-sm-1 col-form-label">Aloitusaika</label>
       <div class="col-3">
-        <select id="inputTime" class="form-control" data-testid="time"
-          name="time">
-          <option selected>8-12</option>
-          <option>12-16</option>
-        </select>
+        <input id="startTime" type="time" value="08:00" name="start_time" data-testid="start_time" data-input>
+      </div>
+    </div>
+    <br>
+    <div class="row justify-content-center">
+      <label for="endTime" class="col-sm-1 col-form-label">Lopetusaika</label>
+      <div class="col-3">
+        <input id="endTime" type="time" value="12:00" name="end_time" data-testid="end_time" data-input>
       </div>
     </div>
     <br>
