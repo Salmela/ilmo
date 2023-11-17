@@ -183,11 +183,11 @@ class TestModels(TestCase):
 
     # Tests for logging in as superuser
     def test_login_for_superuser(self):
-        logged_in = self.client.login(username='kemianope', password='atomi123')
+        logged_in = self.client.login(username="kemianope", password="atomi123")
         self.assertTrue(logged_in)
 
     def test_login_with_wrong_password(self):
-        logged_in = self.client.login(username='kemianope', password='chemicum')
+        logged_in = self.client.login(username="kemianope", password="chemicum")
         self.assertFalse(logged_in)
 
     def test_login_as_not_superuser(self):
@@ -196,23 +196,23 @@ class TestModels(TestCase):
 
     def test_respond_with_correct_status_code_login(self):
         response_get = self.client.get("/accounts/login/",
-                                    {'username':'kemianope', 'password':'atomi123'})
+                                    {"username":"kemianope", "password":"atomi123"})
         status_code_get = response_get.status_code
         self.assertEqual(status_code_get, 200) # 200 OK
 
         response_post = self.client.post("/accounts/login/",
-                                    {'username':'kemianope', 'password':'atomi123'})
+                                    {"username":"kemianope", "password":"atomi123"})
         status_code_post = response_post.status_code
         self.assertEqual(status_code_post, 302) # 302 Found
 
     def test_logout(self):
-        logged_in = self.client.login(username='kemianope', password='atomi123')
+        logged_in = self.client.login(username="kemianope", password="atomi123")
         logged_in = self.client.logout()
         self.assertFalse(logged_in)
 
     def test_respond_with_correct_status_code_logout(self):
         response_get = self.client.get("/accounts/logout/",
-                                    {'username':'kemianope', 'password':'atomi123'})
+                                    {"username":"kemianope", "password":"atomi123"})
         status_code_get = response_get.status_code
         self.assertEqual(status_code_get, 302) # 302 Found
 
@@ -225,8 +225,8 @@ class TestModels(TestCase):
         max_students = self.lab1.max_students
         students = self.labgroup1.signed_up_students
 
-        response_post = self.client.post('/open_labs/enroll/', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
-        response_get = self.client.get('/open_labs/')
+        response_post = self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
+        response_get = self.client.get("/open_labs/")
 
         # correct status codes
 
@@ -247,8 +247,8 @@ class TestModels(TestCase):
         max_students = self.lab1.max_students
         students = self.labgroup1.signed_up_students
 
-        response_post = self.client.post('/open_labs/enroll', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
-        response_get = self.client.get('/open_labs/')
+        response_post = self.client.post("/open_labs/enroll", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
+        response_get = self.client.get("/open_labs/")
 
         # correct status codes
 
@@ -270,10 +270,10 @@ class TestModels(TestCase):
         students = self.labgroup1.signed_up_students
 
         # student enrolls
-        self.client.post('/open_labs/enroll/', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
+        self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
 
         # same student enrolls again
-        response_post = self.client.post('/open_labs/enroll', {'max_students':max_students, 'students':students, 'user_id':user_id, 'group_id':group_id})
+        response_post = self.client.post("/open_labs/enroll", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
 
         # correct status code
 
@@ -289,7 +289,7 @@ class TestModels(TestCase):
     def test_teacher_can_confirm_nonempty_labgroup(self):
         self.client.force_login(self.superuser1)
         group_id = self.labgroup2.id
-        response_post = self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
+        response_post = self.client.post("/open_labs/confirm/", {"lab_group_id": group_id})
         
         # correct status code
         self.assertEqual(response_post.status_code, 302)
@@ -305,7 +305,7 @@ class TestModels(TestCase):
         group_id = self.labgroup1.id
 
         # try to confirm
-        self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
+        self.client.post("/open_labs/confirm/", {"lab_group_id": group_id})
         
         # check database stays same
         self.labgroup1.refresh_from_db()
@@ -317,7 +317,7 @@ class TestModels(TestCase):
         group_id = self.labgroup1.id
 
         # try to confirm
-        self.client.post('/open_labs/confirm/', {'lab_group_id': group_id})
+        self.client.post("/open_labs/confirm/", {"lab_group_id": group_id})
         
         # check database stays same
         self.labgroup1.refresh_from_db()
@@ -341,11 +341,12 @@ class TestModels(TestCase):
 
     def test_start_end_times_8_to_12(self):
         lab = self.lab1
-        date = '2023-10-13'
-        time = '8-12'
-        place = 'B105'
+        date = "2023-10-13"
+        start_time = "08:00"
+        end_time = "12:00"
+        place = "B105"
 
-        labgroups.create(lab, date, time, place, self.assistant1)
+        labgroups.create(lab, date, start_time, end_time, place, self.assistant1)
 
         group = LabGroups.objects.get(lab=lab, date=date, place=place)
 
@@ -354,11 +355,12 @@ class TestModels(TestCase):
 
     def test_start_end_times_12_to_16(self):
         lab = self.lab1
-        date = '2023-10-13'
-        time = '12-16'
-        place = 'B105'
+        date = "2023-10-13"
+        start_time = "12:00"
+        end_time = "16:00"
+        place = "B105"
 
-        labgroups.create(lab, date, time, place, self.assistant1)
+        labgroups.create(lab, date, start_time, end_time, place, self.assistant1)
 
         group = LabGroups.objects.get(lab=lab, date=date, place=place)
 
@@ -367,46 +369,49 @@ class TestModels(TestCase):
     
     def test_labgroup_is_saved_to_db(self):
         lab = self.lab1
-        date = '2023-10-13'
-        time = '8-12'
-        place = 'B105'
+        date = "2023-10-13"
+        start_time = "08:00"
+        end_time = "16:00"
+        place = "B105"
 
         prev = len(LabGroups.objects.all())
-        labgroups.create(lab, date, time, place, self.assistant1)
+        labgroups.create(lab, date, start_time, end_time, place, self.assistant1)
         new = len(LabGroups.objects.all())
 
         self.assertEqual(prev + 1, new)
     
     def test_teacher_can_create_labgroup(self):
         lab = self.lab1.id
-        date = '2023-10-13'
-        time = '8-12'
-        place = 'B105'
+        date = "2023-10-13"
+        start_time = "08:00"
+        end_time = "12:00"
+        place = "B105"
         assistant = User.objects.filter(is_staff=True).first()
 
         self.client.force_login(self.superuser1)
         prev = len(LabGroups.objects.all())
-        get_response = self.client.get("/create_group/", {'course_id':self.course1.id})
+        get_response = self.client.get("/create_group/", {"course_id":self.course1.id})
         self.assertEqual(get_response.status_code, 200)
 
-        post_response = self.client.post("/create_group/", {'labs[]':lab, 'place':place, 'date':date, 'time':time, 'assistant':assistant.id})
+        post_response = self.client.post("/create_group/", {"labs[]":lab, "place":place, "date":date, "start_time":start_time, "end_time":end_time, "assistant":assistant.id})
         self.assertEqual(post_response.status_code, 302)
         new = len(LabGroups.objects.all())
         self.assertEqual(prev + 1, new)
 
     def test_teacher_can_create_multiple_labgroups(self):
         labs = [self.lab1.id, self.lab2.id]
-        date = '2023-10-13'
-        time = '8-12'
-        place = 'B105'
+        date = "2023-10-13"
+        start_time = "08:00"
+        end_time = "12:00"
+        place = "B105"
         assistant = User.objects.filter(is_staff=True).first()
 
         self.client.force_login(self.superuser1)
         prev = len(LabGroups.objects.all())
-        get_response = self.client.get("/create_group/", {'course_id':self.course1.id})
+        get_response = self.client.get("/create_group/", {"course_id":self.course1.id})
         self.assertEqual(get_response.status_code, 200)
 
-        post_response = self.client.post("/create_group/", {'labs[]':labs, 'place':place, 'date':date, 'time':time, 'assistant':assistant.id})
+        post_response = self.client.post("/create_group/", {"labs[]":labs, "place":place, "date":date, "start_time":start_time, "end_time":end_time, "assistant":assistant.id})
         self.assertEqual(post_response.status_code, 302)
         new = len(LabGroups.objects.all())
         self.assertEqual(prev + 2, new)
@@ -414,17 +419,18 @@ class TestModels(TestCase):
     def test_student_cannot_access_create_labgroup(self):
         self.client.force_login(self.user1)
 
-        response = self.client.get("/create_group/", {'course_id':self.course1.id})
-        self.assertEqual(response.url, '/open_labs')
+        response = self.client.get("/create_group/", {"course_id":self.course1.id})
+        self.assertEqual(response.url, "/open_labs")
     
     def test_cannot_create_labgroup_if_not_logged_in(self):
         lab = self.lab1.id
-        date = '2023-10-13'
-        time = '8-12'
-        place = 'B105'
+        date = "2023-10-13"
+        start_time = "08:00"
+        end_time = "12:00"
+        place = "B105"
 
         prev = len(LabGroups.objects.all())
-        post_response = self.client.post("/create_group/", {'labs[]':lab, 'place':place, 'date':date, 'time':time})
+        post_response = self.client.post("/create_group/", {"labs[]":lab, "place":place, "date":date, "start_time":start_time, "end_time":end_time})
         self.assertEqual(post_response.status_code, 302)
         new = len(LabGroups.objects.all())
         self.assertEqual(prev, new)
@@ -433,7 +439,7 @@ class TestModels(TestCase):
 
     def test_teacher_can_activate_lab(self):
         self.client.force_login(self.superuser1)
-        url = reverse('make_lab_visible', args=[str(self.lab2.id)])
+        url = reverse("make_lab_visible", args=[str(self.lab2.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.lab2.refresh_from_db()
@@ -441,7 +447,7 @@ class TestModels(TestCase):
     
     def test_teacher_can_deactivate_lab(self):
         self.client.force_login(self.superuser1)
-        url = reverse('make_lab_visible', args=[str(self.lab1.id)])
+        url = reverse("make_lab_visible", args=[str(self.lab1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.lab1.refresh_from_db()
@@ -449,7 +455,7 @@ class TestModels(TestCase):
     
     def test_student_cannot_activate_lab(self):
         self.client.force_login(self.user1)
-        url = reverse('make_lab_visible', args=[str(self.lab2.id)])
+        url = reverse("make_lab_visible", args=[str(self.lab2.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.lab2.refresh_from_db()
@@ -459,7 +465,7 @@ class TestModels(TestCase):
 
     def test_teacher_can_delete_lab(self):
         self.client.force_login(self.superuser1)
-        url = reverse('delete_lab', args=[str(self.lab1.id)])
+        url = reverse("delete_lab", args=[str(self.lab1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.lab1.refresh_from_db()
@@ -467,7 +473,7 @@ class TestModels(TestCase):
     
     def test_student_cannot_delete_lab(self):
         self.client.force_login(self.user1)
-        url = reverse('delete_lab', args=[str(self.lab1.id)])
+        url = reverse("delete_lab", args=[str(self.lab1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.lab1.refresh_from_db()
@@ -477,48 +483,48 @@ class TestModels(TestCase):
 
     def test_teacher_can_evaluate_reports(self):
         self.client.force_login(self.superuser1)
-        url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 5, 'comments': 'Perfectly done!'})
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        response = self.client.post(url, {"grade": 5, "comments": "Perfectly done!"})
         self.assertEqual(response.status_code, 302)
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.grade, 5)
-        self.assertEqual(self.report1.comments, 'Perfectly done!')
+        self.assertEqual(self.report1.comments, "Perfectly done!")
         self.assertEqual(self.report1.graded_by_id, self.superuser1.id)
         self.assertEqual(self.report1.grading_date, datetime.date.today())
         self.assertEqual(self.report1.report_status, 4)
 
     def test_teacher_can_evaluate_without_comment(self):
         self.client.force_login(self.superuser1)
-        url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 3, 'comments': ''})
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        response = self.client.post(url, {"grade": 3, "comments": ""})
         self.assertEqual(response.status_code, 302)
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.grade, 3)
-        self.assertEqual(self.report1.comments, '')
+        self.assertEqual(self.report1.comments, "")
         self.assertEqual(self.report1.graded_by_id, self.superuser1.id)
         self.assertEqual(self.report1.grading_date, datetime.date.today())
         self.assertEqual(self.report1.report_status, 4)
     
     def test_student_cannot_grade_reports(self):
         self.client.force_login(self.user1)
-        url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 5, 'comments': 'Perfectly done!'})
-        self.assertEqual(response.url, '/my_labs' )
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        response = self.client.post(url, {"grade": 5, "comments": "Perfectly done!"})
+        self.assertEqual(response.url, "/my_labs")
     
     def test_teacher_can_send_reports_to_be_fixed(self):
         self.client.force_login(self.superuser1)
-        url = reverse('evaluate_report', args=[str(self.report1.id)])
-        response = self.client.post(url, {'grade': 0, 'comments': 'Fix the report'})
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        response = self.client.post(url, {"grade": 0, "comments": "Fix the report"})
         self.assertEqual(response.status_code, 302)
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.report_status, 2)
-        self.assertEqual(self.report1.comments, 'Fix the report')
+        self.assertEqual(self.report1.comments, "Fix the report")
 
     # Tests for deleting labgroups
 
     def test_teacher_can_delete_labgroup(self):
         self.client.force_login(self.superuser1)
-        url = reverse('delete_labgroup', args=[str(self.labgroup1.id)])
+        url = reverse("delete_labgroup", args=[str(self.labgroup1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
@@ -526,7 +532,7 @@ class TestModels(TestCase):
 
     def test_student_cannot_delete_labgroup(self):
         self.client.force_login(self.user1)
-        url = reverse('delete_labgroup', args=[str(self.labgroup1.id)])
+        url = reverse("delete_labgroup", args=[str(self.labgroup1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
@@ -538,7 +544,7 @@ class TestModels(TestCase):
         self.client.force_login(self.user1)
         signup.signup(self.user1, self.labgroup1)
         self.assertEqual(self.labgroup1.signed_up_students, 1)
-        url = reverse('cancel_enrollment', args=[str(self.labgroup1.id)])
+        url = reverse("cancel_enrollment", args=[str(self.labgroup1.id)])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
@@ -548,14 +554,14 @@ class TestModels(TestCase):
         self.client.force_login(self.user1)
         signup.signup(self.user1, self.labgroup1)
         self.assertEqual(self.labgroup1.signed_up_students, 1)
-        url = reverse('cancel_enrollment', args=[str(self.labgroup1.id)])
+        url = reverse("cancel_enrollment", args=[str(self.labgroup1.id)])
         response = self.client.post(url)
         messages = [m.message for m in get_messages(response.wsgi_request)]
-        self.assertEqual(str(messages[0]), 'Ilmoittautuminen peruutettu')
+        self.assertEqual(str(messages[0]), "Ilmoittautuminen peruutettu")
 
     def test_staff_can_not_cancel_enrollment(self):
         self.client.force_login(self.assistant1)
-        url = reverse('cancel_enrollment', args=[str(self.labgroup1.id)])
+        url = reverse("cancel_enrollment", args=[str(self.labgroup1.id)])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 400)
     
@@ -563,7 +569,7 @@ class TestModels(TestCase):
 
     def test_teacher_can_publish_labgroup(self):
         self.client.force_login(self.superuser1)
-        url = reverse('labgroup_status', args=[str(self.labgroup1.id)])
+        url = reverse("labgroup_status", args=[str(self.labgroup1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
@@ -571,7 +577,7 @@ class TestModels(TestCase):
     
     def test_teacher_can_cancel_labgroup(self):
         self.client.force_login(self.superuser1)
-        url = reverse('labgroup_status', args=[str(self.labgroup2.id)])
+        url = reverse("labgroup_status", args=[str(self.labgroup2.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup2.refresh_from_db()
@@ -579,7 +585,7 @@ class TestModels(TestCase):
     
     def test_student_cannot_publish_labgroup(self):
         self.client.force_login(self.user1)
-        url = reverse('labgroup_status', args=[str(self.labgroup1.id)])
+        url = reverse("labgroup_status", args=[str(self.labgroup1.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
@@ -588,31 +594,26 @@ class TestModels(TestCase):
     # Tests for updating labgroups
 
     def test_teacher_can_update_labgroups(self):
-        date = '2024-11-11'
-        time = '8-12'
-        place = 'B105'
+        date = "2024-11-11"
+        start_time = "8:00"
+        end_time = "12:00"
+        place = "B105"
         assistant = self.assistant2
 
         self.client.force_login(self.superuser1)
-        url = reverse('update_group', args=[str(self.labgroup1.id)])
-        response = self.client.post(url, {'date': date, 'time':time, 'place':place, 'assistant':assistant.id})
+        url = reverse("update_group", args=[str(self.labgroup1.id)])
+        response = self.client.post(url, {"date": date, "start_time":start_time, "end_time":end_time, "place":place, "assistant":assistant.id})
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.date, datetime.date(2024, 11, 11))
         self.assertEqual(self.labgroup1.start_time, datetime.time(8))
         self.assertEqual(self.labgroup1.end_time, datetime.time(12))
-        self.assertEqual(self.labgroup1.place, 'B105')
-        self.assertEqual(self.labgroup1.assistant.username, 'AinoA')
+        self.assertEqual(self.labgroup1.place, "B105")
+        self.assertEqual(self.labgroup1.assistant.username, "AinoA")
     
     def test_student_cannot_update_labgroups(self):
-        date = '2024-11-12'
-        time = '12-16'
-        place = 'PHY05'
-        assistant = self.assistant1
-
         self.client.force_login(self.user1)
-        url = reverse('update_group', args=[str(self.labgroup1.id)])
+        url = reverse("update_group", args=[str(self.labgroup1.id)])
         response = self.client.get(url)
-        self.assertEqual(response.url, '/open_labs' )
-        self.assertEqual(self.labgroup1.place, 'Chemicum')
-    
+        self.assertEqual(response.url, "/open_labs" )
+        self.assertEqual(self.labgroup1.place, "Chemicum")

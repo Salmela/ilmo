@@ -127,13 +127,14 @@ def create_group(request):
         course_labs = request.POST.getlist("labs[]")
         place = request.POST.get("place")
         date = request.POST.get("date")
-        time = request.POST.get("time")
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
         assistant_id = request.POST.get("assistant")
 
         for lab in course_labs:
             this_lab = Labs.objects.get(pk=lab)
             assistant = User.objects.get(pk=assistant_id)
-            labgroups.create(this_lab, date, time, place, assistant)
+            labgroups.create(this_lab, date, start_time, end_time, place, assistant)
 
         return redirect(created_labs)
 
@@ -427,12 +428,13 @@ def update_group(request, labgroup_id):
         course_labs = request.POST.getlist("labs[]")
         place = request.POST.get("place")
         date = request.POST.get("date")
-        time = request.POST.get("time")
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
         assistant_id = request.POST.get("assistant")
         assistant = User.objects.get(pk=assistant_id)
         if not date:
             date=labgroup.date
-        labgroups.update(date, time, place, assistant, labgroup_id)
+        labgroups.update(date, start_time, end_time, place, assistant, labgroup_id)
 
         return redirect(created_labs)
 
