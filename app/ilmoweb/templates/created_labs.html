@@ -40,18 +40,18 @@
                   <td>{{lab.name}}</td>
                   <td data-testid="place_{{ lab_group.id }}">{{lab_group.place}}</td>
                   {% if lab_group.status == 0 %}
-                    <td>Ei julkaistu</td>
+                    <td data-testid="status_{{ lab_group.id }}">Ei julkaistu</td>
                   {% elif lab_group.status == 1 %}
-                    <td>Ilmoittautuminen käynnissä</td>
+                    <td data-testid="status_{{ lab_group.id }}">Ilmoittautuminen käynnissä</td>
                   {% elif lab_group.status == 2 %}
-                    <td>Vahvistettu</td>
+                    <td data-testid="status_{{ lab_group.id }}">Vahvistettu</td>
                   {% elif lab_group.status == 3 %}
-                    <td>Peruttu</td>
+                    <td data-testid="status_{{ lab_group.id }}">Peruttu</td>
                   {% endif %}
-                  {% if lab_group.status == 0 %}
-                    <td><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Julkaise</a></td>
+                  {% if lab_group.status == 0 or lab_group.status == 3 %}
+                    <td data-testid="publish_{{ lab_group.id }}"><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Julkaise</a></td>
                   {% else %}
-                    <td><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Piilota</a></td>
+                    <td data-testid="cancel_{{ lab_group.id }}"><a href='/labgroup_status/{{ lab_group.id }}' class="btn btn-light btn-outline-dark">Peruuta</a></td>
                   {% endif %}
                     <td>
                       <form action="/update_group/{{ lab_group.id }}" method="GET">

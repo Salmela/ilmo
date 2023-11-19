@@ -391,10 +391,11 @@ def labgroup_status(request, labgroup_id):
     """
     if request.user.is_staff:
         labgroup = LabGroups.objects.get(pk=labgroup_id)
-        if labgroup.status == 0:
+        if labgroup.status in (0, 3):
             labgroup.status = 1
         else:
-            labgroup.status = 0
+            labgroup.status = 3
+            labgroups.email(labgroup, 'cancel')
         labgroup.save()
 
     return redirect(created_labs)

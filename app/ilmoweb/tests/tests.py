@@ -565,7 +565,7 @@ class TestModels(TestCase):
         response = self.client.post(url)
         self.assertEqual(response.status_code, 400)
     
-    # Tests for publishing/hiding labgroups
+    # Tests for publishing/canceling labgroups
 
     def test_teacher_can_publish_labgroup(self):
         self.client.force_login(self.superuser1)
@@ -575,13 +575,18 @@ class TestModels(TestCase):
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 1)
     
-    def test_teacher_can_hide_labgroup(self):
+    def test_teacher_can_cancel_and_republish_labgroup(self):
         self.client.force_login(self.superuser1)
         url = reverse("labgroup_status", args=[str(self.labgroup2.id)])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.labgroup2.refresh_from_db()
-        self.assertEqual(self.labgroup2.status, 0)
+        self.assertEqual(self.labgroup2.status, 3)
+        url_2 = reverse("labgroup_status", args=[str(self.labgroup2.id)])
+        response_2 = self.client.get(url_2)
+        self.assertEqual(response_2.status_code, 302)
+        self.labgroup2.refresh_from_db()
+        self.assertEqual(self.labgroup2.status, 1)
     
     def test_student_cannot_publish_labgroup(self):
         self.client.force_login(self.user1)
