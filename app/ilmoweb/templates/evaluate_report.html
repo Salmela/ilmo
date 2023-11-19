@@ -5,35 +5,35 @@
   <h1>Arvostele työ</h1>
   <form action="/evaluate_report/{{ report.id }}" method="POST">
     {% csrf_token %}
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="mobile">
       <tbody>
         <tr>
-          <td>Opiskelija</td>
-          <td>{{ student.first_name }} {{ student.last_name }}</td>
+          <td class="hide-on-mobile">Opiskelija</td>
+          <td label="Opiskelija">{{ student.first_name }} {{ student.last_name }}</td>
         </tr>
         <tr>
-          <td>Kurssi</td>
-          <td>{{ course.name }}</td>
+          <td class="hide-on-mobile">Kurssi</td>
+          <td label="Kurssi">{{ course.name }}</td>
         </tr>
         <tr>
-          <td>Työ</td>
-          <td>{{ lab.name }}</td>
+          <td class="hide-on-mobile">Työ</td>
+          <td label="Työ">{{ lab.name }}</td>
         </tr>
         <tr>
-          <td>Ryhmä</td>
-          <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+          <td class="hide-on-mobile">Ryhmä</td>
+          <td label="Ryhmä">{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
         </tr>
         <tr>
-          <td>Palautuspäivä</td>
-          <td>{{ report.send_date.day }}.{{ report.send_date.month }}.{{ report.send_date.year }}</td>
+          <td class="hide-on-mobile">Palautuspäivä</td>
+          <td label="Palautuspäivä">{{ report.send_date.day }}.{{ report.send_date.month }}.{{ report.send_date.year }}</td>
         </tr>
         <tr>
-          <td>Raportti</td>
-          <td><a href="/download_report/{{ report.report_name }}" download>{{ report.report_name }}</a></td>
+          <td class="hide-on-mobile">Raportti</td>
+          <td label="Raportti"><a href="/download_report/{{ report.report_name }}" download>{{ report.report_name }}</a></td>
         </tr>
         <tr>
-          <td>Arvosana</td>
-          <td>
+          <td class="hide-on-mobile">Arvosana</td>
+          <td label="Arvosana">
             <select class="form-select" name="grade" data-testid="select_grade">
               <option value="1">1</option>
               <option value="2">2</option>
@@ -45,8 +45,8 @@
           </td>
         </tr>
         <tr>
-          <td>Kommentit</td>
-          <td>
+          <td class="hide-on-mobile">Kommentit</td>
+          <td label="Kommentit">
             <textarea class="form-control" name="comments" rows="3"></textarea>
           </td>
         </tr>
