@@ -461,6 +461,9 @@ def archive(request):
 
 @login_required(login_url="login")
 def system(request):
+    """
+        View for system settings
+    """
     if request.user.is_superuser is not True:
         return redirect(created_labs)
 
