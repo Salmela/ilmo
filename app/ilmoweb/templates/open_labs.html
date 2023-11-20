@@ -59,6 +59,7 @@
           {% if lab.course_id == course.id %}
             {% for lab_group in lab_groups %}
               {% if lab_group.lab_id == lab.id %}
+              {% if lab_group.deleted == 0 %}
                 {% if lab.is_visible == 1 %}
                   {% if lab_group.status == 1 %}
                     <tr>
@@ -162,6 +163,7 @@
                         <td label="Status">Peruttu</td>
                       {% endif %}
                     </tr>
+                  {% endif %}
                   {% endif %}
                 {% endif %}
               {% endif %}
