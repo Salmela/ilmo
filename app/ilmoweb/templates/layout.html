@@ -55,6 +55,7 @@
                 <a href="{% url 'archive' %}" class="nav-link" data-testid="archive-button">
                   Arkisto
                 </a>
+                </a>
               </li>
             {% else %}
               <li class="nav-item">
@@ -78,6 +79,13 @@
                 Ohje
               </a>
             </li>
+            {% if user.is_superuser %}
+              <li class="nav-item">
+                <a href="{% url 'system' %}" class="nav-link" data-testid="system-button">
+                  Järjestelmä
+                </a>
+              </li>
+            {% endif %}
             <li class="nav-item">
               <a href="{% url 'logout' %}" class="nav-link">
                 Kirjaudu ulos

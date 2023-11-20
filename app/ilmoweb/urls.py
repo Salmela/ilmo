@@ -33,7 +33,8 @@ if env("LOCAL") == 'False':
         path("login/", views.login, name="login"),
         path("auth/", views.auth, name="auth"),
         path("update_group/<int:labgroup_id>", views.update_group, name="update_group"),
-        path("archive/", views.archive, name="archive")
+        path("archive/", views.archive, name="archive"),
+        path("system/", views.system, name="system")
     ]
 else:
     urlpatterns = [
@@ -58,5 +59,6 @@ else:
         path("delete_labgroup/<int:labgroup_id>", views.delete_labgroup, name="delete_labgroup"),
         path("labgroup_status/<int:labgroup_id>", views.labgroup_status, name="labgroup_status"),
         path("update_group/<int:labgroup_id>", views.update_group, name="update_group"),
-        path("archive/", views.archive, name="archive")
+        path("archive/", views.archive, name="archive"),
+        path("system/", views.system, name="system")
     ]
