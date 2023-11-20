@@ -8,15 +8,15 @@
 </script>
 <h1>Omat ilmoittautumiset</h1><br>
 <div class="container-sm">
-  <table class="table table-sm table-bordered align-middle">
+  <table class="table table-sm table-bordered align-middle" id="mobile">
     <thead>
       <tr>
-        <th scope="col">Kurssi</th>
-        <th scope="col">Työ</th>
-        <th scope="col">Ajankohta</th>
-        <th scope="col">Paikka</th>
-        <th scope="col">Palautus</th>
-        <th scope="col">Tarkastele</th>
+        <th class="hide-on-mobile" scope="col">Kurssi</th>
+        <th class="hide-on-mobile" scope="col">Työ</th>
+        <th class="hide-on-mobile" scope="col">Ajankohta</th>
+        <th class="hide-on-mobile" scope="col">Paikka</th>
+        <th class="hide-on-mobile" scope="col">Palautus</th>
+        <th class="hide-on-mobile" scope="col">Tarkastele</th>
       </tr>
     </thead>
     <tbody>
@@ -24,15 +24,15 @@
         {% if lab_group.deleted == 0 %}
           {% if lab_group.status == 2 %}
             <tr class="table-success">
-              <td>{{lab_group.lab.course.name}}</td>
-              <td>{{lab_group.lab.name}}</td>
-              <td>
+              <td label="Kurssi">{{lab_group.lab.course.name}}</td>
+              <td label="Työ">{{lab_group.lab.name}}</td>
+              <td label="Ajankohta">
                 {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                 <br>
                 klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
               </td>
-              <td>{{lab_group.place}}</td>
-              <td>
+              <td label="Paikka">{{lab_group.place}}</td>
+              <td label="Palautus">
                 <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal_{{ lab_group.id }}">
                   Palauta raportti
                 </button>
@@ -56,7 +56,7 @@
                 </div>
               </td>
               {% if lab_group.id not in labgroup_ids_with_reports %}
-                <td>
+                <td label="Tarkastele">
                   <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Palauta raportti">
                     <button class="btn btn-light disabled">
                       Avaa
@@ -64,7 +64,7 @@
                   </span>
                 </td>
               {% else %}
-                <td>
+                <td label="Tarkastele">
                   <button class="btn btn-light btn-outline-dark"
                   data-toggle="modal" data-target="#infoModal_{{ lab_group.id }}">
                     Avaa
@@ -121,16 +121,16 @@
             </tr>
           {% elif lab_group.status == 3 %}
             <tr class="table-danger">
-              <td>{{lab_group.lab.course.name}}</td>
-              <td>{{lab_group.lab.name}}</td>
-              <td>
+              <td label="Kurssi">{{lab_group.lab.course.name}}</td>
+              <td label="Työ">{{lab_group.lab.name}}</td>
+              <td label="Ajankohta">
                 {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                 <br>
                 klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
               </td>
-              <td>{{lab_group.place}}</td>
-              <td>Labra peruttu</td>
-              <td>
+              <td label="Paikka">{{lab_group.place}}</td>
+              <td label="Palautus">Labra peruttu</td>
+              <td label="Tarkastele">
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Labra peruttu">
                   <button class="btn btn-light disabled">
                     Avaa
@@ -140,16 +140,16 @@
             </tr>
           {% else %}
             <tr>
-              <td>{{lab_group.lab.course.name}}</td>
-              <td>{{lab_group.lab.name}}</td>
-              <td>
+              <td label="Kurssi">{{lab_group.lab.course.name}}</td>
+              <td label="Työ">{{lab_group.lab.name}}</td>
+              <td label="Ajankohta">
                 {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                 <br>
                 klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
               </td>
-              <td>{{lab_group.place}}</td>             
-              <td>Odota tilaisuuden vahvistusta</td>
-              <td>
+              <td label="Paikka">{{lab_group.place}}</td>             
+              <td label="Palautus">Odota tilaisuuden vahvistusta</td>
+              <td label="Tarkastele">
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Odota tilaisuuden vahvistusta">
                   <button class="btn btn-light disabled">
                     Avaa
