@@ -4,18 +4,18 @@
 <div class="container-sm">
   <h1 class="mb-3">Oppilaiden palautukset</h1>
   {% for course in courses %}
-  <table class="table table-bordered align-middle">
+  <table class="table table-bordered align-middle" id="mobile">
     <thead>
       <tr class="table-secondary">
         <th colspan="7">{{ course.name }}</th>
       </tr>
       <tr class="table-light">
-        <th width="10%">Ryhmä</th>
-        <th width="25%">Työ</th>
-        <th width="15%">Tekijä</th>
-        <th width="25%" colspan="2">Assistentti</th>
-        <th width="15%">Status</th>
-        <th width="10%">Arvostelu</th>
+        <th class="hide-on-mobile" width="10%">Ryhmä</th>
+        <th class="hide-on-mobile" width="25%">Työ</th>
+        <th class="hide-on-mobile" width="15%">Tekijä</th>
+        <th class="hide-on-mobile" width="25%" colspan="2">Assistentti</th>
+        <th class="hide-on-mobile" width="15%">Status</th>
+        <th class="hide-on-mobile" width="10%">Arvostelu</th>
       </tr>
     </thead>
     <tbody>
@@ -28,10 +28,10 @@
       {% for user in users %}
       {% if user.id == report.student_id %}
       <tr>
-        <td>{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
-        <td>{{ lab.name }}</td>
-        <td>{{ user.first_name }} {{ user.last_name }}</td>
-        <td class="border-right-0">
+        <td label="Ryhmä">{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}</td>
+        <td label="Työ">{{ lab.name }}</td>
+        <td label="Tekijä">{{ user.first_name }} {{ user.last_name }}</td>
+        <td label="Assistentti" class="border-right-0">
           {% if report.graded_by == None %}
             Ei assistenttia
           {% else %}
@@ -68,17 +68,17 @@
           </div>
         </td>
         {% if report.report_status == 0 %}
-        <td>Kesken</td>
+        <td label="Status">Kesken</td>
         {% elif report.report_status == 1 %}
-        <td>Palautettu</td>
+        <td label="Status">Palautettu</td>
         {% elif report.report_status == 2 %}
-        <td>Korjauksessa</td>
+        <td label="Status">Korjauksessa</td>
         {% elif report.report_status == 3 %}
-        <td>Korjattu</td>
+        <td label="Status">Korjattu</td>
         {% else %}
-        <td>Arvosteltu ({{ report.grade }}/5)</td>
+        <td label="Status">Arvosteltu ({{ report.grade }}/5)</td>
         {% endif %}
-        <td>
+        <td label="Arvostelu">
           <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark"
             data-testid="open_{{report.id}}">Avaa</a>
         </td>

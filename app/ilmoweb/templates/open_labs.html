@@ -6,7 +6,7 @@
 </div>
 {% for course in courses %}
   <div class="container-sm">
-    <table class="table table-bordered align-middle">
+    <table class="table table-bordered align-middle" id="mobile">
       <thead>
         <tr class="table-secondary">
           <th class="align-middle border-right-0" colspan="5">{{course.name}}</th>
@@ -47,11 +47,11 @@
           </td>
         </tr>
         <tr class="table-light">
-          <th width="30%">Laboratoriotyöt</th>
-          <th width="15%">Ajankohta</th>
-          <th width="10%">Paikka</th>
-          <th width="25%" colspan="2">Ilmoittautuminen</th>
-          <th width="20%">Status</th>
+          <th class="hide-on-mobile" width="30%">Laboratoriotyöt</th>
+          <th class="hide-on-mobile" width="15%">Ajankohta</th>
+          <th class="hide-on-mobile" width="10%">Paikka</th>
+          <th class="hide-on-mobile" width="25%" colspan="2">Ilmoittautuminen</th>
+          <th class="hide-on-mobile" width="20%">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -59,17 +59,18 @@
           {% if lab.course_id == course.id %}
             {% for lab_group in lab_groups %}
               {% if lab_group.lab_id == lab.id %}
+              {% if lab_group.deleted == 0 %}
                 {% if lab.is_visible == 1 %}
-                  {% if lab_group.status == 1 %}
+                  {% if lab_group.status == 1 or lab_group.status == 2 %}
                     <tr>
-                      <td>{{lab.name}}</td>
-                      <td>
+                      <td label="Laboratoriotyö">{{lab.name}}</td>
+                      <td label="Ajankohta">
                         {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                         <br>
                         klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
                       </td>
-                      <td>{{lab_group.place}}</td>
-                      <td><div id="signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}/{{lab.max_students}}</div></td>
+                      <td label="Paikka">{{lab_group.place}}</td>
+                      <td label="Ilmoittautuminen"><div id="signed_up{{ lab_group.id }}">{{ lab_group.signed_up_students }}/{{lab.max_students}}</div></td>
                       {% if user.is_staff %}
                         <td>
                           <button type="button" class="btn btn-light btn-outline-dark" data-testid="{{ lab_group.id }}" data-bs-toggle="modal" data-bs-target="#students{{lab_group.id}}">
@@ -139,29 +140,14 @@
                         </td>
                       {% endif %}
                       {% if lab_group.status == 1 %}
-                        {% if user.is_staff %}
-                          <td>
-                            {% if lab_group.signed_up_students > 0 %}
-                            <form action="{% url 'confirm' %}" method="POST">
-                              <div id = "confirm{{ lab_group.id }}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Vahvista</button>
-                                <input type="hidden" value="{{lab_group.id}}" name="lab_group_id">
-                              </div>
-                            </form>
-                            {% else %} 
-                              Ei vielä tarpeeksi ilmoittautuneita
-                            {% endif %}
-                          </td>
-                        {% else %}
-                          <td>Ei vahvistettu</td>
-                        {% endif %}
+                        <td label="Status">Ei vahvistettu</td>
                       {% elif lab_group.status == 2 %}
-                        <td>Vahvistettu</td>
+                        <td label="Status">Vahvistettu</td>
                       {% elif lab_group.status == 3 %}
-                        <td>Peruttu</td>
+                        <td label="Status">Peruttu</td>
                       {% endif %}
                     </tr>
+                  {% endif %}
                   {% endif %}
                 {% endif %}
               {% endif %}

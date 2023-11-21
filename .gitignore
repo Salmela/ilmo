@@ -2,3 +2,4 @@ __pycache__/
 app/.coverage
 app/htmlcov
 .env
+file.pdf

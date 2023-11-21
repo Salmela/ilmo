@@ -4,13 +4,13 @@ from helper_functions import login
 def test_teacher_can_evaluate_a_report(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     page.goto('/open_labs')
-    page.locator('[data-testid="group_1"]').click()
-    page.locator('[data-testid="enroll_group_1"]').click()
+    page.get_by_test_id('group_1').click()
+    page.get_by_test_id('enroll_group_1').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianope', 'atomi123')
     page.goto('/open_labs')
-    page.locator('[data-testid="group_1"]').click()
+    page.get_by_test_id('group_1').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianopiskelija', 'salasana123')
@@ -24,7 +24,7 @@ def test_teacher_can_evaluate_a_report(page: Page):
     login(page, 'kemianope', 'atomi123')
     page.goto('/returned_reports')
 
-    page.locator('[data-testid="open_1"]').click()
+    page.get_by_test_id('open_1').click()
     page.get_by_test_id('select_grade').select_option('5')
     page.get_by_role('button', name='Arvostele').click()
     expect(page.get_by_text('Arvosteltu (5/5)')).to_be_visible()
@@ -51,11 +51,29 @@ def test_student_can_check_report_info(page: Page):
 def test_student_can_cancel_enrollment(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     page.get_by_role('link', name='Laboratoriotyöt').click()
-    page.locator('[data-testid="group_7"]').click()
-    page.locator('[data-testid="enroll_group_7"]').click()
+    page.get_by_test_id('group_7').click()
+    page.get_by_test_id('enroll_group_7').click()
     page.get_by_role('link', name='Omat labrat').click()
     expect(page.get_by_text('Heisenberg')).to_be_visible()
     page.get_by_role('link', name='Laboratoriotyöt').click()
-    page.locator('[data-testid="group_7"]').click()
+    page.get_by_test_id('group_7').click()
     page.get_by_role('link', name='Omat labrat').click()
     expect(page.get_by_text('Heisenberg')).to_be_hidden()
+
+def test_labgroup_canceled_state_appearance(page: Page):
+    login(page, 'chemstudent', 'password123')
+    page.goto('/open_labs')
+    page.get_by_test_id('group_9').click()
+    page.get_by_test_id('enroll_group_9').click()
+    page.get_by_role('link', name='Kirjaudu ulos').click()
+
+    login(page, 'kemianope', 'atomi123')
+    page.goto('/open_labs')
+    page.get_by_test_id('group_9').click()
+    page.goto('/created_labs')
+    page.get_by_test_id('cancel_9').click()
+    page.get_by_role('link', name='Kirjaudu ulos').click()
+
+    login(page, 'chemstudent', 'password123')
+    page.goto('/my_labs')
+    expect(page.get_by_text('Labra peruttu')).to_be_visible()

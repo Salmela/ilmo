@@ -16,7 +16,7 @@ if env("LOCAL") == 'False':
         path("create_lab/", views.create_lab, name="create_lab"),
         path("open_labs/", views.open_labs, name="open_labs"),
         path("open_labs/enroll/", views.enroll, name="enroll"),
-        path("open_labs/confirm/", views.confirm, name="confirm"),
+        path("created_labs/confirm/", views.confirm, name="confirm"),
         path("cancel_enrollment/<int:labgroup_id>",
              views.cancel_enrollment, name="cancel_enrollment"),
         path("make_lab_visible/<int:lab_id>", views.make_lab_visible, name="make_lab_visible"),
@@ -29,11 +29,12 @@ if env("LOCAL") == 'False':
         path("evaluate_report/<int:report_id>", views.evaluate_report, name="evaluate_report"),
         path("download_report/<str:filename>", views.download_report, name="download_report"),
         path("delete_labgroup/<int:labgroup_id>", views.delete_labgroup, name="delete_labgroup"),
-        path("labgroup_status/<int:labgroup_id>", views.labgroup_status, name="labgroup_status"),
-        path('login/', views.login, name='login'),
-        path('auth/', views.auth, name='auth'),
-        path("update_group/<int:labgroup_id>", views.update_group, name="update_group")
-
+        path("labgroup_status/", views.labgroup_status, name="labgroup_status"),
+        path("login/", views.login, name="login"),
+        path("auth/", views.auth, name="auth"),
+        path("update_group/<int:labgroup_id>", views.update_group, name="update_group"),
+        path("archive/", views.archive, name="archive"),
+        path("system/", views.system, name="system")
     ]
 else:
     urlpatterns = [
@@ -43,7 +44,7 @@ else:
         path("create_lab/", views.create_lab, name="create_lab"),
         path("open_labs/", views.open_labs, name="open_labs"),
         path("open_labs/enroll/", views.enroll, name="enroll"),
-        path("open_labs/confirm/", views.confirm, name="confirm"),
+        path("created_labs/confirm/", views.confirm, name="confirm"),
         path("cancel_enrollment/<int:labgroup_id>",
              views.cancel_enrollment, name="cancel_enrollment"),
         path("make_lab_visible/<int:lab_id>", views.make_lab_visible, name="make_lab_visible"),
@@ -56,6 +57,8 @@ else:
         path("evaluate_report/<int:report_id>", views.evaluate_report, name="evaluate_report"),
         path("download_report/<str:filename>", views.download_report, name="download_report"),
         path("delete_labgroup/<int:labgroup_id>", views.delete_labgroup, name="delete_labgroup"),
-        path("labgroup_status/<int:labgroup_id>", views.labgroup_status, name="labgroup_status"),
-        path("update_group/<int:labgroup_id>", views.update_group, name="update_group")
+        path("labgroup_status/", views.labgroup_status, name="labgroup_status"),
+        path("update_group/<int:labgroup_id>", views.update_group, name="update_group"),
+        path("archive/", views.archive, name="archive"),
+        path("system/", views.system, name="system")
     ]

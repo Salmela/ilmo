@@ -14,7 +14,7 @@ def test_laboratoriotyot_button(page: Page):
 
 def test_lisatietoa_button(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
-    page.locator('[data-testid="1"]').click()
+    page.get_by_test_id('1').click()
     expect(page.get_by_role('heading', name='Järjestettävät laboratoriotyöt')).to_be_visible()
     expect(page.locator('[data-testid="name_1"]')).to_have_text(re.compile(r'labra 1'))
     expect(page.locator('[data-testid="desc_1"]')).to_have_text(re.compile(r'yritetään olla räjäyttämättä labraa'))

@@ -8,150 +8,156 @@
 </script>
 <h1>Omat ilmoittautumiset</h1><br>
 <div class="container-sm">
-  <table class="table table-sm table-bordered align-middle">
+  <table class="table table-sm table-bordered align-middle" id="mobile">
     <thead>
       <tr>
-        <th scope="col">Kurssi</th>
-        <th scope="col">Työ</th>
-        <th scope="col">Ajankohta</th>
-        <th scope="col">Paikka</th>
-        <th scope="col">Palautus</th>
-        <th scope="col">Tarkastele</th>
+        <th class="hide-on-mobile" scope="col">Kurssi</th>
+        <th class="hide-on-mobile" scope="col">Työ</th>
+        <th class="hide-on-mobile" scope="col">Ajankohta</th>
+        <th class="hide-on-mobile" scope="col">Paikka</th>
+        <th class="hide-on-mobile" scope="col">Palautus</th>
+        <th class="hide-on-mobile" scope="col">Tarkastele</th>
       </tr>
     </thead>
     <tbody>
       {% for lab_group in labgroups %}
-        {% if lab_group.status == 2 %}
-          <tr class="table-success">
-            <td>{{lab_group.lab.course.name}}</td>
-            <td>{{lab_group.lab.name}}</td>
-            <td>
-              {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
-              <br>
-              klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
-            </td>
-            <td>{{lab_group.place}}</td>
-            <td>
-              <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal_{{ lab_group.id }}">
-                Palauta raportti
-              </button>
-              <div class="modal fade" id="reportModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="reportModalLabel">Palauta työsi tänne</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      <form method="POST" action="/return_report/" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}"> 
-                        <input type="file" name="file" data-testid="file">
-                        <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-            {% if lab_group.id not in labgroup_ids_with_reports %}
-              <td class="position-relative">
-                <button class="btn btn-light position-absolute top-50 start-50 translate-middle disabled">
-                  Avaa
-                </button>
+        {% if lab_group.deleted == 0 %}
+          {% if lab_group.status == 2 %}
+            <tr class="table-success">
+              <td label="Kurssi">{{lab_group.lab.course.name}}</td>
+              <td label="Työ">{{lab_group.lab.name}}</td>
+              <td label="Ajankohta">
+                {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+                <br>
+                klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
               </td>
-            {% else %}
-              <td>
-                <button class="btn btn-light btn-outline-dark"
-                data-toggle="modal" data-target="#infoModal_{{ lab_group.id }}">
-                  Avaa
+              <td label="Paikka">{{lab_group.place}}</td>
+              <td label="Palautus">
+                <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#reportModal_{{ lab_group.id }}">
+                  Palauta raportti
                 </button>
-                <div class="modal fade" id="infoModal_{{ lab_group.id }}" tabindex="-1">
+                <div class="modal fade" id="reportModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="infoModalLabel">Raportin tiedot</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                        <h1 class="modal-title fs-5" id="reportModalLabel">Palauta työsi tänne</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        {% for report in filtered_reports %}
-                          {% if report.lab_group_id == lab_group.id %}
-                          <table class="table">
-                            <tbody>
-                              <tr>
-                                <th>Raportti</th>
-                                <td><a href="/download_report/{{ report.report_name}}" download>{{ report.report_name }}</a></td>
-                              </tr>
-                              <tr>
-                                <th>Assistentti</th>
-                                <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
-                              </tr>
-                              {% if lab_group.id in labgroup_ids_without_grade %}
-                                <tr>
-                                  <td colspan="2">Odottaa arvostelua</td>
-                                </tr>
-                              {% else %}
-                                <tr>
-                                  <th>Arvosana</th>
-                                  <td>
-                                    {% if report.grade == 0 %}
-                                      Raportti vaatii korjausta
-                                    {% else %}
-                                      {{ report.grade }}
-                                    {% endif %}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>Kommentit</th>
-                                  <td>{{ report.comments }}</td>
-                                </tr>
-                              {% endif %}
-                            </tbody>
-                          </table>
-                        {% endif %}
-                      {% endfor %}
+                        <form method="POST" action="/return_report/" enctype="multipart/form-data">
+                          {% csrf_token %}
+                          <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}"> 
+                          <input type="file" name="file" data-testid="file">
+                          <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>
               </td>
-            {% endif %}
-          </tr>
-        {% elif lab_group.status == 3 %}
-          <tr class="table-danger">
-            <td>{{lab_group.lab.course.name}}</td>
-            <td>{{lab_group.lab.name}}</td>
-            <td>
-              {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
-              <br>
-              klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
-            </td>
-            <td>{{lab_group.place}}</td>
-            <td>Labra peruttu</td>
-            <td>
-              <button class="btn btn-light btn-outline-dark disabled">
-                Avaa
-              </button>
-            </td>
-          </tr>
-        {% else %}
-          <tr>
-            <td>{{lab_group.lab.course.name}}</td>
-            <td>{{lab_group.lab.name}}</td>
-            <td>
-              {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
-              <br>
-              klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
-            </td>
-            <td>{{lab_group.place}}</td>             
-            <td>Odota tilaisuuden vahvistusta</td>
-            <td>
-              <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Palauta raportti">
-                <button class="btn btn-light disabled">
-                  Avaa
-                </button>
-              </span>
-            </td>
-          </tr>
+              {% if lab_group.id not in labgroup_ids_with_reports %}
+                <td label="Tarkastele">
+                  <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Palauta raportti">
+                    <button class="btn btn-light disabled">
+                      Avaa
+                    </button>
+                  </span>
+                </td>
+              {% else %}
+                <td label="Tarkastele">
+                  <button class="btn btn-light btn-outline-dark"
+                  data-toggle="modal" data-target="#infoModal_{{ lab_group.id }}">
+                    Avaa
+                  </button>
+                  <div class="modal fade" id="infoModal_{{ lab_group.id }}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="infoModalLabel">Raportin tiedot</h5>
+                          <button type="button" class="btn-close" data-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                          {% for report in filtered_reports %}
+                            {% if report.lab_group_id == lab_group.id %}
+                            <table class="table">
+                              <tbody>
+                                <tr>
+                                  <th>Raportti</th>
+                                  <td><a href="/download_report/{{ report.report_name}}" download>{{ report.report_name }}</a></td>
+                                </tr>
+                                <tr>
+                                  <th>Assistentti</th>
+                                  <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+                                </tr>
+                                {% if lab_group.id in labgroup_ids_without_grade %}
+                                  <tr>
+                                    <td colspan="2">Odottaa arvostelua</td>
+                                  </tr>
+                                {% else %}
+                                  <tr>
+                                    <th>Arvosana</th>
+                                    <td>
+                                      {% if report.grade == 0 %}
+                                        Raportti vaatii korjausta
+                                      {% else %}
+                                        {{ report.grade }}
+                                      {% endif %}
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <th>Kommentit</th>
+                                    <td>{{ report.comments }}</td>
+                                  </tr>
+                                {% endif %}
+                              </tbody>
+                            </table>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              {% endif %}
+            </tr>
+          {% elif lab_group.status == 3 %}
+            <tr class="table-danger">
+              <td label="Kurssi">{{lab_group.lab.course.name}}</td>
+              <td label="Työ">{{lab_group.lab.name}}</td>
+              <td label="Ajankohta">
+                {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+                <br>
+                klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
+              </td>
+              <td label="Paikka">{{lab_group.place}}</td>
+              <td label="Palautus">Labra peruttu</td>
+              <td label="Tarkastele">
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Labra peruttu">
+                  <button class="btn btn-light disabled">
+                    Avaa
+                  </button>
+                </span>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td label="Kurssi">{{lab_group.lab.course.name}}</td>
+              <td label="Työ">{{lab_group.lab.name}}</td>
+              <td label="Ajankohta">
+                {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
+                <br>
+                klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
+              </td>
+              <td label="Paikka">{{lab_group.place}}</td>             
+              <td label="Palautus">Odota tilaisuuden vahvistusta</td>
+              <td label="Tarkastele">
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Odota tilaisuuden vahvistusta">
+                  <button class="btn btn-light disabled">
+                    Avaa
+                  </button>
+                </span>
+              </td>
+            </tr>
+          {% endif %}
         {% endif %}
       {% endfor %}
     </tbody>

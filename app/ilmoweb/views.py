@@ -17,13 +17,13 @@ from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
 from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports
 
 
-CONF_URL = 'https://login-test.it.helsinki.fi/.well-known/openid-configuration'
+CONF_URL = "https://login-test.it.helsinki.fi/.well-known/openid-configuration"
 oauth = OAuth()
 oauth.register(
-    name='ilmoweb',
+    name="ilmoweb",
     server_metadata_url=CONF_URL,
     client_kwargs={
-        'scope': 'openid profile'
+        "scope": "openid profile"
     }
 )
 
@@ -49,7 +49,7 @@ def login(request):
     """
         University login
     """
-    redirect_uri = request.build_absolute_uri(reverse('auth'))
+    redirect_uri = request.build_absolute_uri(reverse("auth"))
     return oauth.ilmoweb.authorize_redirect(request, redirect_uri, claims=claims)
 
 def auth(request):
@@ -59,7 +59,7 @@ def auth(request):
     token = oauth.ilmoweb.authorize_access_token(request)
 
     userinfo = oauth.ilmoweb.userinfo(token=token)
-    userdata = jwt.decode(token['id_token'], keys, claims_cls=CodeIDToken)
+    userdata = jwt.decode(token["id_token"], keys, claims_cls=CodeIDToken)
     userdata.validate()
 
     user = django_authenticate(userinfo=userinfo)
@@ -78,7 +78,7 @@ def home_page_view(request):
         return redirect(open_labs)
     return render(request, "home.html")
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def created_labs(request):
     """
         View for all created labs
@@ -116,14 +116,10 @@ def created_labs(request):
 
             groups_by_date_time.append(dict_entry)
 
-    for i in groups_by_date_time:
-        print(i)
-
-
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":groups, 'groups_by_date':groups_by_date_time})
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def create_lab(request):
     """
         View for creating a new lab
@@ -145,7 +141,7 @@ def create_lab(request):
 
     return render(request, "create_lab.html", {"course_id": course_id})
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def create_group(request):
     """
         View for creating a new labgroup
@@ -178,7 +174,7 @@ def create_group(request):
     return render(request, "create_group.html", {
         "labs":course_labs, "course":course, "assistants":assistants})
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def open_labs(request):
     """
         View for labs that are open
@@ -194,7 +190,7 @@ def open_labs(request):
                                               "users_enrollments":users_enrollments})
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 
 def enroll(request):
     """
@@ -229,27 +225,34 @@ def enroll(request):
                 messages.warning(request, "Ilmoittautuminen epäonnistui")
     return redirect(open_labs)
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def confirm(request):
     """
         request for confirming a labgroup
     """
     if request.method == "POST":
-        group_id = request.POST.get("lab_group_id")
-        labgroup = LabGroups.objects.get(pk=group_id)
+        lab_group_ids = request.POST.getlist("lab_groups")
+        lab_groups = [LabGroups.objects.get(id=int(group_id)) for group_id in lab_group_ids]
+
 
         if request.user.is_staff:
-            if labgroup.signed_up_students == 0:
+            signed_up = 0
+            for labgroup in lab_groups:
+                signed_up += labgroup.signed_up_students
+
+            if signed_up == 0:
                 messages.warning(request, "Tyhjää ryhmää ei voida vahvistaa")
 
-            elif labgroup.signed_up_students > 0:
-                labgroups.confirm(group_id)
+            elif signed_up> 0:
+                for labgroup in lab_groups:
+                    labgroups.confirm(labgroup.id)
+                
                 messages.success(request, "Ryhmä vahvistettu")
         else:
-            return redirect(open_labs)
-    return redirect(open_labs)
+            return redirect(created_labs)
+    return redirect(created_labs)
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def make_lab_visible(request, lab_id):
     """
         Toggle the lab's visibility based on its current state.
@@ -261,7 +264,8 @@ def make_lab_visible(request, lab_id):
 
     return redirect(created_labs)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
 def delete_lab(request, lab_id):
     """
         Delete lab from created_labs view.
@@ -273,7 +277,29 @@ def delete_lab(request, lab_id):
 
     return redirect(created_labs)
 
-@login_required(login_url='login')
+
+@login_required(login_url="login")
+def labgroup_status(request):
+    """
+        Toggle labgroups status based on its current state.
+    """
+    if request.method == "POST":
+        lab_group_ids = request.POST.getlist("lab_groups")
+        lab_groups = [LabGroups.objects.get(id=int(group_id)) for group_id in lab_group_ids]
+    
+        if request.user.is_staff:
+            for labgroup in lab_groups:
+                if labgroup.status in(0, 3):
+                    labgroup.status = 1
+                else:
+                    labgroup.status = 3
+                    labgroups.email(labgroup, "cancel")
+                labgroup.save()
+        return redirect(created_labs)
+
+    return redirect(created_labs)
+
+@login_required(login_url="login")
 def my_labs(request):
     """
         My labs view
@@ -286,10 +312,10 @@ def my_labs(request):
 
     # Filter the report with the highest status per labgroup
     reports = Report.objects.filter(student=request.user)
-    subquery = reports.filter(lab_group=OuterRef('lab_group')).values('lab_group').annotate(
-        max_report_status=Max('report_status')).values('max_report_status')
+    subquery = reports.filter(lab_group=OuterRef("lab_group")).values("lab_group").annotate(
+        max_report_status=Max("report_status")).values("max_report_status")
     reports = reports.annotate(max_report_status=Subquery(subquery))
-    filtered_reports = reports.filter(report_status=F('max_report_status'))
+    filtered_reports = reports.filter(report_status=F("max_report_status"))
 
     return render(request, "my_labs.html", {"labgroups":students_labgroups,
                                             "reports":students_reports,
@@ -297,7 +323,7 @@ def my_labs(request):
                                             "labgroup_ids_with_reports":lg_ids_with_reports,
                                             "labgroup_ids_without_grade":ids_without_grade})
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def return_report(request):
     """
         Path for returning reports
@@ -310,7 +336,7 @@ def return_report(request):
     file = request.FILES["file"]
     student = request.user
 
-    if not file.name.lower().endswith(('.pdf')):
+    if not file.name.lower().endswith((".pdf")):
         messages.warning(request, "Tiedoston tulee olla pdf-muodossa")
         return redirect("/my_labs")
 
@@ -330,7 +356,7 @@ def return_report(request):
 
     return redirect("/my_labs")
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def returned_reports(request):
     """
         Teacher's view of all returned reports.
@@ -346,7 +372,7 @@ def returned_reports(request):
     return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
     "lab_groups":lab_groups, "reports":reports, "users":users})
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def returned_report(request, report_id):
     """
         Changes the assistant of a certain report.
@@ -362,7 +388,7 @@ def returned_report(request, report_id):
 
     return redirect("/returned_reports")
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def evaluate_report(request, report_id):
     """
         Teacher's view for evaluating a certain report.
@@ -394,7 +420,7 @@ def evaluate_report(request, report_id):
     return render(request, "evaluate_report.html", {"course":course, "lab":lab,
     "lab_group":lab_group, "report":report, "student":student})
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def download_report(request, filename):
     """
         Teacher can download reports through this view.
@@ -402,7 +428,7 @@ def download_report(request, filename):
     response = files.download_file(filename)
     return response
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def delete_labgroup(request, labgroup_id):
     """
         Delete course from created_labs view.
@@ -415,22 +441,7 @@ def delete_labgroup(request, labgroup_id):
     return redirect(created_labs)
 
 
-@login_required(login_url='login')
-def labgroup_status(request, labgroup_id):
-    """
-        Toggle labgroups status based on its current state.
-    """
-    if request.user.is_staff:
-        labgroup = LabGroups.objects.get(pk=labgroup_id)
-        if labgroup.status == 0:
-            labgroup.status = 1
-        else:
-            labgroup.status = 0
-        labgroup.save()
-
-    return redirect(created_labs)
-
-@login_required(login_url='login')
+@login_required(login_url="login")
 def cancel_enrollment(request, labgroup_id):
     """
         Student can cancel an enrollment to a labgroup through this view.
@@ -444,7 +455,7 @@ def cancel_enrollment(request, labgroup_id):
 
     return redirect("/open_labs")
 
-@login_required
+@login_required(login_url="login")
 def update_group(request, labgroup_id):
     """
         View for updating a new labgroup
@@ -477,3 +488,24 @@ def update_group(request, labgroup_id):
 
     return render(request, "update_group.html", {
         "labs":course_labs, "course":course, "assistants":assistants, "lab_group":labgroup })
+
+
+@login_required(login_url="login")
+def archive(request):
+    """
+        View for rendering archive page
+    """
+    if request.user.is_staff is not True:
+        return redirect("/open_labs")
+
+    return render(request, "archive.html")
+
+@login_required(login_url="login")
+def system(request):
+    """
+        View for system settings
+    """
+    if request.user.is_superuser is not True:
+        return redirect(created_labs)
+
+    return render(request, "system.html")
