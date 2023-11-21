@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %} Ohjeet {% endblock %}
+{% block content %}
+  <div class="container-sm">
+    {% if user.is_staff %}
+    <table class="table table-bordered align-left" id="mobile">
+        <thead>
+          <tr class="table-secondary">
+            <th colspan="2"><h3>Assistentin ohje</h3></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left-align">
+              <p>
+                <p>
+                    <b>Opetus</b>
+                    <br><br>
+                    Tällä sivulla voi luoda uusia harjoitusryhmiä sekä muuttaa niiden tietoja. Tämän lisäksi kurssien harjoitustöitä voi lisätä ja poistaa sekä muuttaa niiden tietoja.
+                    Uuden ryhmän luonnissa valittavana ovat ryhmän ajankohta ja paikka sekä mitä töitä ryhmässä voi suorittaa. Kun ryhmä aktivoidaan, opiskelijat voivat alkaa ilmoittautua siihen. Tämän jälkeen ryhmän tietoja ei voi muuttaa paikkaa lukuun ottamatta.
+                    Ryhmälistassa jokaisen ryhmän kohdalla näkyy, kuinka monta opiskelijaa kuhunkin työhön on ilmoittautunut. Näiden tietojen perusteella ryhmä voidaan vahvistaa tai peruuttaa. Molemmissa tapauksissa ryhmään ilmoittautuneita opiskelijoita tiedotetaan asiasta sähköpostilla. Jos ryhmää ei ole vahvistettu ennen tiettyä määräaikaa, sen väri muuttuu punaiseksi.
+                    Uuden työn luonnissa valittavana ovat työn nimi ja kuvaus sekä kuinka monta opiskelijaa voi suorittaa työtä samaan aikaan. Kurssilla voi olla enemmän töitä kuin vaaditaan sen suorittamiseen. Tällöin kurssin voi suorittaa valitsemalla minkä tahansa joukon tarjolla olevista töistä.
+                    Sekaannusten estämiseksi töiden tietoja kannattaa muuttaa harkiten, jos töihin voi samaan aikaan ilmoittautua tai opiskelijoilla on palautettavana niihin työraportteja.
+                </p>
+                <br>
+                <p>    
+                    <b>Palautukset</b>
+                    <br><br>
+                    Tällä sivulla näkyvät kaikki opiskelijoiden palauttamat työraportit, joita ei ole vielä hyväksytty. Jos raporttia ei ole arvosteltu, sen pystyy lataamaan ja arvostelemaan. Lisäksi on merkitty, jos raportti on määrätty korjattavaksi.
+                    Kunkin ryhmän kullekin työlle voi määrittää assistentin, jonka vastuulla työstä kirjoitettujen raporttien arvostelu on. Kuitenkin raportin voi arvostella ilman tätä määritystäkin.
+                    Arvostelussa opiskelijalle voi lähettää kommentteja tekstimuodossa tai tiedostona (esim. korjaukset suoraan opiskelijan raporttiin). Korjauksia sisältävän tiedoston voi lähettää vain, jos raporttia ei hyväksytä.
+                    Raportin arvostelu poistaa raportin sisältävän tiedoston järjestelmästä.
+                </p>
+                <br>
+                <p>    
+                    <b>Arkisto</b>
+                    <br><br>
+                    Arkistossa näkyvät järjestelmässä olevat opiskelijat. Opiskelijan nimeä painamalla aukeaa sivu, johon on merkitty opiskelijan valmiit ja keskeneräiset suoritukset.
+                    Opiskelijan tietojen poistaminen tarkoittaa, että kaikki opiskelijan tiedot (henkilötiedot, ilmoittautumiset, työraportit, suoritukset) poistetaan järjestelmästä.
+                    Osasuorituksen poistaminen tarkoittaa, että kaikki siihen raporttiin liittyvät tiedot poistetaan järjestelmästä. Opiskelijan mahdollista ilmoittautumista ei kuitenkaan poisteta.
+                </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    {% else %}
+    <table class="table table-bordered align-left" id="mobile">
+        <thead>
+          <tr class="table-secondary">
+            <th colspan="2"><h3>Opiskelijan ohje</h3></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left-align">
+              <p>
+                <p>
+                    <b>Ilmoittautuminen</b>
+                    <br><br>
+                    Tähän ohjeet opiskelijalle ilmoittautumiseen.
+                    
+                <br>
+                <p>    
+                    <b>Palautukset</b>
+                    <br><br>
+                    Tähän ohjeet opiskelijalle töiden palautukseen.
+                </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}
