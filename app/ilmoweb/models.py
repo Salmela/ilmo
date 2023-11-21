@@ -67,11 +67,13 @@ class Report(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "student")
     lab_group = models.ForeignKey(LabGroups, on_delete=models.CASCADE)
     send_date = models.DateField(auto_now_add=True)
-    filename = models.FileField(upload_to="ilmoweb/static/upload/", null=True)
-    report_name = models.CharField(default="")
+    report_file = models.FileField(upload_to="ilmoweb/static/upload/", null=True)
+    report_file_name = models.CharField(default="")
     report_status = models.IntegerField()
     # 0 = no file, 1 = report returned, 2 = revisions proposed, 3 = fixed report, 4 = report graded
     comments = models.TextField()
+    comment_file = models.FileField(upload_to="ilmoweb/static/upload/", null=True)
+    comment_file_name = models.CharField(default="")
     grade = models.IntegerField(null=True)
     # 0 = revisions needed, 1-5 = grade, empty = not graded
     grading_date = models.DateField(null=True)
