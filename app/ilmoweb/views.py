@@ -109,15 +109,18 @@ def created_labs(request):
                 'place': lab_group.place,
                 'labs': Labs.objects.filter(course=lab_group.lab.course, is_visible=1),
                 'groups': [group for group in lab_groups if
-                           (group.date, group.start_time, group.end_time, group.place) == date_time_key],
-                'signup_sum':sum([group.signed_up_students for group in lab_groups if
-                           (group.date, group.start_time, group.end_time, group.place) == date_time_key])
+                           (group.date, group.start_time, group.end_time,
+                            group.place) == date_time_key],
+                'signup_sum':sum(([group.signed_up_students for group in lab_groups if
+                           (group.date, group.start_time, group.end_time,
+                            group.place) == date_time_key]), 0)
             }
 
             groups_by_date_time.append(dict_entry)
 
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
-                                                 "lab_groups":groups, 'groups_by_date':groups_by_date_time})
+                                                 "lab_groups":groups,
+                                                 'groups_by_date':groups_by_date_time})
 
 @login_required(login_url="login")
 def create_lab(request):
@@ -246,7 +249,7 @@ def confirm(request):
             elif signed_up> 0:
                 for labgroup in lab_groups:
                     labgroups.confirm(labgroup.id)
-                
+
                 messages.success(request, "Ryhmä vahvistettu")
         else:
             return redirect(created_labs)
@@ -286,7 +289,7 @@ def labgroup_status(request):
     if request.method == "POST":
         lab_group_ids = request.POST.getlist("lab_groups")
         lab_groups = [LabGroups.objects.get(id=int(group_id)) for group_id in lab_group_ids]
-    
+
         if request.user.is_staff:
             for labgroup in lab_groups:
                 if labgroup.status in(0, 3):
