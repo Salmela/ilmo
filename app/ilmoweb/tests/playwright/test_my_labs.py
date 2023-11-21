@@ -9,8 +9,8 @@ def test_teacher_can_evaluate_a_report(page: Page):
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianope', 'atomi123')
-    page.goto('/open_labs')
-    page.get_by_test_id('group_1').click()
+    page.goto('/created_labs')
+    page.get_by_test_id('confirm_1').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianopiskelija', 'salasana123')
@@ -68,8 +68,8 @@ def test_labgroup_canceled_state_appearance(page: Page):
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianope', 'atomi123')
-    page.goto('/open_labs')
-    page.get_by_test_id('group_9').click()
+    page.goto('/created_labs')
+    page.get_by_test_id('confirm_9').click()
     page.goto('/created_labs')
     page.get_by_test_id('cancel_9').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()

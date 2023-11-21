@@ -107,7 +107,7 @@ def created_labs(request):
                 'start_time': lab_group.start_time,
                 'end_time': lab_group.end_time,
                 'place': lab_group.place,
-                'labs': Labs.objects.filter(course=lab_group.lab.course),
+                'labs': Labs.objects.filter(course=lab_group.lab.course, is_visible=1),
                 'groups': [group for group in lab_groups if
                            (group.date, group.start_time, group.end_time, group.place) == date_time_key],
                 'signup_sum':sum([group.signed_up_students for group in lab_groups if

@@ -10,7 +10,7 @@ def test_staff_does_not_see_student_who_cancelled_enrollment(page: Page):
     login(page, 'kemianope', 'atomi123')
     page.goto('/open_labs/')
     page.get_by_test_id('7').click()
-    student = page.get_by_test_id('kemianopiskelija')
+    student = page.get_by_test_id('kemianopiskelija').last
     expect(student).to_be_visible()
     page.get_by_test_id('close_7').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()

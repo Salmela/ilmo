@@ -55,7 +55,7 @@
                 {% for group in date.groups %}
                   <input type="hidden" value="{{ group.id }}" name="lab_groups">
                 {% endfor %}
-                <button type="submit" class="btn btn-light btn-outline-success">Vahvista</button>
+                <button type="submit" class="btn btn-light btn-outline-success" data-testid="confirm_{{date.groups.0.id}}">Vahvista</button>
               </form>
             </td>
           {% elif date.groups.0.status == 2 %}
@@ -65,32 +65,26 @@
           {% elif date.groups.0.status == 0 or date.groups.0.status == 3 %}
             <td></td>
           {% endif %}
-          {% if date.groups.0.status == 3 %}
-            <td>
-              Peruutettu
-            </td>
-          {% elif date.groups.0.status == 1 %}
-            <td>
-              <form action="{% url 'labgroup_status' %}" method="POST">
-                {% csrf_token %}
-                {% for group in date.groups %}
-                  <input type="hidden" value="{{ group.id }}" name="lab_groups">
-                {% endfor %}
-                <button type="submit" class="btn btn-light btn-outline-danger">Peruuta</button>
-              </form>
-            </td>
-          {% elif date.groups.0.status == 0 %}
+          {% if date.groups.0.status == 0 or date.groups.0.status == 3 %}
+          <td>
+            <form action="{% url 'labgroup_status' %}" method="POST">
+              {% csrf_token %}
+              {% for group in date.groups %}
+                <input type="hidden" value="{{ group.id }}" name="lab_groups">
+              {% endfor %}
+              <button type="submit" class="btn btn-light btn-outline-info" data-testid="publish_{{date.groups.0.id}}">Julkaise</button>
+            </form>
+          </td>
+          {% elif date.groups.0.status == 1 or date.groups.0.status == 2  %}
             <td>
               <form action="{% url 'labgroup_status' %}" method="POST">
                 {% csrf_token %}
                 {% for group in date.groups %}
                   <input type="hidden" value="{{ group.id }}" name="lab_groups">
                 {% endfor %}
-                <button type="submit" class="btn btn-light btn-outline-info">Julkaise</button>
+                <button type="submit" class="btn btn-light btn-outline-danger" data-testid="cancel_{{date.groups.0.id}}">Peruuta</button>
               </form>
             </td>
-          {% elif date.groups.0.status == 2 %}
-            <td></td>
           {% endif %}
         </tbody>
       {% endif %}
