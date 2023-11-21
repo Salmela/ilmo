@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container-sm">
   <h1>Arvostele työ</h1>
-  <form action="/evaluate_report/{{ report.id }}" method="POST">
+  <form action="/evaluate_report/{{ report.id }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table table-bordered" id="mobile">
       <tbody>
@@ -29,7 +29,7 @@
         </tr>
         <tr>
           <td class="hide-on-mobile">Raportti</td>
-          <td label="Raportti"><a href="/download_report/{{ report.report_name }}" download>{{ report.report_name }}</a></td>
+          <td label="Raportti"><a href="/download_report/{{ report.report_file_name }}" download>{{ report.report_file_name }}</a></td>
         </tr>
         <tr>
           <td class="hide-on-mobile">Arvosana</td>
@@ -45,9 +45,15 @@
           </td>
         </tr>
         <tr>
-          <td class="hide-on-mobile">Kommentit</td>
+          <td class="hide-on-mobile" rowspan="2">Kommentit</td>
           <td label="Kommentit">
             <textarea class="form-control" name="comments" rows="3"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td label="Kommenttitiedosto">
+            Palauta kommenttitiedosto:
+            <input type="file" name="file" data-testid="file">
           </td>
         </tr>
         <tr>

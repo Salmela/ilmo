@@ -36,9 +36,9 @@ def email(lab_group, message_type):
     send_mail(
     subject,
     message,
-    'ilmoweb@gmail.com',
+    'grp-fyskem-labra-ilmo@helsinki.fi',
     email_recipient_list,
-    fail_silently=True
+    fail_silently=False
     )
 
 def confirm(group_id):

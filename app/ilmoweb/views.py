@@ -349,6 +349,10 @@ def evaluate_report(request, report_id):
         grade = int(request.POST.get("grade"))
         report.grade = grade
         comments = request.POST.get("comments")
+        if "file" in request.FILES:
+            comment_file = request.FILES["file"]
+            report.comment_file = comment_file
+            report.comment_file_name = comment_file.name
         report.comments = comments
         report.grading_date = datetime.date.today()
         report.graded_by_id = request.user.id

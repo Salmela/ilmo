@@ -15,8 +15,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
         report = Report(
             student=student,
             lab_group=lab_group,
-            filename=file,
-            report_name=file.name,
+            report_file=file,
+            report_file_name=file.name,
             report_status=3)
         report.save()
         messages.success(request, "Korjausehdotukset sisältävä tiedosto korvattu uudella")
@@ -25,8 +25,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
     if prev_2:
         report = Report(student=student,
                         lab_group=lab_group,
-                        filename=file,
-                        report_name=file.name,
+                        report_file=file,
+                        report_file_name=file.name,
                         report_status=3)
         report.save()
         messages.success(request, "Korjausehdotukset sisältävä tiedosto lähetetty onnistuneesti")
@@ -36,8 +36,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
         Report.objects.filter(pk=prev_1[0].id).delete()
         report = Report(student=student,
                         lab_group=lab_group,
-                        filename=file,
-                        report_name=file.name,
+                        report_file=file,
+                        report_file_name=file.name,
                         report_status=1)
         report.save()
         messages.success(request, "Alkuperäisen korvaava tiedosto lähetetty onnistuneesti")
@@ -45,8 +45,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
 
     report = Report(student=student,
                     lab_group=lab_group,
-                    filename=file,
-                    report_name=file.name,
+                    report_file=file,
+                    report_file_name=file.name,
                     report_status=1)
     report.save()
     messages.success(request, "Tiedosto lähetetty onnistuneesti")

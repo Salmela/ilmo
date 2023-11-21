@@ -97,7 +97,7 @@ class TestModels(TestCase):
             student = self.user1,
             lab_group = self.labgroup1,
             send_date = "2023-06-10",
-            filename = "raportti.pdf",
+            report_file = "raportti.pdf",
             report_status = 1,
             comments = "",
         )
@@ -333,7 +333,7 @@ class TestModels(TestCase):
         self.all_reports = Report.objects.all()
         self.assertEqual(self.all_reports[0].student, self.user1)
         self.assertEqual(self.all_reports[0].lab_group, self.labgroup1)
-        self.assertEqual(self.all_reports[0].filename, "raportti.pdf")
+        self.assertEqual(self.all_reports[0].report_file, "raportti.pdf")
         self.assertEqual(self.all_reports[0].comments, "")
         self.assertEqual(self.all_reports[0].graded_by, None)
     
