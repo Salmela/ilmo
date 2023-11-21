@@ -88,9 +88,40 @@ def created_labs(request):
 
     courses = Courses.objects.all()
     course_labs = Labs.objects.filter(is_visible=1)
-    lab_groups = LabGroups.objects.filter(deleted=0).order_by('date')
+    groups = LabGroups.objects.filter(deleted=0).order_by('date')
+
+    lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False)
+
+    dates_times = set()
+    groups_by_date_time = []
+
+    for lab_group in lab_groups:
+        date_time_key = (lab_group.date, lab_group.start_time, lab_group.end_time, lab_group.place)
+
+        if date_time_key not in dates_times:
+            dates_times.add(date_time_key)
+
+            dict_entry = {
+                'course': lab_group.lab.course,
+                'date': lab_group.date,
+                'start_time': lab_group.start_time,
+                'end_time': lab_group.end_time,
+                'place': lab_group.place,
+                'labs': Labs.objects.filter(course=lab_group.lab.course),
+                'groups': [group for group in lab_groups if
+                           (group.date, group.start_time, group.end_time, group.place) == date_time_key],
+                'signup_sum':sum([group.signed_up_students for group in lab_groups if
+                           (group.date, group.start_time, group.end_time, group.place) == date_time_key])
+            }
+
+            groups_by_date_time.append(dict_entry)
+
+    for i in groups_by_date_time:
+        print(i)
+
+
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
-                                                 "lab_groups":lab_groups})
+                                                 "lab_groups":groups, 'groups_by_date':groups_by_date_time})
 
 @login_required(login_url='login')
 def create_lab(request):

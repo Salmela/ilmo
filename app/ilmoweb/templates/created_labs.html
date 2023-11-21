@@ -4,6 +4,64 @@
 <div class="container-sm">
   <h1 class="float-left mb-3">Harjoitusryhmät kursseittain</h1>
 </div>
+
+{% for course in courses %}
+<div class="container-sm" id="table-sm">
+  <table class="table table-bordered align-middle">
+    <thead>
+      <tr class="table-secondary">
+        <th class="align-middle" colspan="9">{{course.name}}</th>
+        <th colspan="1">
+          <form action="/create_group" method="GET">
+            <input type="hidden" name="course_id" value="{{ course.id }}">
+            <input type="hidden" name="course_name" value="{{ course.name }}">
+            <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="course_{{course.id}}" value="Luo uusi ryhmä">
+          </form>
+        </th>
+      </tr>
+      <tr class="table-secondary">
+        <th colspan="1">Päivä</th>
+        <th colspan="1">Aika</th>
+        <th colspan="1">Paikka</th>
+        <th colspan="4">Täyttöaste töittäin</th>
+        <th colspan="1">Yhteensä</th>
+        <th colspan="1">Vahvistus</th>
+        <th colspan="2">Toiminnot</th>
+      </tr>
+    </thead>
+    {% for date in groups_by_date %}
+      {% if date.course == course %}
+        <tbody>
+          <td>{{date.date.day}}.{{date.date.month}}.{{date.date.year}}</td>
+          <td>{{date.start_time.hour}}-{{date.end_time.hour}}</td>
+          <td>{{date.place}}</td>
+          {% for lab in date.labs %}
+          <td>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ lab.name }}">
+            {% for group in date.groups %}
+              {% if group.lab_id == lab.id%}
+                {{group.signed_up_students}} / {{lab.max_students}}
+              {% endif %}
+            {% endfor %}
+            </span>
+          </td>
+          {% endfor %}
+          <td>{{date.signup_sum}}</td>
+          <td><button type="button" class="btn btn-light btn-outline-success">Vahvista</button></td>
+          <td>
+            <button type="button" class="btn btn-light btn-outline-danger">Peruuta</button>
+          </td>
+        </tbody>
+      {% endif %}
+    {% endfor %}
+  </table>
+</div>
+
+{% endfor %}
+
+
+
+
 {% for course in courses %}
   <div class="container-sm" id="table-sm">
     <table class="table table-bordered align-middle">
