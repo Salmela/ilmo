@@ -11,7 +11,7 @@ def migrate(ctx):
 
 @task
 def populate(ctx):
-    ctx.run("python config/populate.py")
+    ctx.run("python config/populate_official.py")
 
 @task
 def coverage(ctx):

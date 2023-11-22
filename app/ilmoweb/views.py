@@ -516,3 +516,10 @@ def system(request):
         return redirect(created_labs)
 
     return render(request, "system.html")
+
+@login_required(login_url="login")
+def instructions(request):
+    """
+        View for instructions page
+    """
+    return render(request, "instructions.html")
