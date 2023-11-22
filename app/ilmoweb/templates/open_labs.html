@@ -61,7 +61,7 @@
               {% if lab_group.lab_id == lab.id %}
               {% if lab_group.deleted == 0 %}
                 {% if lab.is_visible == 1 %}
-                  {% if lab_group.status == 1 %}
+                  {% if lab_group.status == 1 or lab_group.status == 2 %}
                     <tr>
                       <td label="Laboratoriotyö">{{lab.name}}</td>
                       <td label="Ajankohta">
@@ -140,23 +140,7 @@
                         </td>
                       {% endif %}
                       {% if lab_group.status == 1 %}
-                        {% if user.is_staff %}
-                          <td label="Status">
-                            {% if lab_group.signed_up_students > 0 %}
-                            <form action="{% url 'confirm' %}" method="POST">
-                              <div id = "confirm{{ lab_group.id }}">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-light btn-outline-dark" data-testid="group_{{ lab_group.id }}">Vahvista</button>
-                                <input type="hidden" value="{{lab_group.id}}" name="lab_group_id">
-                              </div>
-                            </form>
-                            {% else %} 
-                              Ei vielä tarpeeksi ilmoittautuneita
-                            {% endif %}
-                          </td>
-                        {% else %}
-                          <td label="Status">Ei vahvistettu</td>
-                        {% endif %}
+                        <td label="Status">Ei vahvistettu</td>
                       {% elif lab_group.status == 2 %}
                         <td label="Status">Vahvistettu</td>
                       {% elif lab_group.status == 3 %}

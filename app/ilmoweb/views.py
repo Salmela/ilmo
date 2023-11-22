@@ -88,9 +88,39 @@ def created_labs(request):
 
     courses = Courses.objects.all()
     course_labs = Labs.objects.filter(is_visible=1)
-    lab_groups = LabGroups.objects.filter(deleted=0).order_by("date")
+    groups = LabGroups.objects.filter(deleted=0).order_by('date')
+
+    lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False)
+
+    dates_times = set()
+    groups_by_date_time = []
+
+    for lab_group in lab_groups:
+        date_time_key = (lab_group.date, lab_group.start_time, lab_group.end_time, lab_group.place)
+
+        if date_time_key not in dates_times:
+            dates_times.add(date_time_key)
+
+            dict_entry = {
+                'course': lab_group.lab.course,
+                'date': lab_group.date,
+                'start_time': lab_group.start_time,
+                'end_time': lab_group.end_time,
+                'place': lab_group.place,
+                'labs': Labs.objects.filter(course=lab_group.lab.course, is_visible=1),
+                'groups': [group for group in lab_groups if
+                           (group.date, group.start_time, group.end_time,
+                            group.place) == date_time_key],
+                'signup_sum':sum(([group.signed_up_students for group in lab_groups if
+                           (group.date, group.start_time, group.end_time,
+                            group.place) == date_time_key]), 0)
+            }
+
+            groups_by_date_time.append(dict_entry)
+
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
-                                                 "lab_groups":lab_groups})
+                                                 "lab_groups":groups,
+                                                 'groups_by_date':groups_by_date_time})
 
 @login_required(login_url="login")
 def create_lab(request):
@@ -204,19 +234,26 @@ def confirm(request):
         request for confirming a labgroup
     """
     if request.method == "POST":
-        group_id = request.POST.get("lab_group_id")
-        labgroup = LabGroups.objects.get(pk=group_id)
+        lab_group_ids = request.POST.getlist("lab_groups")
+        lab_groups = [LabGroups.objects.get(id=int(group_id)) for group_id in lab_group_ids]
+
 
         if request.user.is_staff:
-            if labgroup.signed_up_students == 0:
+            signed_up = 0
+            for labgroup in lab_groups:
+                signed_up += labgroup.signed_up_students
+
+            if signed_up == 0:
                 messages.warning(request, "Tyhjää ryhmää ei voida vahvistaa")
 
-            elif labgroup.signed_up_students > 0:
-                labgroups.confirm(group_id)
+            elif signed_up> 0:
+                for labgroup in lab_groups:
+                    labgroups.confirm(labgroup.id)
+
                 messages.success(request, "Ryhmä vahvistettu")
         else:
-            return redirect(open_labs)
-    return redirect(open_labs)
+            return redirect(created_labs)
+    return redirect(created_labs)
 
 @login_required(login_url="login")
 def make_lab_visible(request, lab_id):
@@ -230,6 +267,7 @@ def make_lab_visible(request, lab_id):
 
     return redirect(created_labs)
 
+
 @login_required(login_url="login")
 def delete_lab(request, lab_id):
     """
@@ -239,6 +277,28 @@ def delete_lab(request, lab_id):
         lab = Labs.objects.get(pk=lab_id)
         lab.deleted = 1
         lab.save()
+
+    return redirect(created_labs)
+
+
+@login_required(login_url="login")
+def labgroup_status(request):
+    """
+        Toggle labgroups status based on its current state.
+    """
+    if request.method == "POST":
+        lab_group_ids = request.POST.getlist("lab_groups")
+        lab_groups = [LabGroups.objects.get(id=int(group_id)) for group_id in lab_group_ids]
+
+        if request.user.is_staff:
+            for labgroup in lab_groups:
+                if labgroup.status in(0, 3):
+                    labgroup.status = 1
+                else:
+                    labgroup.status = 3
+                    labgroups.email(labgroup, "cancel")
+                labgroup.save()
+        return redirect(created_labs)
 
     return redirect(created_labs)
 
@@ -387,22 +447,6 @@ def delete_labgroup(request, labgroup_id):
 
     return redirect(created_labs)
 
-
-@login_required(login_url="login")
-def labgroup_status(request, labgroup_id):
-    """
-        Toggle labgroups status based on its current state.
-    """
-    if request.user.is_staff:
-        labgroup = LabGroups.objects.get(pk=labgroup_id)
-        if labgroup.status in (0, 3):
-            labgroup.status = 1
-        else:
-            labgroup.status = 3
-            labgroups.email(labgroup, "cancel")
-        labgroup.save()
-
-    return redirect(created_labs)
 
 @login_required(login_url="login")
 def cancel_enrollment(request, labgroup_id):

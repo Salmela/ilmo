@@ -288,8 +288,8 @@ class TestModels(TestCase):
     
     def test_teacher_can_confirm_nonempty_labgroup(self):
         self.client.force_login(self.superuser1)
-        group_id = self.labgroup2.id
-        response_post = self.client.post("/open_labs/confirm/", {"lab_group_id": group_id})
+        groups = [self.labgroup2.id]
+        response_post = self.client.post("/created_labs/confirm/", {"lab_groups": groups})
         
         # correct status code
         self.assertEqual(response_post.status_code, 302)
@@ -302,10 +302,10 @@ class TestModels(TestCase):
 
     def test_teacher_cannot_confirm_empty_labgroup(self):
         self.client.force_login(self.superuser1)
-        group_id = self.labgroup1.id
+        groups = [self.labgroup1.id]
 
         # try to confirm
-        self.client.post("/open_labs/confirm/", {"lab_group_id": group_id})
+        self.client.post("/created_labs/confirm/", {"lab_groups": groups})
         
         # check database stays same
         self.labgroup1.refresh_from_db()
@@ -314,10 +314,10 @@ class TestModels(TestCase):
 
     def test_student_cannot_confirm_labgroup(self):
         self.client.force_login(self.user1)
-        group_id = self.labgroup1.id
+        groups = [self.labgroup1.id]
 
         # try to confirm
-        self.client.post("/open_labs/confirm/", {"lab_group_id": group_id})
+        self.client.post("/created_labs/confirm/", {"lab_group_id": groups})
         
         # check database stays same
         self.labgroup1.refresh_from_db()
@@ -569,29 +569,32 @@ class TestModels(TestCase):
 
     def test_teacher_can_publish_labgroup(self):
         self.client.force_login(self.superuser1)
-        url = reverse("labgroup_status", args=[str(self.labgroup1.id)])
-        response = self.client.get(url)
+        lab_groups = [self.labgroup1.id]
+        url = reverse("labgroup_status")
+        response = self.client.post(url, {'lab_groups':lab_groups})
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 1)
     
     def test_teacher_can_cancel_and_republish_labgroup(self):
         self.client.force_login(self.superuser1)
-        url = reverse("labgroup_status", args=[str(self.labgroup2.id)])
-        response = self.client.get(url)
+        lab_groups = [self.labgroup2.id]
+        url = reverse("labgroup_status")
+        response = self.client.post(url, {'lab_groups':lab_groups})
         self.assertEqual(response.status_code, 302)
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 3)
-        url_2 = reverse("labgroup_status", args=[str(self.labgroup2.id)])
-        response_2 = self.client.get(url_2)
+        url_2 = reverse("labgroup_status")
+        response_2 = self.client.post(url_2, {'lab_groups':lab_groups})
         self.assertEqual(response_2.status_code, 302)
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 1)
     
     def test_student_cannot_publish_labgroup(self):
+        lab_groups = [self.labgroup1.id]
         self.client.force_login(self.user1)
-        url = reverse("labgroup_status", args=[str(self.labgroup1.id)])
-        response = self.client.get(url)
+        url = reverse("labgroup_status")
+        response = self.client.post(url, {'lab_groups':lab_groups})
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 0)
