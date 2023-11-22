@@ -14,6 +14,10 @@ def populate(ctx):
     ctx.run("python config/populate_official.py")
 
 @task
+def pwpopulate(ctx):
+    ctx.run("python config/populate.py")
+
+@task
 def coverage(ctx):
     ctx.run("coverage run --source='.' manage.py test ilmoweb")
     ctx.run("coverage html")

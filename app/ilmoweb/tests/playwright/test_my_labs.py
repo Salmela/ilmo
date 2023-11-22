@@ -17,7 +17,7 @@ def test_teacher_can_evaluate_a_report(page: Page):
     page.goto('/my_labs')
     expect(page.get_by_text('Palauta raportti')).to_be_visible()
     page.get_by_role('button', name='Palauta raportti').click()
-    page.locator('[data-testid="file"]').set_input_files('config/file.pdf')
+    page.get_by_test_id('file').set_input_files('config/file.pdf')
     page.get_by_role('button', name='Tallenna').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
@@ -26,6 +26,8 @@ def test_teacher_can_evaluate_a_report(page: Page):
 
     page.get_by_test_id('open_1').click()
     page.get_by_test_id('select_grade').select_option('5')
+    page.get_by_test_id('comment').fill('tämä on kommentti')
+    page.get_by_test_id('file').set_input_files('config/comment.pdf')
     page.get_by_role('button', name='Arvostele').click()
     expect(page.get_by_text('Arvosteltu (5/5)')).to_be_visible()
 
@@ -47,6 +49,8 @@ def test_student_can_check_report_info(page: Page):
     expect(page.get_by_role('link', name='file.pdf')).to_be_visible()
     expect(page.get_by_text('Kalle Kemisti')).to_be_visible()
     expect(page.locator('td:text("5")')).to_be_visible()
+    expect(page.get_by_text('tämä on kommentti')).to_be_visible()
+    expect(page.get_by_role('link', name='comment.pdf')).to_be_visible()
 
 def test_student_can_cancel_enrollment(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
