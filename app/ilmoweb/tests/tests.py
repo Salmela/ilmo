@@ -1,5 +1,6 @@
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.messages import get_messages
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups, Report
@@ -484,11 +485,14 @@ class TestModels(TestCase):
     def test_teacher_can_evaluate_reports(self):
         self.client.force_login(self.superuser1)
         url = reverse("evaluate_report", args=[str(self.report1.id)])
-        response = self.client.post(url, {"grade": 5, "comments": "Perfectly done!"})
+        pdf = SimpleUploadedFile("comments.pdf", b"comment", content_type="application/pdf")
+        response = self.client.post(url, {"grade": 5, "comments": "Perfectly done!", "file": pdf})
         self.assertEqual(response.status_code, 302)
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.grade, 5)
         self.assertEqual(self.report1.comments, "Perfectly done!")
+        self.assertIsNotNone(self.report1.comment_file)
+        self.assertEqual(self.report1.comment_file_name, "comments.pdf")
         self.assertEqual(self.report1.graded_by_id, self.superuser1.id)
         self.assertEqual(self.report1.grading_date, datetime.date.today())
         self.assertEqual(self.report1.report_status, 4)
