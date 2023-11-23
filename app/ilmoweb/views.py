@@ -1,8 +1,8 @@
 """Module for page rendering."""
 import datetime
-import environ
 import urllib.request
 import json
+import environ
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
@@ -49,11 +49,11 @@ claims_data = {
 claims = json.dumps(claims_data)
 
 if env("UNI_LOGIN") == 'True':
-    keyset = "https://login.helsinki.fi/idp/profile/oidc/keyset"
+    KEYSET = "https://login.helsinki.fi/idp/profile/oidc/keyset"
 else:
-    keyset = "https://login-test.it.helsinki.fi/idp/profile/oidc/keyset"
+    KEYSET = "https://login-test.it.helsinki.fi/idp/profile/oidc/keyset"
 
-with urllib.request.urlopen(keyset) as url:
+with urllib.request.urlopen(KEYSET) as url:
     keys = json.load(url)
 
 def login(request):
