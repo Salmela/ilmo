@@ -516,7 +516,25 @@ def archive(request):
     if request.user.is_staff is not True:
         return redirect("/open_labs")
 
-    return render(request, "archive.html")
+    all_students = User.objects.filter(is_staff = False)
+    return render(request, "archive.html", {"all_students":all_students})
+
+@login_required(login_url="login")
+def personal_archive(request, user_id):
+    """
+        View for individual student's reports
+    """
+    if request.user.is_staff is not True:
+        return redirect("/open_labs")
+    user = User.objects.get(pk=user_id)
+
+    reports = Report.objects.filter(student=user_id)
+    subquery = reports.filter(lab_group=OuterRef("lab_group")).values("lab_group").annotate(
+    max_report_status=Max("report_status")).values("max_report_status")
+    reports = reports.annotate(max_report_status=Subquery(subquery))
+    filtered_reports = reports.filter(report_status=F("max_report_status"))
+
+    return render(request, "personal_archive.html", {"user":user, "filtered_reports":filtered_reports})
 
 @login_required(login_url="login")
 def system(request):

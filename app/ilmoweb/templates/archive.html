@@ -1,5 +1,25 @@
 {% extends "layout.html" %}
 {% block title %} Arkisto {% endblock %}
 {% block content %}
-<h1>Placeholder</h1>
+<div class="container-sm">
+    <h1>Arkisto</h1>
+    <table class="table table-sm table-bordered align-middle" id="mobile">
+        <thead>
+            <tr class="table-secondary">
+                <th class="hide-on-mobile" scope="col">Opiskelija</th>
+                <th class="hide-on-mobile" scope="col">Opiskelijanumero</th>
+                <th class="hide-on-mobile" scope="col">Sähköpostiosoite</th>
+                <th class="hide-on-mobile" scope="col">Palautukset</th>
+            </tr>
+        </thead>
+        {% for user in all_students %}
+        <tbody>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.student_id }}</td>
+            <td>{{ user.email }}</td>
+            <td><a href="/personal_archive/{{user.id}}">Näytä palautukset</a></td>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
