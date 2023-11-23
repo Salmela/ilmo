@@ -1,13 +1,13 @@
-name: CI
+name: CI_prod
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow
+  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches-ignore:
+    branches:
       - 'production'
   pull_request:
-    branches-ignore:
+    branches:
       - 'production'
     types: [opened, reopened]
 
@@ -84,6 +84,7 @@ jobs:
         run: |
           while ! nc -z localhost 8000; do sleep 1; done
           sleep 5
+
       - name: Run Playwright tests
         working-directory: ./app
         run: poetry run xvfb-run pytest ilmoweb/tests/playwright/ --headed --base-url http://127.0.0.1:8000/
@@ -112,7 +113,7 @@ jobs:
 
       # Build docker image and push it to Docker Hub
       - name: Build image
-        run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
+        run: docker build . -t ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:prod
 
       - name: Push image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:ilmo
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ilmoweb:prod
