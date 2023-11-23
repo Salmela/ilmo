@@ -14,7 +14,7 @@ from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports
+from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports, users_info
 
 
 CONF_URL = "https://login-test.it.helsinki.fi/.well-known/openid-configuration"
@@ -523,3 +523,16 @@ def instructions(request):
         View for instructions page
     """
     return render(request, "instructions.html")
+
+@login_required(login_url="login")
+def user_info(request):
+    """
+        View for user info page where user can change their email address
+    """
+
+    if request.method == "POST":
+        new_email = request.POST.get("new_email")
+        user = request.user
+        users_info.change_email(request, user, new_email)
+
+    return render(request, "user_info.html")

@@ -629,3 +629,25 @@ class TestModels(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.url, "/open_labs" )
         self.assertEqual(self.labgroup1.place, "Chemicum")
+
+    # Tests for changing email address
+
+    def test_user_can_change_their_email(self):
+        new_email="testi.meili@ilmo.fi"
+        self.client.force_login(self.user1)
+        response = self.client.post("/user_info/", {"new_email":new_email})
+        self.assertEqual(response.status_code, 200)
+        self.user1.refresh_from_db()
+        self.assertEqual(self.user1.email, new_email)
+    
+    def test_cannot_change_email_if_not_logged_in(self):
+        new_email="testi.meili@ilmo.fi"
+        response = self.client.post("/user_info/", {"new_email":new_email})
+        self.assertEqual(response.status_code, 302)
+    
+    def test_cannot_change_email_if_it_is_not_valid(self):
+        new_email="sähköpostiosoite"
+        self.client.force_login(self.user1)
+        response = self.client.post("/user_info/", {"new_email":new_email})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.user1.email, "pekka.virtanen@ilmoweb.fi")
