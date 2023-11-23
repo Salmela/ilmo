@@ -25,6 +25,7 @@ jobs:
       HOST: 127.0.0.1
       PORT: 5432
       LOCAL: True
+      PROD: False
       EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
 
     # Service for Postgres DB
