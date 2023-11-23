@@ -139,8 +139,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
 
-if env("LOCAL") == 'False':
+if env("LOCAL") == 'False' and env("UNI_LOGIN") == 'False':
     LOGOUT_REDIRECT_URL = 'https://login-test.it.helsinki.fi/idp/profile/Logout'
+elif env('UNI_LOGIN') == 'True':
+    LOGOUT_REDIRECT_URL = 'https://login.helsinki.fi/idp/profile/Logout'
 else:
     LOGOUT_REDIRECT_URL = '/'
 

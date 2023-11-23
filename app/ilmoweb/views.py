@@ -2,6 +2,7 @@
 import datetime
 import urllib.request
 import json
+import environ
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
@@ -16,8 +17,13 @@ from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
 from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports, users_info
 
+env = environ.Env()
+environ.Env.read_env()
 
-CONF_URL = "https://login-test.it.helsinki.fi/.well-known/openid-configuration"
+if env("UNI_LOGIN") == 'True':
+    CONF_URL = "https://login.helsinki.fi/.well-known/openid-configuration"
+else:
+    CONF_URL = "https://login-test.it.helsinki.fi/.well-known/openid-configuration"
 oauth = OAuth()
 oauth.register(
     name="ilmoweb",
@@ -42,7 +48,12 @@ claims_data = {
 
 claims = json.dumps(claims_data)
 
-with urllib.request.urlopen("https://login-test.it.helsinki.fi/idp/profile/oidc/keyset") as url:
+if env("UNI_LOGIN") == 'True':
+    KEYSET = "https://login.helsinki.fi/idp/profile/oidc/keyset"
+else:
+    KEYSET = "https://login-test.it.helsinki.fi/idp/profile/oidc/keyset"
+
+with urllib.request.urlopen(KEYSET) as url:
     keys = json.load(url)
 
 def login(request):
