@@ -60,11 +60,19 @@
       <div class="col text-center">
         {% for lab in labs %}
           {% if lab.course_id == course.id %}
-          <div class="form-check d-flex justify-content-center">
-            <input class="form-check-input" type="checkbox" value="{{lab.id}}"
-              data-testid="{{lab.id}}" id="{{lab.id}}" name="labs[]">
-            <label class="form-check-label ml-2" for="{{lab.id}}">{{lab.name}}</label>
-          </div>
+            {% if lab.is_visible == 1 %}
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" value="{{lab.id}}"
+                  data-testid="{{lab.id}}" id="{{lab.id}}" name="labs[]">
+                <label class="form-check-label ml-2" for="{{lab.id}}">{{lab.name}}</label>
+              </div>
+            {% elif lab.is_visible == 0 %}
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" value="{{lab.id}}"
+                  data-testid="{{lab.id}}" id="{{lab.id}}" name="labs[]" disabled>
+                <label class="form-check-label ml-2" for="{{lab.id}}">{{lab.name}}</label>
+              </div>
+            {% endif %}
           {% endif %}
         {% endfor %}
       </div>
