@@ -11,6 +11,7 @@ def test_teacher_can_evaluate_a_report(page: Page):
     login(page, 'kemianope', 'atomi123')
     page.goto('/created_labs')
     page.get_by_test_id('confirm_1').click()
+    expect(page.get_by_text('Ryhmä vahvistettu')).to_be_visible()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
     login(page, 'kemianopiskelija', 'salasana123')

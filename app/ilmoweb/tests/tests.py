@@ -239,7 +239,17 @@ class TestModels(TestCase):
         self.labgroup1.refresh_from_db()
         students = self.labgroup1.signed_up_students
         self.assertEqual(students, 1)
+        
+    def test_enrollment_gives_success_message(self):
+        self.client.force_login(self.user1)
+        user_id = self.user1.id,
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
 
+        response_post = self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
+        messages = [m.message for m in get_messages(response_post.wsgi_request)]
+        self.assertEqual(str(messages[0]), "Ilmoittautuminen onnistui!")
     
     def test_teacher_cannot_enroll_to_labgroup(self):
         self.client.force_login(self.superuser1)
@@ -261,7 +271,6 @@ class TestModels(TestCase):
         self.labgroup1.refresh_from_db()
         students = self.labgroup1.signed_up_students
         self.assertEqual(students, 0)
-
     
     def test_student_cannot_enroll_twice_to_same_labgroup(self):
         self.client.force_login(self.user1)
@@ -299,6 +308,14 @@ class TestModels(TestCase):
         self.labgroup2.refresh_from_db()
         status = self.labgroup2.status
         self.assertEqual(status, 2)
+
+    def test_confirming_groups_gives_succeess_message(self):
+        self.client.force_login(self.superuser1)
+        groups = [self.labgroup2.id]
+        response_post = self.client.post("/created_labs/confirm/", {"lab_groups": groups})
+
+        messages = [m.message for m in get_messages(response_post.wsgi_request)]
+        self.assertEqual(str(messages[0]), "Ryhmä vahvistettu")
     
 
     def test_teacher_cannot_confirm_empty_labgroup(self):
@@ -306,7 +323,10 @@ class TestModels(TestCase):
         groups = [self.labgroup1.id]
 
         # try to confirm
-        self.client.post("/created_labs/confirm/", {"lab_groups": groups})
+        response = self.client.post("/created_labs/confirm/", {"lab_groups": groups})
+
+        messages = [m.message for m in get_messages(response.wsgi_request)]
+        self.assertEqual(str(messages[0]), "Tyhjää ryhmää ei voida vahvistaa")
         
         # check database stays same
         self.labgroup1.refresh_from_db()
@@ -541,6 +561,8 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.deleted, False)
+        self.client.force_login(self.user1)
+        signup.signup(self.user1, self.labgroup1)
 
     # Test for cancelling enrollment
 
