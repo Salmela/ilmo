@@ -2,34 +2,52 @@
 {% block title %} Henkilökohtainen arkisto {% endblock %}
 {% block content %}
 <div class="container-sm">
-    <h3 class="text-left mb-3">{{ user.first_name }} {{ user.last_name }}</h3>
-    {% for report in filtered_reports %}
+    <h3 class="text-left mb-3">{{ student.first_name }} {{ student.last_name }}</h3>
+    {% for course in all_courses %}
+        <h4 class="text-left mb-3">{{ course.name }}</h4>
         <table class="table table-sm table-bordered align-middle" id="mobile">
             <thead>
                 <tr class="table-secondary">
+                    <th class="hide-on-mobile" scope="col">Kurssi</th>
                     <th class="hide-on-mobile" scope="col">Laboratoriotyö</th>
                     <th class="hide-on-mobile" scope="col">Ryhmän päivämäärä</th>
                     <th class="hide-on-mobile" scope="col">Raportti</th>
                     <th class="hide-on-mobile" scope="col">Assistentti</th>
                     <th class="hide-on-mobile" scope="col">Arvosana</th>
                     <th class="hide-on-mobile" scope="col">Kommentit</th>
+                    <th class="hide-on-mobile" scope="col">Kommenttitiedosto</th>
                 </tr>
             </thead>
             <tbody>
-                <td>{{ report.lab_group.lab.name }}</td>
-                <td>{{ report.lab_group.date }}</td>
-                <td><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
-                <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
-                {% if report.grade == 0 %}
-                <td>Raportti vaatii korjausta</td>
-                {% else %}
-                <td>{{ report.grade }}</td>
-                {% endif %}
-                {% if report.comments %}
-                <td>{{ report.comments }}</td>
-                {% else %}
-                <td>Ei Kommentteja</td>
-                {% endif %}
+                {% for report in filtered_reports %}
+                    {% if course.id == report.lab_group.lab.course.id %}
+                        <tr>
+                            <td>{{ report.lab_group.lab.course.name }}</td>
+                            <td>{{ report.lab_group.lab.name }}</td>
+                            <td>{{ report.lab_group.date }}</td>
+                            <td><a href="/download_report/{{ report.report_file_name }}" download>{{ report.report_file_name }}</a></td>
+                            <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+                            {% if not report.grade %}
+                                <td>Odottaa arvostelua</td>
+                            {% endif %}
+                            {% if report.grade == 0 %}
+                                <td>Raportti vaatii korjausta</td>
+                            {% elif report.grade == 1 or report.grade == 2 or report.grade == 3 or report.grade == 4 or report.grade == 5 %}
+                                <td>{{ report.grade }}</td>
+                            {% endif %}
+                            {% if report.comments %}
+                                <td>{{ report.comments }}</td>
+                            {% else %}
+                                <td>-</td>
+                            {% endif %}
+                            {% if report.comment_file %}
+                                <td><a href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a></td>
+                            {% else %}
+                                <td>-</td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
             </tbody>
         </table>
     {% endfor %}

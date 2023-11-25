@@ -10,13 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
-from django.db.models import Max, F, Subquery, OuterRef
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports, users_info
-
+from ilmoweb.logic import labs, signup, labgroups, files
+from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
 
@@ -325,11 +324,7 @@ def my_labs(request):
     ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
 
     # Filter the report with the highest status per labgroup
-    reports = Report.objects.filter(student=request.user)
-    subquery = reports.filter(lab_group=OuterRef("lab_group")).values("lab_group").annotate(
-        max_report_status=Max("report_status")).values("max_report_status")
-    reports = reports.annotate(max_report_status=Subquery(subquery))
-    filtered_reports = reports.filter(report_status=F("max_report_status"))
+    filtered_reports = filter_reports.filter_report(request.user)
 
     return render(request, "my_labs.html", {"labgroups":students_labgroups,
                                             "reports":students_reports,
@@ -516,8 +511,8 @@ def archive(request):
     if request.user.is_staff is not True:
         return redirect("/open_labs")
 
-    all_students = User.objects.filter(is_staff = False)
-    return render(request, "archive.html", {"all_students":all_students})
+    users = User.objects.filter(is_staff = False)
+    return render(request, "archive.html", {"users":users})
 
 @login_required(login_url="login")
 def personal_archive(request, user_id):
@@ -526,16 +521,14 @@ def personal_archive(request, user_id):
     """
     if request.user.is_staff is not True:
         return redirect("/open_labs")
-    user = User.objects.get(pk=user_id)
 
-    reports = Report.objects.filter(student=user_id)
-    subquery = reports.filter(lab_group=OuterRef("lab_group")).values("lab_group").annotate(
-    max_report_status=Max("report_status")).values("max_report_status")
-    reports = reports.annotate(max_report_status=Subquery(subquery))
-    filtered_reports = reports.filter(report_status=F("max_report_status"))
+    student = User.objects.get(pk=user_id)
+    filtered_reports = filter_reports.filter_report(user_id)
+    all_courses = Courses.objects.all().order_by("id").values()
 
-    return render(request, "personal_archive.html", {"user":user,
-                                                     "filtered_reports":filtered_reports})
+    return render(request, "personal_archive.html", {"student":student,
+                                                     "filtered_reports":filtered_reports,
+                                                     "all_courses":all_courses})
 
 @login_required(login_url="login")
 def system(request):
