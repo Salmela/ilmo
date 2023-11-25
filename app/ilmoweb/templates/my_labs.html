@@ -83,7 +83,7 @@
                               <tbody>
                                 <tr>
                                   <th>Raportti</th>
-                                  <td><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
+                                  <td class="file-name"><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
                                 </tr>
                                 <tr>
                                   <th>Assistentti</th>
@@ -112,7 +112,7 @@
                                         <br>
                                       {% endif %}
                                       {% if report.comment_file %}
-                                        <a href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
+                                        <a class="file-name" href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
                                       {% endif %}
                                     </td>
                                   </tr>
@@ -171,4 +171,22 @@
     </tbody>
   </table>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const max = 45
+    const fileNames = document.querySelectorAll(".file-name")
+
+    fileNames.forEach(function (fileName) {
+      const name = fileName.textContent
+
+      if (name.length > max) {
+        const shortName = name.substring(0, max - 3) + "..."
+        fileName.innerHTML = "<span style='display:none;'>" + name + "</span>" + "<a href='/download_report/" + name + "' download>" + shortName + "</a>"
+        $(fileName).attr("data-toggle", "tooltip")
+        $(fileName).attr("title", name)
+        $(fileName).tooltip()
+      }
+    })
+  })
+</script>
 {% endblock %}
