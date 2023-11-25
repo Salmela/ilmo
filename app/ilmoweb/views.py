@@ -534,7 +534,8 @@ def personal_archive(request, user_id):
     reports = reports.annotate(max_report_status=Subquery(subquery))
     filtered_reports = reports.filter(report_status=F("max_report_status"))
 
-    return render(request, "personal_archive.html", {"user":user, "filtered_reports":filtered_reports})
+    return render(request, "personal_archive.html", {"user":user,
+                                                     "filtered_reports":filtered_reports})
 
 @login_required(login_url="login")
 def system(request):
