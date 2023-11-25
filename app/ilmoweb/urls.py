@@ -34,6 +34,7 @@ if env("LOCAL") == 'False':
         path("auth/", views.auth, name="auth"),
         path("update_group/<int:labgroup_id>", views.update_group, name="update_group"),
         path("archive/", views.archive, name="archive"),
+        path("personal_archive/<int:user_id>", views.personal_archive, name="personal_archive"),
         path("system/", views.system, name="system"),
         path("instructions/", views.instructions, name="instructions"),
         path("user_info/", views.user_info, name="user_info")
@@ -63,6 +64,7 @@ else:
         path("labgroup_status/", views.labgroup_status, name="labgroup_status"),
         path("update_group/<int:labgroup_id>", views.update_group, name="update_group"),
         path("archive/", views.archive, name="archive"),
+        path("personal_archive/<int:user_id>", views.personal_archive, name="personal_archive"),
         path("system/", views.system, name="system"),
         path("instructions/", views.instructions, name="instructions"),
         path("user_info/", views.user_info, name="user_info")
