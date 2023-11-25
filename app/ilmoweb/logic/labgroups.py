@@ -4,13 +4,7 @@ from ilmoweb.models import Labs, LabGroups, SignUp
 
 def email(lab_group, message_type):
     """
-        sends email to given addresses
-        ----------------------------
-        CURRENTLY WORKS ONLY LOCALLY
-        ----------------------------
-        open another terminal and go to ilmoweb/app
-        run poetry shell
-        run python3 -m smtpd -n -c DebuggingServer localhost:1025
+        sends a certain email message to given addresses according to the message_type
     """
     lab = Labs.objects.get(pk=lab_group.lab_id)
     all_students = SignUp.objects.all()
