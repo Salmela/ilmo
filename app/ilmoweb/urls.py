@@ -37,7 +37,8 @@ if env("LOCAL") == 'False':
         path("personal_archive/<int:user_id>", views.personal_archive, name="personal_archive"),
         path("system/", views.system, name="system"),
         path("instructions/", views.instructions, name="instructions"),
-        path("user_info/", views.user_info, name="user_info")
+        path("user_info/", views.user_info, name="user_info"),
+        path("update_multiple_groups/", views.update_multiple_groups, name="update_multiple_groups")
 
     ]
 else:
@@ -67,5 +68,6 @@ else:
         path("personal_archive/<int:user_id>", views.personal_archive, name="personal_archive"),
         path("system/", views.system, name="system"),
         path("instructions/", views.instructions, name="instructions"),
-        path("user_info/", views.user_info, name="user_info")
+        path("user_info/", views.user_info, name="user_info"),
+        path("update_multiple_groups/", views.update_multiple_groups, name="update_multiple_groups")
     ]

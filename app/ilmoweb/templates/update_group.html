@@ -32,14 +32,26 @@
     <div class="row justify-content-center">
       <label for="startTime" class="col-sm-1 col-form-label">Aloitusaika</label>
       <div class="col-3">
-        <input id="startTime" type="time" value="08:00" name="start_time" data-testid="start_time" data-input>
+        <input id="startTime" type="time" 
+        {% if lab_group.start_time.hour < 10 %}
+          value="0{{lab_group.start_time.hour}}:00"
+        {% else %} 
+          value="{{lab_group.start_time.hour}}:00"
+        {% endif %}
+        name="start_time" data-testid="start_time" data-input>
       </div>
     </div>
     <br>
     <div class="row justify-content-center">
       <label for="endTime" class="col-sm-1 col-form-label">Lopetusaika</label>
       <div class="col-3">
-        <input id="endTime" type="time" value="12:00" name="end_time" data-testid="end_time" data-input>
+        <input id="endTime" type="time"
+        {% if lab_group.end_time.hour < 10 %}
+          value="0{{lab_group.end_time.hour}}:00"
+        {% else %} 
+          value="{{lab_group.end_time.hour}}:00"
+        {% endif %}
+        name="end_time" data-testid="end_time" data-input>
       </div>
     </div>
     <br>
@@ -73,9 +85,13 @@
       <label for="inputPlace" class="col-sm-1 col-form-label">Assistentti</label>
       <div class="col-3">
         <select id="inputPlace" class="form-control" data-testid="assistant"
-          name="assistant" placeholder={{lab_group.assistant.username}}>
+          name="assistant">
           {% for assistant in assistants %}
-            <option value="{{assistant.id}}">{{assistant.username}}</option>
+            {% if assistant.id == lab_group.assistant.id %}
+              <option selected value="{{assistant.id}}">{{assistant.username}}</option>
+            {% else %}
+              <option value="{{assistant.id}}">{{assistant.username}}</option>
+            {% endif %}
           {% endfor %}
         </select>
       </div>

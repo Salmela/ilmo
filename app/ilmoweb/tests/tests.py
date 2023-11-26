@@ -723,3 +723,34 @@ class TestModels(TestCase):
         self.assertEqual(mail.outbox[0].from_email, sender)
         recipient = ["pekka.virtanen@ilmoweb.fi"]
         self.assertEqual(mail.outbox[0].to, recipient)
+    
+    # Tests for updating multiple lab groups
+
+    def test_teacher_can_update_multiple_labgroups(self):
+        labgroup_id_list = [self.labgroup1.id, self.labgroup2.id]
+        date = "2023-12-12"
+        start_time = "10:00"
+        end_time = "15:00"
+        place = "D211 (Phy)"
+        assistant = self.assistant2.id
+
+        self.client.force_login(self.superuser1)
+        response = self.client.post("/update_multiple_groups/", {
+            "lab_groups[]":labgroup_id_list,"date":date,
+            "start_time":start_time, "end_time":end_time,
+            "place":place, "assistant":assistant
+        })
+        self.assertEqual(response.status_code, 302)
+        self.labgroup1.refresh_from_db()
+        self.assertEqual(self.labgroup1.date, datetime.date(2023, 12, 12))
+        self.assertEqual(self.labgroup1.start_time, datetime.time(10))
+        self.assertEqual(self.labgroup1.end_time, datetime.time(15))
+        self.assertEqual(self.labgroup1.place, "D211 (Phy)")
+        self.assertEqual(self.labgroup1.assistant.username, "AinoA")
+
+        self.labgroup2.refresh_from_db()
+        self.assertEqual(self.labgroup2.date, datetime.date(2023, 12, 12))
+        self.assertEqual(self.labgroup2.start_time, datetime.time(10))
+        self.assertEqual(self.labgroup2.end_time, datetime.time(15))
+        self.assertEqual(self.labgroup2.place, "D211 (Phy)")
+        self.assertEqual(self.labgroup2.assistant.username, "AinoA")
