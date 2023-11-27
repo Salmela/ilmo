@@ -26,5 +26,5 @@ def test_toggling_labgroup_status(page: Page):
     assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
     page.get_by_test_id('cancel_2').click()
     assert page.get_by_test_id('status_2').inner_text() == 'Peruttu'
-    #page.get_by_test_id('publish_2').click()
-    #assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
+    page.get_by_test_id('publish_2').click()
+    assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
