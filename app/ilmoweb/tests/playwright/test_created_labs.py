@@ -26,9 +26,9 @@ def test_toggling_labgroup_status(page: Page):
     assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
     page.get_by_test_id('cancel_2').click()
     assert page.get_by_test_id('status_2').inner_text() == 'Peruttu'
-    #page.get_by_test_id('publish_2').click()
-    #assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
-
+    page.get_by_test_id('publish_2').click()
+    assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
+    
 def test_update_multiple_groups(page: Page):
     page.goto('/')
     login(page, 'kemianope', 'atomi123')
@@ -45,4 +45,3 @@ def test_update_multiple_groups(page: Page):
     expect(page.get_by_test_id('place_10')).to_have_text('D211 (Phy)')
     expect(page.get_by_test_id('date_12')).to_have_text('12.12.2023 klo 10 - 15')
     expect(page.get_by_test_id('place_12')).to_have_text('D211 (Phy)')
-

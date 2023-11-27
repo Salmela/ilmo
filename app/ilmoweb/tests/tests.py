@@ -5,7 +5,7 @@ from django.core import mail
 from django.urls import reverse
 from django.test import TestCase, Client
 from ilmoweb.models import User, Courses, Labs, LabGroups, Report
-from ilmoweb.logic import labgroups, signup
+from ilmoweb.logic import labgroups, signup, filter_reports
 import datetime
 
 class FirstTest(TestCase):
@@ -94,7 +94,7 @@ class TestModels(TestCase):
             signed_up_students = 1
         )
 
-        # report for testing
+        # Report for testing
         self.report1 = Report.objects.create(
             student = self.user1,
             lab_group = self.labgroup1,
@@ -103,6 +103,7 @@ class TestModels(TestCase):
             report_status = 1,
             comments = "",
         )
+        self.report1.save()
 
         # creating a superuser for testing login
         self.superuser1 = User.objects.create_superuser(
@@ -112,6 +113,18 @@ class TestModels(TestCase):
         self.superuser1.save()
 
         self.client=Client()
+
+        # Report for testing report filtering
+        self.report2 = Report.objects.create(
+            student = self.user1,
+            lab_group = self.labgroup1,
+            send_date = "2023-06-11",
+            report_file = "raportti2.pdf",
+            report_status = 3,
+            comments = "",
+        )
+        self.report2.save()
+
 
     # Tests for User-model
     
@@ -245,7 +258,17 @@ class TestModels(TestCase):
         self.labgroup1.refresh_from_db()
         students = self.labgroup1.signed_up_students
         self.assertEqual(students, 1)
+        
+    def test_enrollment_gives_success_message(self):
+        self.client.force_login(self.user1)
+        user_id = self.user1.id,
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
 
+        response_post = self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
+        messages = [m.message for m in get_messages(response_post.wsgi_request)]
+        self.assertEqual(str(messages[0]), "Ilmoittautuminen onnistui!")
     
     def test_teacher_cannot_enroll_to_labgroup(self):
         self.client.force_login(self.superuser1)
@@ -267,7 +290,6 @@ class TestModels(TestCase):
         self.labgroup1.refresh_from_db()
         students = self.labgroup1.signed_up_students
         self.assertEqual(students, 0)
-
     
     def test_student_cannot_enroll_twice_to_same_labgroup(self):
         self.client.force_login(self.user1)
@@ -306,12 +328,24 @@ class TestModels(TestCase):
         status = self.labgroup2.status
         self.assertEqual(status, 2)
 
+    def test_confirming_groups_gives_succeess_message(self):
+        self.client.force_login(self.superuser1)
+        groups = [self.labgroup2.id]
+        response_post = self.client.post("/created_labs/confirm/", {"lab_groups": groups})
+
+        messages = [m.message for m in get_messages(response_post.wsgi_request)]
+        self.assertEqual(str(messages[0]), "Ryhmä vahvistettu")
+    
+
     def test_teacher_cannot_confirm_empty_labgroup(self):
         self.client.force_login(self.superuser1)
         groups = [self.labgroup1.id]
 
         # try to confirm
-        self.client.post("/created_labs/confirm/", {"lab_groups": groups})
+        response = self.client.post("/created_labs/confirm/", {"lab_groups": groups})
+
+        messages = [m.message for m in get_messages(response.wsgi_request)]
+        self.assertEqual(str(messages[0]), "Tyhjää ryhmää ei voida vahvistaa")
         
         # check database stays same
         self.labgroup1.refresh_from_db()
@@ -333,7 +367,7 @@ class TestModels(TestCase):
     # Tests for reports
     def test_report_is_saved_to_db(self):
         self.all_reports = Report.objects.all()
-        self.assertEqual(len(self.all_reports), 1)
+        self.assertEqual(len(self.all_reports), 2)
 
     def test_saved_report_has_correct_fields(self):
         self.all_reports = Report.objects.all()
@@ -546,6 +580,8 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.deleted, False)
+        self.client.force_login(self.user1)
+        signup.signup(self.user1, self.labgroup1)
 
     # Test for cancelling enrollment
 
@@ -724,7 +760,7 @@ class TestModels(TestCase):
         recipient = ["pekka.virtanen@ilmoweb.fi"]
         self.assertEqual(mail.outbox[0].to, recipient)
     
-    # Tests for updating multiple lab groups
+    # Test for updating multiple lab groups
 
     def test_teacher_can_update_multiple_labgroups(self):
         labgroup_id_list = [self.labgroup1.id, self.labgroup2.id]
@@ -754,3 +790,39 @@ class TestModels(TestCase):
         self.assertEqual(self.labgroup2.end_time, datetime.time(15))
         self.assertEqual(self.labgroup2.place, "D211 (Phy)")
         self.assertEqual(self.labgroup2.assistant.username, "AinoA")
+
+    # Test that user has two reports when they are not filtered
+    def test_reports_are_saved_for_same_student(self):
+        reports = Report.objects.filter(student=self.user1)
+        self.assertEqual(len(reports), 2)
+
+    # Test filter_reports function returns report with highest status per labgroup
+    def test_filter_reports_returns_correct_report(self):
+        filtered_reports = filter_reports.filter_report(self.user1.id)
+        self.assertEqual(filtered_reports[0].report_file, "raportti2.pdf")
+
+    def test_filter_reports_returns_correct_report_when_adding_new(self):
+        self.report3 = Report.objects.create(
+            student = self.user1,
+            lab_group = self.labgroup1,
+            send_date = "2023-06-11",
+            report_file = "raportti3.pdf",
+            report_status = 4,
+            comments = "",
+        )
+        self.report3.save()
+        filtered_reports = filter_reports.filter_report(self.user1.id)
+        self.assertEqual(filtered_reports[0].report_file, "raportti3.pdf")
+
+    # Filter_reports should only return one report with the highest status
+    def test_filter_reports_returns_correct_amount_of_reports(self):
+        self.report4 = Report.objects.create(
+            student = self.user1,
+            lab_group = self.labgroup1,
+            send_date = "2023-06-12",
+            report_status = 0,
+            comments = "",
+        )
+        self.report4.save()
+        filtered_reports = filter_reports.filter_report(self.user1.id)
+        self.assertEqual(len(filtered_reports), 1)
