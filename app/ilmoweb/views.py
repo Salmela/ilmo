@@ -2,6 +2,7 @@
 import datetime
 import urllib.request
 import json
+import environ
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
@@ -9,15 +10,19 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
-from django.db.models import Max, F, Subquery, OuterRef
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files, check_previous_reports, users_info
+from ilmoweb.logic import labs, signup, labgroups, files
+from ilmoweb.logic import check_previous_reports, users_info, filter_reports
+env = environ.Env()
+environ.Env.read_env()
 
-
-CONF_URL = "https://login-test.it.helsinki.fi/.well-known/openid-configuration"
+if env("UNI_LOGIN") == 'True':
+    CONF_URL = "https://login.helsinki.fi/.well-known/openid-configuration"
+else:
+    CONF_URL = "https://login-test.it.helsinki.fi/.well-known/openid-configuration"
 oauth = OAuth()
 oauth.register(
     name="ilmoweb",
@@ -42,7 +47,12 @@ claims_data = {
 
 claims = json.dumps(claims_data)
 
-with urllib.request.urlopen("https://login-test.it.helsinki.fi/idp/profile/oidc/keyset") as url:
+if env("UNI_LOGIN") == 'True':
+    KEYSET = "https://login.helsinki.fi/idp/profile/oidc/keyset"
+else:
+    KEYSET = "https://login-test.it.helsinki.fi/idp/profile/oidc/keyset"
+
+with urllib.request.urlopen(KEYSET) as url:
     keys = json.load(url)
 
 def login(request):
@@ -314,11 +324,7 @@ def my_labs(request):
     ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
 
     # Filter the report with the highest status per labgroup
-    reports = Report.objects.filter(student=request.user)
-    subquery = reports.filter(lab_group=OuterRef("lab_group")).values("lab_group").annotate(
-        max_report_status=Max("report_status")).values("max_report_status")
-    reports = reports.annotate(max_report_status=Subquery(subquery))
-    filtered_reports = reports.filter(report_status=F("max_report_status"))
+    filtered_reports = filter_reports.filter_report(request.user)
 
     return render(request, "my_labs.html", {"labgroups":students_labgroups,
                                             "reports":students_reports,
@@ -505,7 +511,24 @@ def archive(request):
     if request.user.is_staff is not True:
         return redirect("/open_labs")
 
-    return render(request, "archive.html")
+    users = User.objects.filter(is_staff = False)
+    return render(request, "archive.html", {"users":users})
+
+@login_required(login_url="login")
+def personal_archive(request, user_id):
+    """
+        View for individual student's reports
+    """
+    if request.user.is_staff is not True:
+        return redirect("/open_labs")
+
+    student = User.objects.get(pk=user_id)
+    filtered_reports = filter_reports.filter_report(user_id)
+    all_courses = Courses.objects.all().order_by("id").values()
+
+    return render(request, "personal_archive.html", {"student":student,
+                                                     "filtered_reports":filtered_reports,
+                                                     "all_courses":all_courses})
 
 @login_required(login_url="login")
 def system(request):

@@ -42,7 +42,10 @@ NAME= ```database_name```
 USER= ```database_user``` or NONE  
 PASSWORD= ```database_password``` or NONE  
 HOST= ```database_host``` usually ```localhost``` or ```path/to/socket```  
-PORT= ```database_port``` usually 5432  
+PORT= ```database_port``` usually 5432
+LOCAL= ```True```
+UNI_LOGIN= ```False```
+EMAIL_HOST_PASSWORD= ```email_host_password```
 
 - Run ```poetry run invoke migrate```
 - Start the application  

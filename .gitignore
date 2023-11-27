@@ -3,3 +3,4 @@ app/.coverage
 app/htmlcov
 .env
 file.pdf
+app/ilmoweb/static/upload/
