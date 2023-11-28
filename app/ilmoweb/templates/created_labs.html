@@ -109,7 +109,7 @@
             <form action="/create_group" method="GET">
               <input type="hidden" name="course_id" value="{{ course.id }}">
               <input type="hidden" name="course_name" value="{{ course.name }}">
-              <input class="btn btn-light btn-outline-dark" id="button" type="submit" value="Luo uusi ryhmä">
+              <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="course_{{course.id}}" value="Luo uusi ryhmä">
             </form>
           </th>
         </tr>
