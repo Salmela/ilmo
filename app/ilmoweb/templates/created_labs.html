@@ -12,7 +12,7 @@
     <thead>
       <tr class="table-secondary">
         <th class="align-middle" colspan="9">{{course.name}}</th>
-        <th colspan="1">
+        <th colspan="2">
           <form action="/create_group" method="GET">
             <input type="hidden" name="course_id" value="{{ course.id }}">
             <input type="hidden" name="course_name" value="{{ course.name }}">
@@ -86,6 +86,15 @@
               </form>
             </td>
           {% endif %}
+          <td>
+            <form action="{% url 'update_multiple_groups' %}" method="GET">
+              {% for group in date.groups %}
+                <input type="hidden" value="{{ group.id }}" name="lab_groups[]">
+              {% endfor %}
+              <input type="hidden" value="{{ course.id }}" name="course_id">
+              <button type="submit" class="btn btn-light btn-outline-danger" data-testid="update_{{date.groups.0.id}}">Muokkaa</button>
+            </form>
+          </td>
         </tbody>
       {% endif %}
     {% endfor %}
