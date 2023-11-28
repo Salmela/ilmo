@@ -11,16 +11,9 @@
   <table class="table table-bordered align-middle">
     <thead>
       <tr class="table-secondary">
-        <th class="align-middle" colspan="9">{{course.name}}</th>
-        <th colspan="2">
-          <form action="/create_group" method="GET">
-            <input type="hidden" name="course_id" value="{{ course.id }}">
-            <input type="hidden" name="course_name" value="{{ course.name }}">
-            <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="course_{{course.id}}" value="Luo uusi ryhmä">
-          </form>
-        </th>
+        <th class="align-middle" colspan="11">{{course.name}}</th>
       </tr>
-      <tr class="table-secondary">
+      <tr class="table-light">
         <th colspan="1">Päivä</th>
         <th colspan="1">Aika</th>
         <th colspan="1">Paikka</th>
