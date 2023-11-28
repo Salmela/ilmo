@@ -204,7 +204,6 @@ def open_labs(request):
 
 
 @login_required(login_url="login")
-
 def enroll(request):
     """
         A request for student enrolling in a given lab group
@@ -559,3 +558,40 @@ def user_info(request):
         users_info.change_email(request, user, new_email)
 
     return render(request, "user_info.html")
+
+@login_required(login_url="login")
+def update_multiple_groups(request):
+    """ 
+        View for updating labgroups from the same lab shift at the same time
+    """
+
+    if request.method == "GET":
+        if request.user.is_staff is not True:
+            return redirect("/open_labs")
+
+    if request.method == "POST":
+        lab_group_ids = request.POST.getlist("lab_groups[]")
+        place = request.POST.get("place")
+        date = request.POST.get("date")
+        start_time = request.POST.get("start_time")
+        end_time = request.POST.get("end_time")
+        assistant_id = request.POST.get("assistant")
+        assistant = User.objects.get(pk=assistant_id)
+        if not date:
+            lab_group = LabGroups.objects.get(id=int(lab_group_ids[0]))
+            date=lab_group.date
+        for lab_group_id in lab_group_ids:
+            labgroups.update(date, start_time, end_time, place, assistant, lab_group_id)
+        return redirect(created_labs)
+
+    lab_group_ids = request.GET.getlist("lab_groups[]")
+    lab_group = LabGroups.objects.get(id=int(lab_group_ids[0]))
+    course_id = request.GET.get("course_id")
+    course = Courses.objects.get(pk=course_id)
+
+    assistants = User.objects.filter(is_staff=True)
+
+    return render(request, "update_multiple_groups.html",
+                            {"lab_group_ids":lab_group_ids,
+                            "lab_group":lab_group, 
+                            "course":course, "assistants":assistants})

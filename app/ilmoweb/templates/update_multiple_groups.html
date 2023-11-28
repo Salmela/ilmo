@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block title %} Update multiple groups {% endblock %}
+{% block content %}
+
+<script type="text/javascript">
+    $(function() {
+        $('#datepicker').datepicker({
+          format: "yyyy-mm-dd"}
+        );
+    });
+</script>
+
+<h1>{{ course.name }}</h1>
+
+<form action="/update_multiple_groups/" method="POST">
+    {% csrf_token %}
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <label for="date" class="col-sm-1 col-form-label">Päivä</label>
+        <div class="col-4">
+          <div class="input-group date" id="datepicker">
+            <input type="text" class="form-control" data-testid="date" name="date" placeholder="{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}">
+            <span class="input-group-append">
+              <span class="input-group-text bg-white d-block">
+                <i class="fa fa-calendar"></i>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row justify-content-center">
+        <label for="startTime" class="col-sm-1 col-form-label">Aloitusaika</label>
+        <div class="col-3">
+          <input id="startTime" type="time" 
+            {% if lab_group.start_time.hour < 10 %}
+              {% if lab_group.start_time.minute < 10 %}
+                value="0{{lab_group.start_time.hour}}:0{{lab_group.start_time.minute}}"
+              {% else %}
+                value="0{{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}"
+              {% endif %}
+            {% else %} 
+              {% if lab_group.start_time.minute < 10 %}
+                value="{{lab_group.start_time.hour}}:0{{lab_group.start_time.minute}}"
+              {% else %}
+                value="{{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}"
+              {% endif %}
+            {% endif %}
+            name="start_time" data-testid="start_time" data-input>
+        </div>
+      </div>
+      <br>
+      <div class="row justify-content-center">
+        <label for="endTime" class="col-sm-1 col-form-label">Lopetusaika</label>
+        <div class="col-3">
+          <input id="endTime" type="time"
+            {% if lab_group.end_time.hour < 10 %}
+              {% if lab_group.end_time.minute < 10 %}
+                value="0{{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}"
+              {% else %}
+                value="0{{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}"
+              {% endif %}
+            {% else %} 
+              {% if lab_group.end_time.minute < 10 %}
+                value="{{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}"
+              {% else %}
+                value="{{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}"
+              {% endif %}
+            {% endif %}
+            name="end_time" data-testid="end_time" data-input>
+        </div>
+      </div>
+      <br>
+      <div class="row justify-content-center">
+        <label for="inputPlace" class="col-sm-1 col-form-label">Paikka</label>
+        <div class="col-3">
+          <select id="inputPlace" class="form-control" data-testid="place"
+            name="place">
+            {% if lab_group.place == "B152" %}
+              <option selected>B152</option>
+              <option>D210 (Phy)</option>
+              <option>D211 (Phy)</option>
+            {% elif lab_group.place == "D210 (Phy)" %}
+              <option>B152</option>
+              <option selected>D210 (Phy)</option>
+              <option>D211 (Phy)</option>
+            {% elif lab_group.place == "D211 (Phy)" %}
+              <option>B152</option>
+              <option>D210 (Phy)</option>
+              <option selected>D211 (Phy)</option>
+            {% else %}
+              <option selected>B152</option>
+              <option>D210 (Phy)</option>
+              <option>D211 (Phy)</option>
+            {% endif %}
+          </select>
+        </div>
+      </div>
+      <br>
+      <div class="row justify-content-center">
+        <label for="inputPlace" class="col-sm-1 col-form-label">Assistentti</label>
+        <div class="col-3">
+          <select id="inputPlace" class="form-control" data-testid="assistant"
+            name="assistant">
+            {% for assistant in assistants %}
+                {% if assistant.id == lab_group.assistant.id %}
+                  <option selected value="{{assistant.id}}">{{assistant.username}}</option>
+                {% else %}
+                  <option value="{{assistant.id}}">{{assistant.username}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    <br>
+    <input type="hidden" name="course_id" value="course.id">
+    <input type="hidden" name="course_name" value="course.name">
+    {% for group in lab_group_ids %}
+        <input type="hidden" value="{{ group }}" name="lab_groups[]">
+    {% endfor %}
+    <input class="btn btn-light btn-outline-dark" type="submit" value="Päivitä labrat">
+  </form>
+
+{% endblock %}
