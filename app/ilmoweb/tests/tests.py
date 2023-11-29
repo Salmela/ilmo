@@ -854,6 +854,3 @@ class TestModels(TestCase):
         self.message.refresh_from_db()
 
         self.assertEqual(self.message.message, "Hi students")
-
-
-
