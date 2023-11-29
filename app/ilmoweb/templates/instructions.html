@@ -3,7 +3,7 @@
 {% block content %}
   <div class="container-sm">
     {% if user.is_staff %}
-    <table class="table table-bordered align-left" id="mobile">
+      <table class="table table-bordered align-left" id="mobile">
         <thead>
           <tr class="table-secondary">
             <th colspan="2"><h3>Assistentin ohje</h3></th>
@@ -13,58 +13,46 @@
           <tr>
             <td class="left-align">
               <p>
-                <p>
-                    <b>Opetus</b>
-                    <br><br>
-                    Tällä sivulla voi luoda uusia harjoitusryhmiä sekä muuttaa niiden tietoja. Tämän lisäksi kurssien harjoitustöitä voi lisätä ja poistaa sekä muuttaa niiden tietoja.
-                    Uuden ryhmän luonnissa valittavana ovat ryhmän ajankohta ja paikka sekä mitä töitä ryhmässä voi suorittaa. Kun ryhmä aktivoidaan, opiskelijat voivat alkaa ilmoittautua siihen. Tämän jälkeen ryhmän tietoja ei voi muuttaa paikkaa lukuun ottamatta.
-                    Ryhmälistassa jokaisen ryhmän kohdalla näkyy, kuinka monta opiskelijaa kuhunkin työhön on ilmoittautunut. Näiden tietojen perusteella ryhmä voidaan vahvistaa tai peruuttaa. Molemmissa tapauksissa ryhmään ilmoittautuneita opiskelijoita tiedotetaan asiasta sähköpostilla. Jos ryhmää ei ole vahvistettu ennen tiettyä määräaikaa, sen väri muuttuu punaiseksi.
-                    Uuden työn luonnissa valittavana ovat työn nimi ja kuvaus sekä kuinka monta opiskelijaa voi suorittaa työtä samaan aikaan. Kurssilla voi olla enemmän töitä kuin vaaditaan sen suorittamiseen. Tällöin kurssin voi suorittaa valitsemalla minkä tahansa joukon tarjolla olevista töistä.
-                    Sekaannusten estämiseksi töiden tietoja kannattaa muuttaa harkiten, jos töihin voi samaan aikaan ilmoittautua tai opiskelijoilla on palautettavana niihin työraportteja.
-                </p>
-                <br>
-                <p>    
-                    <b>Palautukset</b>
-                    <br><br>
-                    Tällä sivulla näkyvät kaikki opiskelijoiden palauttamat työraportit, joita ei ole vielä hyväksytty. Jos raporttia ei ole arvosteltu, sen pystyy lataamaan ja arvostelemaan. Lisäksi on merkitty, jos raportti on määrätty korjattavaksi.
-                    Kunkin ryhmän kullekin työlle voi määrittää assistentin, jonka vastuulla työstä kirjoitettujen raporttien arvostelu on. Kuitenkin raportin voi arvostella ilman tätä määritystäkin.
-                    Arvostelussa opiskelijalle voi lähettää kommentteja tekstimuodossa tai tiedostona (esim. korjaukset suoraan opiskelijan raporttiin). Korjauksia sisältävän tiedoston voi lähettää vain, jos raporttia ei hyväksytä.
-                    Raportin arvostelu poistaa raportin sisältävän tiedoston järjestelmästä.
-                </p>
-                <br>
-                <p>    
-                    <b>Arkisto</b>
-                    <br><br>
-                    Arkistossa näkyvät järjestelmässä olevat opiskelijat. Opiskelijan nimeä painamalla aukeaa sivu, johon on merkitty opiskelijan valmiit ja keskeneräiset suoritukset.
-                    Opiskelijan tietojen poistaminen tarkoittaa, että kaikki opiskelijan tiedot (henkilötiedot, ilmoittautumiset, työraportit, suoritukset) poistetaan järjestelmästä.
-                    Osasuorituksen poistaminen tarkoittaa, että kaikki siihen raporttiin liittyvät tiedot poistetaan järjestelmästä. Opiskelijan mahdollista ilmoittautumista ei kuitenkaan poisteta.
-                </p>
+                <b>Opetus</b>
+                <br><br>
+                Tällä sivulla voi luoda uusia harjoitusryhmiä. Ryhmien luominen tapahtuu painamalla halutun kurssin kohdalta <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi ryhmä</button>.
+                Luomisen yhteydessä valitaan päivä, aika, paikka, työt ja assistentti. Ryhmään ilmoittautuminen avataan painamalla <button class="btn btn-sm btn-light btn-outline-info">Julkaise</button>. Ryhmän
+                voi peruuttaa painamalla <button class="btn btn-sm btn-light btn-outline-danger">Peruuta</button>. Ryhmien tietoja voi myös muokata. Taulukosta näkee ryhmän töiden osallistujamäärän, ja kun ryhmässä on
+                tarpeeksi osallistujia, sen voi vahvistaa. Tästä lähtee ilmoittautuneille opiskelijoille sähköpostiviesti. Ryhmässä olevia töitä on mahdollista muokata tai poistaa yksittäin alemmasta taulukosta käsin.
+                <br><br>
+                Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi työ</button> voi luoda kurssille uuden laboratoriotyön. Luomisen yhteydessä kysytään työn nimi, kuvaus ja ryhmäkoko.
+                Kun työ on aktiivisessa tilassa, se on valittavissa ryhmää luodessa. Jos työ on deaktivoitu, sitä ei voi sisällyttää ryhmään. Työn voi myös poistaa.
+              </p>
+              <br>
+              <p>
+                <b>Laboratoriotyöt</b>
+                <br><br>
+                Tällä sivulla voi tarkastella, ketkä oppilaat ovat ilmoittautuneet harjoitustöihin.
+              </p>
+              <br>
+              <p>    
+                <b>Palautukset</b>
+                <br><br>
+                Oppilaiden palautuksien arvosteleminen tapahtuu täällä. Jokaiselle raportille on määritelty assistentti, jonka on määrä tarkastaa raportti. Assistentin voi vaihtaa, ja raportin pystyy arvostelemaan 
+                myös muu kuin määritelty assistentti. Raportin arvosteluun pääsee painamalla <button class="btn btn-sm btn-light btn-outline-dark">Avaa</button>. Raportin voi ladata painamalla raporttitiedostoa. Arvosana 
+                valitaan valikosta, ja kommentit voi antaa joko vapaaseen tekstikenttään tai PDF-tiedostona. Jos raportti ei ole hyväksyttävä ja vaatii korjausta, valitse arvosanavalikosta <i>Vaatii korjausta</i>. Tällöin
+                oppilas voi palauttaa parannellun version. Kun raportti on arvosteltu, arvosana näkyy statustilassa.
+              </p>
+              <br>
+              <p>    
+                <b>Arkisto</b>
+                <br><br>
+                Arkistossa näkyvät kaikki järjestelmään kirjautuneet opiskelijat. Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Näytä</button> aukeaa sivu, jonne on listattu kyseisen opiskelijan suoritukset.
+              </p>
             </td>
           </tr>
         </tbody>
       </table>
     {% else %}
-    <table class="table table-bordered align-left" id="mobile">
-        <thead>
-            <tr class="table-secondary">
-              <th colspan="2"><h3>Ajankohtaista</h3></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="left-align">
-                <p>
-                  <p>
-                      <b>Tiedotteet</b>
-                      <br><br>
-                     Moodle linkki tähän
-                  <p>    
-              </td>
-            </tr>
-          </tbody>
+      <table class="table table-bordered align-left" id="mobile">
         <thead>
           <tr class="table-secondary">
-            <th colspan="2"><h3>Opiskelijan ohje</h3></th>
+            <th colspan="2"><h3>Ajankohtaista</h3></th>
           </tr>
         </thead>
         <tbody>
@@ -72,34 +60,46 @@
             <td class="left-align">
               <p>
                 <p>
-                    Muista aina kirjautua ulos, kun lopetat järjestelmän käytön.
-                    Järjestelmä lähettää sinulle sähköpostia eri tilanteissa. Voit vaihtaa sähköpostiosoitteesi sivulla Omat tiedot ja suoritukset.    
-                    <br><br>
-                    <b>Ilmoittautuminen</b>
-                    <br><br>
-                    Ilmoittautumissivulla näkyvät laboratoriotyöt, joihin voit ilmoittautua. Jokaiseen työhön voi ilmoittautua tietty määrä opiskelijoita.
-                    Kun ryhmään on ilmoittautunut riittävästi opiskelijoita, se vahvistetaan. Tästä saat myös ilmoituksen sähköpostiisi. Joskus ryhmä joudutaan peruuttamaan, mistä saat myös ilmoituksen sähköpostiisi.
-                    
-                    <br>
+                  <b>Tiedotteet</b>
+                  <br><br>
+                  Moodle linkki tähän
                 <p>    
-                    <b>Omat ilmoittautumiset</b>
-                    <br><br>
-                    Tällä sivulla ovat laboratoriotyöt, joihin olet ilmoittautunut. Vahvistetut ja peruutetut työt on merkitty erikseen. Jos työ on pidetty, sen kohdalla on linkki työraportin palautukseen.
-                    Ilmoittautuminen poistuu tältä sivulta, kun palauttamasi työraportti on hyväksytty tai raportin palautusaika on päättynyt.
-                </p>
-                <p>    
-                    <b>Palautus</b>
-                    <br><br>
-                    Palautussivun kautta voit palauttaa kirjoittamasi työraportin. Sivulla on mainittu kelvolliset tiedostotyypit sekä tiedoston suurin sallittu koko.
-                    Kun raportti on arvosteltu, saat tiedon asiasta sähköpostilla. Arvostelu ilmestyy myös sivulle Omat tiedot ja suoritukset.
-                </p>
-                <p>    
-                    <b>Omat tiedot ja suoritukset</b>
-                    <br><br>
-                    Tällä sivulla näkyvät kursseittain työt, joihin olet lähettänyt työraportin. Jokaisen kurssin taulukossa on niin monta riviä kuin kurssilla täytyy suorittaa töitä.
-                    Jos raporttisi arvostelija on lähettänyt sinulle kommentteja, pystyt katsomaan ne tämän sivun kautta. Lisäksi voit palauttaa korjatun raportin.
-                    Hyväksyttyjen töiden arvosanat ja kurssien kokonaisarvosanat tulevat näkyviin tälle sivulle.
-                </p>
+            </td>
+          </tr>
+        </tbody>
+        <thead>
+          <tr class="table-secondary">
+            <th colspan="2">
+              <h3>Opiskelijan ohje</h3>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="left-align">
+              <p>
+                <b>Laboratoriotyöt</b>
+                <br><br>
+                Laboratoriotöihin ilmoittautuminen tapahtuu täällä. Ilmoittautumisnapin vasemmalla puolella näkyy työn osallistujamäärä sekä ryhmäkoko.
+                Mikäli ryhmä on täynnä, siihen ei voi enää ilmoittautua. Kun ilmoittautuminen on vahvistettu, siitä lähetetään ilmoitus sähköpostitse.
+                Mikäli ryhmä perutaan, siitäkin ilmoitetaan sähköpostilla. Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Lisätietoa</button> 
+                pääsee tarkastelemaan kurssille kuuluvia töitä.
+              </p>      
+              <br>
+              <p>
+                <b>Omat labrat</b>
+                <br><br>
+                Tällä sivulla näkyvät kaikki työt, joihin oppilas on ilmoittautunut. Kun ilmoittautuminen on vahvistettu, tausta muuttuu vihreäksi.
+                Jos työ perutaan, muuttuu tausta punaiseksi. Raportin palauttaminen tapahtuu painamalla <button class="btn btn-sm btn-light btn-outline-dark">Palauta raportti</button>.
+                Raportin tulee olla PDF-tiedosto. Opettajan kommentit ja arvosana avautuvat painamalla 
+                <button class="btn btn-sm btn-light btn-outline-dark">Avaa</button>.
+              </p>
+              <br>
+              <p>    
+                <b>Omat tiedot</b>
+                <br><br>
+                Jos haluaa vaihtaa sähköpostiosoitetta, johon ilmoitukset lähetetään, sen voi tehdä täällä.
+              </p>
             </td>
           </tr>
         </tbody>
