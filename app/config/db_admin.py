@@ -10,9 +10,9 @@ import wsgi
 
 from ilmoweb.models import User
 
-fucntion = input("Lisää superuser1, Poista käyttäjä 2: ")
+value = input("Lisää superuser1, Poista käyttäjä 2: ")
 
-if fucntion == "1":
+if value == "1":
     username = input("käyttäjänimi superuseriksi: ")
 
     user = User.objects.get(username=username)
@@ -20,7 +20,7 @@ if fucntion == "1":
     user.is_superuser=True
     user.save()
 
-if fucntion == "2":
+if value == "2":
     username = input("poista käyttäjänimi: ")
     user = User.objects.get(username=username)
     user.delete()
