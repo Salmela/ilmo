@@ -1,5 +1,40 @@
 {% extends "layout.html" %}
 {% block title %} System {% endblock %}
 {% block content %}
-<td label="Django-settings" data-testid="Django-settings"><a href='/admin' class="btn btn-light btn-outline-dark">DJango-admin</a></td>
+<td label="Django-settings" data-testid="Django-settings"><a href='/admin' class="btn btn-light btn-outline-dark">Django-admin</a></td>
+<br><br><br><br>
+<div class="container-sm">
+    <form action="/teachers_message/" method="POST">
+        {% csrf_token %}
+        <table class="table table-bordered align-content-center" id="mobile">
+            <thead>
+                <tr class="table-secondary">
+                    <th><h5>Viesti opiskelijoille</h5></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <textarea class="form-control" name="message" data-testid="message" maxlength="1000" style="width: 100%"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="btn btn-light btn-outline-dark" type="submit" value="Tallenna viesti">
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <td>
+                        <h5>Nykyinen viesti</h5>
+                    </td>
+                </tr>
+                <tr class="text-left">
+                    <td>
+                        {{ current_message }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
 {% endblock %}

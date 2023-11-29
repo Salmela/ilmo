@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %} Ohjeet {% endblock %}
 {% block content %}
+
   <div class="container-sm">
     {% if user.is_staff %}
     <table class="table table-bordered align-left" id="mobile">
@@ -57,7 +58,7 @@
                   <p>
                       <b>Tiedotteet</b>
                       <br><br>
-                     Moodle linkki tähän
+                     {{ current_message }}
                   <p>    
               </td>
             </tr>

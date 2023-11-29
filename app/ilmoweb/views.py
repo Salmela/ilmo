@@ -13,8 +13,8 @@ from django.urls import reverse
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
-from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files
+from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
+from ilmoweb.logic import labs, signup, labgroups, files, teachermessage
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
@@ -536,15 +536,24 @@ def system(request):
     """
     if request.user.is_superuser is not True:
         return redirect(created_labs)
-
-    return render(request, "system.html")
+    messages = TeachersMessage.objects.all()
+    if len(messages) == 0:
+        current_message = "Ei viestiä"
+    else:
+        current_message = messages[0].message
+    return render(request, "system.html", {"current_message":current_message})
 
 @login_required(login_url="login")
 def instructions(request):
     """
         View for instructions page
     """
-    return render(request, "instructions.html")
+    messages = TeachersMessage.objects.all()
+    if len(messages) == 0:
+        current_message = "Ei viestiä"
+    else:
+        current_message = messages[0].message
+    return render(request, "instructions.html", {"current_message":current_message})
 
 @login_required(login_url="login")
 def user_info(request):
@@ -595,3 +604,20 @@ def update_multiple_groups(request):
                             {"lab_group_ids":lab_group_ids,
                             "lab_group":lab_group, 
                             "course":course, "assistants":assistants})
+
+@login_required(login_url="login")
+def teachers_message(request):
+    """
+        View for updating message in instuctions page
+    """
+    if request.method == "GET":
+        if not request.user.is_staff:
+            return redirect("/open_labs")
+        else:
+            return redirect("/system")
+        
+    if request.method == "POST":
+        new_message = request.POST.get("message")
+        teachermessage.update(new_message)
+
+        return redirect("/system")
