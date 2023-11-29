@@ -27,10 +27,9 @@
                             <td>{{ report.lab_group.date }}</td>
                             <td><a href="/download_report/{{ report.report_file_name }}" download>{{ report.report_file_name }}</a></td>
                             <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
-                            {% if not report.grade %}
+                            {% if not report.grade and report.grade != 0 %}
                                 <td>Odottaa arvostelua</td>
-                            {% endif %}
-                            {% if report.grade == 0 %}
+                            {% elif report.grade == 0 %}
                                 <td>Raportti vaatii korjausta</td>
                             {% elif report.grade == 1 or report.grade == 2 or report.grade == 3 or report.grade == 4 or report.grade == 5 %}
                                 <td>{{ report.grade }}</td>
