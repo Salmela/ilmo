@@ -1,29 +1,84 @@
 {% extends "layout.html" %}
-{% block title %} User info {% endblock %}
+{% block title %} Omat tiedot {% endblock %}
 {% block content %}
 
-<h1>Omat tiedot</h1><br>
 <div class="container-sm">
-    <table class="table table-sm table-bordered align-middle" id="mobile">
-      <thead>
-        <tr class="table-secondary">
-          <th class="hide-on-mobile" scope="col" width="15%">Nimi</th>
-          <th class="hide-on-mobile" scope="col">Opiskelijanumero</th>
-          <th class="hide-on-mobile" scope="col">sähköpostiosoite</th>
-        </tr>
-      </thead>
-      <tbody>
-        <td label="Nimi" data-testid="name">{{user.first_name}} {{user.last_name }}</td>
-        <td label="Opiskelijanumero" data-testid="student_id">{{user.student_id}}</td>
-        <td label="Sähköpostiosoite" data-testid="email">{{user.email}}</td>
-      </tbody>
-    </table>
-
-  <strong>Uusi sähköpostiosoite:</strong>
+  <h1 class="pb-4">Omat tiedot</h1>
+  <table class="table table-sm table-bordered align-middle" id="mobile">
+    <thead>
+      <tr class="table-secondary">
+        <th class="hide-on-mobile" scope="col">Nimi</th>
+        <th class="hide-on-mobile" scope="col" width="25%">Opiskelijanumero</th>
+        <th class="hide-on-mobile" scope="col">Sähköpostiosoite</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td label="Nimi" data-testid="name">{{user.first_name}} {{user.last_name }}</td>
+      <td label="Opiskelijanumero" data-testid="student_id">{{user.student_id}}</td>
+      <td label="Sähköpostiosoite" data-testid="email">{{user.email}}</td>
+    </tbody>
+  </table>
+  <b>Uusi sähköpostiosoite:</b>
   <form action="/user_info/" method="POST">
-    {% csrf_token %}
-    <input class="float" type="email" name="new_email" size="46" maxlength="100" class="border-left-0" data-testid="new_email">
+    {% csrf_token %}  
+    <input class="float" type="email" name="new_email" size="35" maxlength="100" class="border-left-0" data-testid="new_email">
     <input class="btn btn-light btn-outline-dark" type="submit" value="Vaihda" data-testid="change_email">
   </form>
 </div>
+{% if student.is_staff == 0 %}
+  <div class="container-sm">
+    <h1 class="pt-4">Suoritukset</h1>
+    {% for course in all_courses %}
+      <table class="table table-sm table-bordered align-middle" id="mobile">
+        <thead>
+          <tr class="table-secondary">
+            <th colspan="6">{{ course.name }}</th>
+          </tr>
+          <tr class="table-light">
+            <th class="hide-on-mobile" scope="col">Laboratoriotyö</th>
+            <th class="hide-on-mobile" scope="col">Ryhmän päivämäärä</th>
+            <th class="hide-on-mobile" scope="col">Assistentti</th>
+            <th class="hide-on-mobile" scope="col">Kommentit</th>
+            <th class="hide-on-mobile" scope="col">Kommenttitiedosto</th>
+            <th class="hide-on-mobile" scope="col">Arvosana</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for report in filtered_reports %}
+            {% if course.id == report.lab_group.lab.course.id %}
+              <tr>
+                <td label="Laboratoriotyö">{{ report.lab_group.lab.name }}</td>
+                <td label="Päivämäärä">{{report.lab_group.date.day}}.{{report.lab_group.date.month}}.{{report.lab_group.date.year}}</td>
+                <td label="Assistentti">{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+                <td label="Kommentit">
+                  {% if report.comments %}
+                    {{ report.comments }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td label="Kommenttitiedosto">
+                  {% if report.comment_file %}
+                    <a href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td label="Arvosana">
+                  {% if not report.grade and report.grade != 0 %}
+                    Odottaa arvostelua
+                  {% elif report.grade == 0 %}
+                    Raportti vaatii korjausta
+                  {% else %}
+                    {{ report.grade }}
+                  {% endif %}
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+  </div>
+{% endif %}
 {% endblock %}

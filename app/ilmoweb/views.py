@@ -557,7 +557,13 @@ def user_info(request):
         user = request.user
         users_info.change_email(request, user, new_email)
 
-    return render(request, "user_info.html")
+    student = User.objects.get(pk=request.user.id)
+    filtered_reports = filter_reports.filter_report(request.user.id)
+    all_courses = Courses.objects.all().order_by("id").values()
+
+    return render(request, "user_info.html", {"student":student,
+                                            "filtered_reports":filtered_reports,
+                                            "all_courses":all_courses})
 
 @login_required(login_url="login")
 def update_multiple_groups(request):
