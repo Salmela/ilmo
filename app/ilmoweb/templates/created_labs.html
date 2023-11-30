@@ -25,7 +25,16 @@
     </thead>
     {% for date in groups_by_date %}
       {% if date.course == course %}
-        <tbody>
+        <tbody
+          {% if date.groups.0.status == 2 %}
+            class="green"
+          {% elif date.groups.0.status == 1 %}
+            {% if current_date <= date.date and date.date <= day_after_tomorrow %}
+              class="red"
+            {% else %}
+              class="yellow"
+            {% endif %}
+          {% endif %}>
           <td>{{date.date.day}}.{{date.date.month}}.{{date.date.year}}</td>
           <td>{{date.start_time.hour}}-{{date.end_time.hour}}</td>
           <td>{{date.place}}</td>

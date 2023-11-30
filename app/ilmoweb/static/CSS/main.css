@@ -57,6 +57,18 @@ form {
     display: inline;
 }
 
+.green {
+    color:green;
+}
+
+.red {
+    color:red;
+}
+
+.yellow {
+    color:darkorange;
+}
+
 @media screen and (max-width: 600px) {
     #hy_logo {
         height: 70px;
