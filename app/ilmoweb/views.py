@@ -72,7 +72,7 @@ def auth(request):
     userdata = jwt.decode(token["id_token"], keys, claims_cls=CodeIDToken)
     userdata.validate()
 
-    user = django_authenticate(userinfo=userinfo)
+    user = django_authenticate(userinfo=userinfo, userdata=userdata)
     if user is not None:
         django_login(request, user)
 
@@ -561,7 +561,7 @@ def user_info(request):
 
 @login_required(login_url="login")
 def update_multiple_groups(request):
-    """ 
+    """
         View for updating labgroups from the same lab shift at the same time
     """
 
@@ -593,5 +593,5 @@ def update_multiple_groups(request):
 
     return render(request, "update_multiple_groups.html",
                             {"lab_group_ids":lab_group_ids,
-                            "lab_group":lab_group, 
+                            "lab_group":lab_group,
                             "course":course, "assistants":assistants})
