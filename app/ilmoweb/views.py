@@ -132,9 +132,9 @@ def created_labs(request):
 
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":groups,
-                                                 'groups_by_date':groups_by_date_time,
-                                                 'current_date':current_date,
-                                                 'day_after_tomorrow':day_after_tomorrow})
+                                                 "groups_by_date":groups_by_date_time,
+                                                 "current_date":current_date,
+                                                 "day_after_tomorrow":day_after_tomorrow})
 
 @login_required(login_url="login")
 def create_lab(request):
