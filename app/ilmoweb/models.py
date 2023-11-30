@@ -74,6 +74,7 @@ class Report(models.Model):
     comments = models.TextField()
     comment_file = models.FileField(upload_to="ilmoweb/static/upload/", null=True)
     comment_file_name = models.CharField(default="")
+    notes = models.TextField(default="")
     grade = models.IntegerField(null=True)
     # 0 = revisions needed, 1-5 = grade, empty = not graded
     grading_date = models.DateField(null=True)
