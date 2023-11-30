@@ -601,3 +601,20 @@ def update_multiple_groups(request):
                             {"lab_group_ids":lab_group_ids,
                             "lab_group":lab_group,
                             "course":course, "assistants":assistants})
+
+@login_required(login_url="login")
+def report_notes(request, report_id):
+    """
+        Teacher can write notes for a report through this view
+    """
+    if request.user.is_staff is not True:
+        return redirect("/my_labs")
+
+    if request.method == "POST":
+        report = Report.objects.get(pk=report_id)
+        notes = request.POST.get("notes")
+        report.notes = notes
+        report.save()
+        messages.success(request, "Muistiinpanot tallennettu")
+
+    return redirect(reverse("evaluate_report", args=[report_id]))
