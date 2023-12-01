@@ -38,6 +38,7 @@ if env("LOCAL") == 'False':
         path("system/", views.system, name="system"),
         path("instructions/", views.instructions, name="instructions"),
         path("user_info/", views.user_info, name="user_info"),
+        path("teachers_message/", views.teachers_message, name="teachers_message"),
         path("update_multiple_groups/", views.update_multiple_groups,
              name="update_multiple_groups"),
         path("report_notes/<int:report_id>", views.report_notes, name="report_notes")
@@ -72,6 +73,7 @@ else:
         path("system/", views.system, name="system"),
         path("instructions/", views.instructions, name="instructions"),
         path("user_info/", views.user_info, name="user_info"),
+        path("teachers_message/", views.teachers_message, name="teachers_message"),
         path("update_multiple_groups/", views.update_multiple_groups,
              name="update_multiple_groups"),
         path("report_notes/<int:report_id>", views.report_notes, name="report_notes")

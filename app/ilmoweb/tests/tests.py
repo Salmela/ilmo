@@ -4,8 +4,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core import mail
 from django.urls import reverse
 from django.test import TestCase, Client
-from ilmoweb.models import User, Courses, Labs, LabGroups, Report
-from ilmoweb.logic import labgroups, signup, filter_reports
+from ilmoweb.models import User, Courses, Labs, LabGroups, Report, TeachersMessage
+from ilmoweb.logic import labgroups, signup, filter_reports, teachermessage
 import datetime
 
 class FirstTest(TestCase):
@@ -826,6 +826,34 @@ class TestModels(TestCase):
         self.report4.save()
         filtered_reports = filter_reports.filter_report(self.user1.id)
         self.assertEqual(len(filtered_reports), 1)
+
+    # Tests for teachers message to students
+    def message_is_saved_in_database(self):
+        self.message = TeachersMessage.objects.create(
+            message = "Hello students"
+        )
+
+        self.message.save()
+        get_message = TeachersMessage.objects.get(id=0)
+
+        self.assertEqual(get_message, "Hello students")
+    
+    def test_messages_are_updated(self):
+        self.message = TeachersMessage.objects.create(
+            message = "Hello students"
+        )
+
+        self.message.save()
+
+        self.client.force_login(self.superuser1)
+
+        new_message="Hi students"
+        response = self.client.post("/teachers_message/", {"message":new_message})
+        self.assertEqual(response.status_code, 302)
+
+        self.message.refresh_from_db()
+
+        self.assertEqual(self.message.message, "Hi students")
     
     # Test for adding notes to a report
 

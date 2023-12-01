@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %} Ohjeet {% endblock %}
 {% block content %}
+
   <div class="container-sm">
     {% if user.is_staff %}
       <table class="table table-bordered align-left" id="mobile">
@@ -49,21 +50,21 @@
         </tbody>
       </table>
     {% else %}
-      <table class="table table-bordered align-left" id="mobile">
+    <table class="table table-bordered align-left" id="mobile">
         <thead>
-          <tr class="table-secondary">
-            <th colspan="2"><h3>Ajankohtaista</h3></th>
-          </tr>
+            <tr class="table-secondary">
+              <th colspan="2"><h3>Ajankohtaista</h3></th>
+            </tr>
         </thead>
         <tbody>
           <tr>
             <td class="left-align">
               <p>
-                <p>
-                  <b>Tiedotteet</b>
-                  <br><br>
-                  Moodle linkki tähän
-                <p>    
+              <p>
+              <b>Tiedotteet</b>
+              <br><br>
+                {{ current_message }}
+              <p>    
             </td>
           </tr>
         </tbody>

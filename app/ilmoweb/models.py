@@ -84,3 +84,9 @@ class Report(models.Model):
         on_delete=models.SET_NULL,
         related_name = "grader"
     )
+
+class TeachersMessage(models.Model):
+    """
+        Model for teachers message to students
+    """
+    message = models.TextField()
