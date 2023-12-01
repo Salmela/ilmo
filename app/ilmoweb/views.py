@@ -99,6 +99,8 @@ def created_labs(request):
     courses = Courses.objects.all()
     course_labs = Labs.objects.filter(is_visible=1)
     groups = LabGroups.objects.filter(deleted=0).order_by('date')
+    current_date = datetime.date.today()
+    day_after_tomorrow = current_date + datetime.timedelta(days=2)
 
     lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False)
 
@@ -130,7 +132,9 @@ def created_labs(request):
 
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":groups,
-                                                 'groups_by_date':groups_by_date_time})
+                                                 "groups_by_date":groups_by_date_time,
+                                                 "current_date":current_date,
+                                                 "day_after_tomorrow":day_after_tomorrow})
 
 @login_required(login_url="login")
 def create_lab(request):
