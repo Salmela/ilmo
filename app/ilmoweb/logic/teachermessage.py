@@ -2,6 +2,9 @@
 from ilmoweb.models import TeachersMessage
 
 def update(new_message):
+    """
+        Function for updating message in database
+    """
     messages = TeachersMessage.objects.all()
 
     if len(messages) == 0:

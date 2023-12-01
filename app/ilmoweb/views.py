@@ -538,26 +538,29 @@ def system(request):
     """
         View for system settings
     """
+
     if request.user.is_superuser is not True:
         return redirect(created_labs)
-    messages = TeachersMessage.objects.all()
-    if len(messages) == 0:
+
+    teachers_messages = TeachersMessage.objects.all()
+    if len(teachers_messages) == 0:
         current_message = "Ei viestiä"
     else:
-        current_message = messages[0].message
+        current_message = teachers_messages[0].message
     return render(request, "system.html", {"current_message":current_message})
 
 @login_required(login_url="login")
 def instructions(request):
     """
-        View for instructions page
+    View for instructions page
     """
-    messages = TeachersMessage.objects.all()
-    if len(messages) == 0:
+    teachers_messages = TeachersMessage.objects.all()
+
+    if len(teachers_messages) == 0:
         current_message = "Ei viestiä"
     else:
-        current_message = messages[0].message
-    return render(request, "instructions.html", {"current_message":current_message})
+        current_message = teachers_messages[0].message
+    return render(request, "instructions.html", {"current_message": current_message})
 
 @login_required(login_url="login")
 def user_info(request):
@@ -623,15 +626,14 @@ def teachers_message(request):
     if request.method == "GET":
         if not request.user.is_staff:
             return redirect("/open_labs")
-        else:
-            return redirect("/system")
-        
+        return redirect("/system")
+
     if request.method == "POST":
         new_message = request.POST.get("message")
         teachermessage.update(new_message)
 
-        return redirect("/system")
-    
+    return redirect("/system")
+
 @login_required(login_url="login")
 def report_notes(request, report_id):
     """

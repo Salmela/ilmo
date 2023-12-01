@@ -86,4 +86,7 @@ class Report(models.Model):
     )
 
 class TeachersMessage(models.Model):
+    """
+        Model for teachers message to students
+    """
     message = models.TextField()
