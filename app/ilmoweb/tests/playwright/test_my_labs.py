@@ -18,7 +18,7 @@ def test_teacher_can_evaluate_a_report(page: Page):
     page.goto('/my_labs')
     expect(page.get_by_text('Palauta raportti')).to_be_visible()
     page.get_by_role('button', name='Palauta raportti').click()
-    page.get_by_test_id('file').set_input_files('config/file.pdf')
+    page.get_by_test_id('file_1').set_input_files('config/file.pdf')
     page.get_by_role('button', name='Tallenna').click()
     page.get_by_role('link', name='Kirjaudu ulos').click()
 
