@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ilmoweb', '0024_rename_filename_report_report_file_and_more'),
+        ('ilmoweb', '0025_report_notes'),
     ]
 
     operations = [
@@ -16,5 +16,5 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('message', models.TextField()),
             ],
-        ),
+        )
     ]

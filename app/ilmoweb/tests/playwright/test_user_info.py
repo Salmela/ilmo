@@ -5,7 +5,7 @@ def test_navigate_to_user_info(page: Page):
     page.goto('/')
     login(page, 'kemianope', 'atomi123')
     page.get_by_test_id('user_info').click()
-    expect(page).to_have_title('User info')
+    expect(page).to_have_title('Omat tiedot')
 
 def test_user_info_is_correct(page:Page):
     page.goto('/')

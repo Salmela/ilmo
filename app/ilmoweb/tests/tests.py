@@ -854,3 +854,26 @@ class TestModels(TestCase):
         self.message.refresh_from_db()
 
         self.assertEqual(self.message.message, "Hi students")
+    
+    # Test for adding notes to a report
+
+    def test_teacher_can_add_notes_to_a_report(self):
+        notes = "this is a noteworthy thing"
+        self.client.force_login(self.assistant1)
+        url = reverse("report_notes", args=[str(self.report1.id)])
+        response = self.client.post(url, {"notes":notes})
+        self.assertEqual(response.status_code, 302)
+
+        self.report1.refresh_from_db()
+        self.assertEqual(self.report1.notes, "this is a noteworthy thing")
+    
+    def test_student_cannot_add_notes_to_a_report(self):
+        notes = "this is a noteworthy thing"
+        self.client.force_login(self.user1)
+        url = reverse("report_notes", args=[str(self.report1.id)])
+        response = self.client.post(url, {"notes":notes})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, "/my_labs")
+
+        self.report1.refresh_from_db()
+        self.assertEqual(self.report1.notes, "")

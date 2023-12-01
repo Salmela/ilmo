@@ -7,14 +7,15 @@ class AuthenticationBackend:
     """
         Class for custom authentication
     """
-    def authenticate(self, request, userinfo=None):
+    def authenticate(self, request, userinfo=None, userdata=None):
         """
             Function for custom authentication
         """
         try:
             user = User.objects.get(username=userinfo['uid'])
         except User.DoesNotExist:
-            user = User(username=userinfo['uid'], first_name=userinfo['given_name'],
+            user = User(student_id=userdata['hyPersonStudentId'], username=userinfo['uid'],
+                        first_name=userinfo['given_name'],
                         last_name=userinfo['family_name'], email=userinfo['email'],
                         password=make_password("test"), is_staff=0)
             user.save()

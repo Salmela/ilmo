@@ -72,7 +72,7 @@ def auth(request):
     userdata = jwt.decode(token["id_token"], keys, claims_cls=CodeIDToken)
     userdata.validate()
 
-    user = django_authenticate(userinfo=userinfo)
+    user = django_authenticate(userinfo=userinfo, userdata=userdata)
     if user is not None:
         django_login(request, user)
 
@@ -566,11 +566,17 @@ def user_info(request):
         user = request.user
         users_info.change_email(request, user, new_email)
 
-    return render(request, "user_info.html")
+    student = User.objects.get(pk=request.user.id)
+    filtered_reports = filter_reports.filter_report(request.user.id)
+    all_courses = Courses.objects.all().order_by("id").values()
+
+    return render(request, "user_info.html", {"student":student,
+                                            "filtered_reports":filtered_reports,
+                                            "all_courses":all_courses})
 
 @login_required(login_url="login")
 def update_multiple_groups(request):
-    """ 
+    """
         View for updating labgroups from the same lab shift at the same time
     """
 
@@ -602,7 +608,7 @@ def update_multiple_groups(request):
 
     return render(request, "update_multiple_groups.html",
                             {"lab_group_ids":lab_group_ids,
-                            "lab_group":lab_group, 
+                            "lab_group":lab_group,
                             "course":course, "assistants":assistants})
 
 @login_required(login_url="login")
@@ -621,3 +627,20 @@ def teachers_message(request):
         teachermessage.update(new_message)
 
         return redirect("/system")
+    
+@login_required(login_url="login")
+def report_notes(request, report_id):
+    """
+        Teacher can write notes for a report through this view
+    """
+    if request.user.is_staff is not True:
+        return redirect("/my_labs")
+
+    if request.method == "POST":
+        report = Report.objects.get(pk=report_id)
+        notes = request.POST.get("notes")
+        report.notes = notes
+        report.save()
+        messages.success(request, "Muistiinpanot tallennettu")
+
+    return redirect(reverse("evaluate_report", args=[report_id]))
