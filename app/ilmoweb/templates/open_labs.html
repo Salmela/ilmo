@@ -62,7 +62,14 @@
               {% if lab_group.deleted == 0 %}
                 {% if lab.is_visible == 1 %}
                   {% if lab_group.status == 1 or lab_group.status == 2 %}
-                    <tr>
+                    <tr
+                    {% if not user.is_staff %}
+                        {% if lab_group.id in users_enrollments %}
+                          class="green"
+                        {% elif lab_group.signed_up_students == lab.max_students %}
+                          class="red"
+                        {% endif %}
+                      {% endif %}>
                       <td label="Laboratoriotyö">{{lab.name}}</td>
                       <td label="Ajankohta">
                         {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
