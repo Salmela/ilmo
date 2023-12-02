@@ -47,7 +47,7 @@
           {% for report in filtered_reports %}
             {% if course.id == report.lab_group.lab.course.id %}
               <tr>
-                <td label="Laboratoriotyö">{{ report.lab_group.lab.name }}</td>
+                <td label="Laboratoriotyö" data-testid="lab_{{ report.id }}">{{ report.lab_group.lab.name }}</td>
                 <td label="Päivämäärä">{{report.lab_group.date.day}}.{{report.lab_group.date.month}}.{{report.lab_group.date.year}}</td>
                 <td label="Assistentti">{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
                 <td label="Kommentit">
@@ -64,7 +64,7 @@
                     -
                   {% endif %}
                 </td>
-                <td label="Arvosana">
+                <td label="Arvosana" data-testid="grade_{{ report.id }}">
                   {% if not report.grade and report.grade != 0 %}
                     Odottaa arvostelua
                   {% elif report.grade == 0 %}
