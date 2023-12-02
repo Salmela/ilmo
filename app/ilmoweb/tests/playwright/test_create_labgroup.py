@@ -20,7 +20,7 @@ def test_create_labgroup_and_check_that_it_is_created(page: Page):
     page.get_by_test_id('1').click()
     page.get_by_role('button', name='Luo labra').click()
     expect(page).to_have_title('Created labs')
-    expect(page.get_by_role('cell', name='31.10.2025 klo 12 - 16'))
+    expect(page.get_by_role('cell', name='31.10.2025 klo 12:00 - 16:00'))
     expect(page.get_by_text('D210 (Phy)').first).to_be_visible()
 
 def test_delete_lab_group_and_check_it_is_deleted(page:Page):
@@ -28,5 +28,5 @@ def test_delete_lab_group_and_check_it_is_deleted(page:Page):
     login(page, 'kemianope', 'atomi123')
     page.get_by_test_id('lab_group_13').click()
     page.get_by_test_id('delete_lab_group_13').click()
-    expect(page.get_by_role('cell', name='31.10.2025 klo 12 - 16')).to_be_hidden()
+    expect(page.get_by_role('cell', name='31.10.2025 klo 12:00 - 16:00')).to_be_hidden()
     expect(page.get_by_text('D210 (Phy)')).to_be_hidden()

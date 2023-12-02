@@ -125,6 +125,9 @@ def created_labs(request):
                             group.place) == date_time_key],
                 'signup_sum':sum(([group.signed_up_students for group in lab_groups if
                            (group.date, group.start_time, group.end_time,
+                            group.place) == date_time_key]), 0),
+                'max_signup_sum': sum(([group.lab.max_students for group in lab_groups if 
+                            (group.date, group.start_time, group.end_time,
                             group.place) == date_time_key]), 0)
             }
 
