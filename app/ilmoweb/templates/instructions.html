@@ -4,10 +4,12 @@
 
   <div class="container-sm">
     {% if user.is_staff %}
-      <table class="table table-bordered align-left" id="mobile">
+      <table class="table table-bordered align-left"
         <thead>
           <tr class="table-secondary">
-            <th colspan="2"><h3>Assistentin ohje</h3></th>
+            <th>
+              <h2>Assistentin ohje</h2>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -24,13 +26,19 @@
                 Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi työ</button> voi luoda kurssille uuden laboratoriotyön. Luomisen yhteydessä kysytään työn nimi, kuvaus ja ryhmäkoko.
                 Kun työ on aktiivisessa tilassa, se on valittavissa ryhmää luodessa. Jos työ on deaktivoitu, sitä ei voi sisällyttää ryhmään. Työn voi myös poistaa.
               </p>
-              <br>
+            </td>
+          </tr>
+          <tr>
+            <td class="left-align">
               <p>
                 <b>Laboratoriotyöt</b>
                 <br><br>
                 Tällä sivulla voi tarkastella, ketkä oppilaat ovat ilmoittautuneet harjoitustöihin.
               </p>
-              <br>
+            </td>
+          </tr>
+          <tr>
+            <td class="left-align">
               <p>    
                 <b>Palautukset</b>
                 <br><br>
@@ -39,7 +47,10 @@
                 valitaan valikosta, ja kommentit voi antaa joko vapaaseen tekstikenttään tai PDF-tiedostona. Jos raportti ei ole hyväksyttävä ja vaatii korjausta, valitse arvosanavalikosta <i>Vaatii korjausta</i>. Tällöin
                 oppilas voi palauttaa parannellun version. Kun raportti on arvosteltu, arvosana näkyy statustilassa.
               </p>
-              <br>
+            </td>
+          </tr>
+          <tr>
+            <td class="left-align">
               <p>    
                 <b>Arkisto</b>
                 <br><br>
@@ -50,10 +61,12 @@
         </tbody>
       </table>
     {% else %}
-    <table class="table table-bordered align-left" id="mobile">
+      <table class="table table-bordered align-left">
         <thead>
             <tr class="table-secondary">
-              <th colspan="2"><h3>Ajankohtaista</h3></th>
+              <th>
+                <h2>Ajankohtaista</h2>
+              </th>
             </tr>
         </thead>
         <tbody>
@@ -70,8 +83,8 @@
         </tbody>
         <thead>
           <tr class="table-secondary">
-            <th colspan="2">
-              <h3>Opiskelijan ohje</h3>
+            <th>
+              <h2>Opiskelijan ohje</h2>
             </th>
           </tr>
         </thead>
@@ -86,7 +99,10 @@
                 Mikäli ryhmä perutaan, siitäkin ilmoitetaan sähköpostilla. Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Lisätietoa</button> 
                 pääsee tarkastelemaan kurssille kuuluvia töitä.
               </p>      
-              <br>
+            </td>
+          </tr>
+          <tr>
+            <td class="left-align">
               <p>
                 <b>Omat labrat</b>
                 <br><br>
@@ -95,7 +111,10 @@
                 Raportin tulee olla PDF-tiedosto. Opettajan kommentit ja arvosana avautuvat painamalla 
                 <button class="btn btn-sm btn-light btn-outline-dark">Avaa</button>.
               </p>
-              <br>
+            </td>
+          </tr>
+          <tr>
+            <td class="left-align">
               <p>    
                 <b>Omat tiedot</b>
                 <br><br>
