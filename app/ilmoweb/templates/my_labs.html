@@ -92,12 +92,12 @@
                             <table class="table">
                               <tbody>
                                 <tr>
-                                  <th>Raportti</th>
-                                  <td class="file-name"><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
+                                  <th class="hide-on-mobile">Raportti</th>
+                                  <td class="file-name" label="Raportti"><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
                                 </tr>
                                 <tr>
-                                  <th>Assistentti</th>
-                                  <td>{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+                                  <th class="hide-on-mobile">Assistentti</th>
+                                  <td label="Assistentti">{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
                                 </tr>
                                 {% if lab_group.id in labgroup_ids_without_grade %}
                                   <tr>
@@ -105,8 +105,8 @@
                                   </tr>
                                 {% else %}
                                   <tr>
-                                    <th>Arvosana</th>
-                                    <td>
+                                    <th class="hide-on-mobile">Arvosana</th>
+                                    <td label="Arvosana">
                                       {% if report.grade == 0 %}
                                         Raportti vaatii korjausta
                                       {% else %}
@@ -115,8 +115,8 @@
                                     </td>
                                   </tr>
                                   <tr>
-                                    <th>Kommentit</th>
-                                    <td>
+                                    <th class="hide-on-mobile">Kommentit</th>
+                                    <td label="Kommentit">
                                       {% if report.comments %}
                                         {{ report.comments }}
                                         <br>
