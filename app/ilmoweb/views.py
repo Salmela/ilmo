@@ -433,7 +433,7 @@ def evaluate_report(request, report_id):
         else:
             try:
                 files.delete_file(str(report.report_file))
-            except:
+            except FileNotFoundError:
                 # this is here for testing reasons
                 pass
             report.report_status = 4
