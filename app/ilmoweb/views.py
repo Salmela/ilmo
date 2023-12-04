@@ -431,7 +431,9 @@ def evaluate_report(request, report_id):
         if grade == 0:
             report.report_status = 2
         else:
+            files.delete_file(str(report.report_file))
             report.report_status = 4
+            report.report_file = report.report_file_name = ""
         report.save()
 
         return redirect(returned_reports)
