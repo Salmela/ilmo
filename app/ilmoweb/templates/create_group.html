@@ -10,8 +10,8 @@
     });
 </script>
 
-<h1>{{course.name}}</h1><br>
-
+<h1>{{course.name}}</h1>
+<br>
 <form action="/create_group/" method="POST">
   {% csrf_token %}
   <div class="container-fluid">
