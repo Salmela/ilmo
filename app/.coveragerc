@@ -1,3 +1,3 @@
 [run]
 source = ilmoweb
-omit = ilmoweb/tests/**, ilmoweb/__init__.py, **/__init__.py, config/**, manage.py
+omit = ilmoweb/tests/**, ilmoweb/__init__.py, **/__init__.py, config/**, manage.py, ilmoweb/migrations/**
