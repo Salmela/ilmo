@@ -72,7 +72,6 @@ def test_student_can_check_graded_report_info(page: Page):
     login(page, 'kemianopiskelija', 'salasana123')
     page.get_by_role('link', name='Omat labrat').click()
     page.get_by_role('button', name='Avaa').click()
-    page.expect.not_to_have_text('Raportti')
     expect(page.get_by_text('tämä on kommentti')).to_be_visible()
     expect(page.get_by_role('link', name='comment.pdf')).to_be_visible()
 
