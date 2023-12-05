@@ -543,8 +543,10 @@ def system(request):
     """
 
     if request.user.is_superuser is not True:
-        return redirect(created_labs)
-
+        if request.user.is_staff:
+            return redirect(created_labs)
+        if not request.user.is_staff:
+            return redirect(open_labs)
     teachers_messages = TeachersMessage.objects.all()
     if len(teachers_messages) == 0:
         current_message = "Ei viestiä"

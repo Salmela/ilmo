@@ -236,6 +236,30 @@ class TestModels(TestCase):
         status_code_get = response_get.status_code
         self.assertEqual(status_code_get, 302) # 302 Found
 
+    def test_navigate_to_right_page_after_login_as_user(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(reverse("home"))
+        
+        self.assertRedirects(response, reverse('open_labs'))
+        
+    def test_navigate_to_right_page_after_login_as_staff(self):
+        self.client.force_login(self.assistant1)
+        response = self.client.get(reverse("home"))
+        
+        self.assertRedirects(response, reverse('created_labs'))
+
+    def test_logged_out_user_gets_home_page(self):
+        self.client.logout()
+        response = self.client.get(reverse("home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "home.html")
+
+    def test_student_can_not_get_to_created_labs(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(reverse('created_labs'))
+        self.assertEqual(response.url, '/open_labs')
+        self.assertEqual(response.status_code, 302)
+
     # Tests for labgroup enrollment
 
     def test_student_can_enroll_to_labgroup(self):
@@ -620,6 +644,7 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 1)
+        self.assertRedirects(response, reverse('created_labs'))
     
     def test_teacher_can_cancel_and_republish_labgroup(self):
         self.client.force_login(self.superuser1)
@@ -634,6 +659,7 @@ class TestModels(TestCase):
         self.assertEqual(response_2.status_code, 302)
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 1)
+        self.assertRedirects(response, reverse('created_labs'))
     
     def test_student_cannot_publish_labgroup(self):
         lab_groups = [self.labgroup1.id]
@@ -643,6 +669,11 @@ class TestModels(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 0)
+
+    def test_get_request_redirects_to_created_labs(self):
+        self.client.force_login(self.superuser1)
+        response = self.client.get(reverse('labgroup_status'))
+        self.assertRedirects(response, reverse('created_labs'))
     
     # Tests for updating labgroups
 
@@ -854,6 +885,12 @@ class TestModels(TestCase):
         self.message.refresh_from_db()
 
         self.assertEqual(self.message.message, "Hi students")
+
+    def test_student_can_not_get_to_system_page_to_update_message(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(reverse('teachers_message'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/open_labs')
     
     # Test for adding notes to a report
 
@@ -877,3 +914,55 @@ class TestModels(TestCase):
 
         self.report1.refresh_from_db()
         self.assertEqual(self.report1.notes, "")
+
+    # Tests for creating labs
+
+    def test_student_can_not_get_create_lab_page(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(reverse('create_lab'))
+
+        self.assertEqual(response.url, '/open_labs')
+        self.assertEqual(response.status_code, 302)
+
+    def test_post_request_creates_new_lab_and_redirects(self):
+        self.client.force_login(self.superuser1)
+
+        data = {
+            'lab_name': 'Lab',
+            'description': 'Lab description',
+            'max_students': str(5),
+            'course_id': self.course1.id
+        }
+        response = self.client.post(reverse('create_lab'), data)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('created_labs'))
+
+    def test_staff_gets_correct_template(self):
+        self.client.force_login(self.superuser1)
+        response = self.client.get(reverse('create_lab'))
+        self.assertTemplateUsed(response, 'create_lab.html')
+
+    # Tests for system page
+    def test_only_super_user_gets_system_page(self):
+        self.client.force_login(self.user1)
+        response_user = self.client.get(reverse('system'))
+        self.assertEqual(response_user.status_code, 302)
+        self.assertEqual(response_user.url, '/open_labs/')
+        self.client.logout()
+
+        self.client.force_login(self.assistant1)
+        response_staff = self.client.get(reverse('system'))
+        self.assertEqual(response_staff.status_code, 302)
+        self.assertEqual(response_staff.url, '/created_labs/')
+        self.client.logout()
+
+        self.client.force_login(self.superuser1)
+        response_superuser = self.client.get(reverse('system'))
+        self.assertTemplateUsed(response_superuser, 'system.html')
+
+    # Tests for my labs page
+    def test_user_can_access_my_labs(self):
+        self.client.force_login(self.user1)
+        response = self.client.get(reverse('my_labs'))
+        self.assertEqual(response.status_code, 200)
