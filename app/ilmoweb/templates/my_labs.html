@@ -89,48 +89,51 @@
                         <div class="modal-body">
                           {% for report in filtered_reports %}
                             {% if report.lab_group_id == lab_group.id %}
-                            <table class="table">
-                              <tbody>
-                                <tr>
-                                  <th class="hide-on-mobile">Raportti</th>
-                                  <td class="file-name" label="Raportti"><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
-                                </tr>
-                                <tr>
-                                  <th class="hide-on-mobile">Assistentti</th>
-                                  <td label="Assistentti">{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
-                                </tr>
-                                {% if lab_group.id in labgroup_ids_without_grade %}
+                              <table class="table">
+                                <tbody>
+                                  {% if report.report_status != 4 %}
+                                    <tr>
+                                      <th class="hide-on-mobile">Raportti</th>
+                                      <td class="file-name" label="Raportti"><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
+                                    </tr>
+                                  {% endif %}
                                   <tr>
-                                    <td colspan="2">Odottaa arvostelua</td>
+                                    <th class="hide-on-mobile">Assistentti</th>
+                                    <td label="Assistentti">{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
                                   </tr>
-                                {% else %}
-                                  <tr>
-                                    <th class="hide-on-mobile">Arvosana</th>
-                                    <td label="Arvosana">
-                                      {% if report.grade == 0 %}
-                                        Raportti vaatii korjausta
-                                      {% else %}
-                                        {{ report.grade }}
-                                      {% endif %}
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <th class="hide-on-mobile">Kommentit</th>
-                                    <td label="Kommentit">
-                                      {% if report.comments %}
-                                        {{ report.comments }}
-                                        <br>
-                                      {% endif %}
-                                      {% if report.comment_file %}
-                                        <a class="file-name" href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
-                                      {% endif %}
-                                    </td>
-                                  </tr>
-                                {% endif %}
-                              </tbody>
-                            </table>
-                          {% endif %}
-                        {% endfor %}
+                                  {% if lab_group.id in labgroup_ids_without_grade %}
+                                    <tr>
+                                      <td colspan="2">Odottaa arvostelua</td>
+                                    </tr>
+                                  {% else %}
+                                    <tr>
+                                      <th class="hide-on-mobile">Arvosana</th>
+                                      <td label="Arvosana">
+                                        {% if report.grade == 0 %}
+                                          Raportti vaatii korjausta
+                                        {% else %}
+                                          {{ report.grade }}
+                                        {% endif %}
+                                      </td>
+                                    </tr>
+                                    <tr>
+                                      <th class="hide-on-mobile">Kommentit</th>
+                                      <td label="Kommentit">
+                                        {% if report.comments %}
+                                          {{ report.comments }}
+                                          <br>
+                                        {% endif %}
+                                        {% if report.comment_file %}
+                                          <a class="file-name" href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
+                                        {% endif %}
+                                      </td>
+                                    </tr>
+                                  {% endif %}
+                                </tbody>
+                              </table>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
                       </div>
                     </div>
                   </div>

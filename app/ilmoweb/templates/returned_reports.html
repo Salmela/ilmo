@@ -67,17 +67,19 @@
             </div>
           </div>
         </td>
-        {% if report.report_status == 0 %}
-        <td label="Status">Kesken</td>
-        {% elif report.report_status == 1 %}
-        <td label="Status">Palautettu</td>
-        {% elif report.report_status == 2 %}
-        <td label="Status">Korjauksessa</td>
-        {% elif report.report_status == 3 %}
-        <td label="Status">Korjattu</td>
-        {% else %}
-        <td label="Status">Arvosteltu ({{ report.grade }}/5)</td>
-        {% endif %}
+        <td label="Status" data-testid="status_{{ report.id }}">
+          {% if report.report_status == 0 %}
+            Kesken
+          {% elif report.report_status == 1 %}
+            Palautettu
+          {% elif report.report_status == 2 %}
+            Korjauksessa
+          {% elif report.report_status == 3 %}
+            Korjattu
+          {% else %}
+            Arvosteltu ({{ report.grade }}/5)
+          {% endif %}
+        </td>
         <td label="Arvostelu">
           <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark"
             data-testid="open_{{report.id}}">Avaa</a>

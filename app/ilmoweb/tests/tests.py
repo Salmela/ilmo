@@ -543,7 +543,7 @@ class TestModels(TestCase):
         self.lab1.refresh_from_db()
         self.assertEqual(self.lab1.deleted, False)
 
-    # Tests for evaluating labs
+    # Tests for evaluating reports
 
     def test_teacher_can_evaluate_reports(self):
         self.client.force_login(self.superuser1)

@@ -7,12 +7,11 @@
     <table class="table table-sm table-bordered align-middle" id="mobile">
       <thead>
         <tr class="table-secondary">
-          <th colspan="7">{{ course.name }}</th>
+          <th colspan="6">{{ course.name }}</th>
         </tr>
         <tr class="table-light">
-          <th class="hide-on-mobile" scope="col">Laboratoriotyö</th>
-          <th class="hide-on-mobile" scope="col">Ryhmän päivämäärä</th>
-          <th class="hide-on-mobile" scope="col">Raportti</th>
+          <th class="hide-on-mobile" scope="col">Työ</th>
+          <th class="hide-on-mobile" scope="col">Ryhmä</th>
           <th class="hide-on-mobile" scope="col">Assistentti</th>
           <th class="hide-on-mobile" scope="col">Arvosana</th>
           <th class="hide-on-mobile" scope="col">Kommentit</th>
@@ -23,10 +22,13 @@
         {% for report in filtered_reports %}
           {% if course.id == report.lab_group.lab.course.id %}
             <tr>
-              <td label="Laboratoriotyö">{{ report.lab_group.lab.name }}</td>
-              <td label="Päivämäärä">{{report.lab_group.date.day}}.{{report.lab_group.date.month}}.{{report.lab_group.date.year}}</td>
-              <td label="Raportti"><a href="/download_report/{{ report.report_file_name }}" download>{{ report.report_file_name }}</a></td>
-              <td label="Assistentti">{{ report.graded_by.first_name }} {{ report.graded_by.last_name }}</td>
+              <td label="Työ">{{ report.lab_group.lab.name }}</td>
+              <td label="Ryhmä">
+                {{ report.lab_group.date.day }}.{{ report.lab_group.date.month }}.{{ report.lab_group.date.year }}
+              </td>
+              <td label="Assistentti">
+                {{ report.graded_by.first_name }} {{ report.graded_by.last_name }}
+              </td>
               <td label="Arvosana">
                 {% if not report.grade and report.grade != 0 %}
                   Odottaa arvostelua
