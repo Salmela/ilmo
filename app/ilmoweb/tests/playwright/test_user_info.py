@@ -57,5 +57,5 @@ def test_student_can_see_ungraded_report(page:Page):
     page.get_by_role('button', name='Tallenna').click()
 
     page.get_by_test_id('user_info').click()
-    expect(page.get_by_test_id('lab_2')).to_have_text('labra 1')
-    expect(page.get_by_test_id('grade_2')).to_have_text('Odottaa arvostelua')
+    expect(page.get_by_test_id('lab_3')).to_have_text('labra 1')
+    expect(page.get_by_test_id('grade_3')).to_have_text('Odottaa arvostelua')
