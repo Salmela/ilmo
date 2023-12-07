@@ -15,7 +15,7 @@ class AuthenticationBackend:
             user = User.objects.get(username=userinfo['uid'])
         except User.DoesNotExist:
 
-            if userdata['hyPersonStudentId'] == None:
+            if userdata['hyPersonStudentId'] is None:
                 student_id = "000000000"
             else:
                 student_id = userdata['hyPersonStudentId']
@@ -28,7 +28,7 @@ class AuthenticationBackend:
             return user
 
         if user.student_id == "0":
-            if userdata['hyPersonStudentId'] == None:
+            if userdata['hyPersonStudentId'] is None:
                 user.student_id = "000000000"
             else:
                 user.student_id=userdata['hyPersonStudentId']
