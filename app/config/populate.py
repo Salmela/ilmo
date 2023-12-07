@@ -15,7 +15,7 @@ from datetime import date, time
 
 
 """
-    Populates the relation connected to the Reports model with official data.
+    Populates the relation connected to the User model with official data.
 
 """
 with open('config/test_data_1.csv') as file:
