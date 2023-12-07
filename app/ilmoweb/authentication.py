@@ -14,12 +14,28 @@ class AuthenticationBackend:
         try:
             user = User.objects.get(username=userinfo['uid'])
         except User.DoesNotExist:
-            user = User(student_id=userdata['hyPersonStudentId'], username=userinfo['uid'],
+
+            if userdata['hyPersonStudentId'] == None:
+                student_id = "000000000"
+            else:
+                student_id = userdata['hyPersonStudentId']
+
+            user = User(student_id=student_id, username=userinfo['uid'],
                         first_name=userinfo['given_name'],
                         last_name=userinfo['family_name'], email=userinfo['email'],
-                        password=make_password("test"), is_staff=0)
+                        password=make_password("pass"), is_staff=0)
             user.save()
             return user
+
+        if user.student_id == "0":
+            if userdata['hyPersonStudentId'] == None:
+                user.student_id = "000000000"
+            else:
+                user.student_id=userdata['hyPersonStudentId']
+
+        if user.email == "None":
+            user.email=userinfo['email']
+
         return user
 
     def get_user(self, user_id):
