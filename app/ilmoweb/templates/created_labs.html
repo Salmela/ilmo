@@ -4,100 +4,114 @@
 <div class="container-sm">
   <h1 class="float-left mb-3">Harjoitusryhmät kursseittain</h1>
 </div>
-
 {% for course in courses %}
-
-<div class="container-sm" id="table-sm">
-  <table class="table table-bordered align-middle">
-    <thead>
-      <tr class="table-secondary">
-        <th class="align-middle" colspan="11">{{course.name}}</th>
-      </tr>
-      <tr class="table-light">
-        <th colspan="1">Päivä</th>
-        <th colspan="1">Aika</th>
-        <th colspan="1">Paikka</th>
-        <th colspan="4">Täyttöaste töittäin</th>
-        <th colspan="1">Yhteensä</th>
-        <th colspan="1">Vahvistus</th>
-        <th colspan="2">Toiminnot</th>
-      </tr>
-    </thead>
-    {% for date in groups_by_date %}
-      {% if date.course == course %}
-        <tbody>
-          <td>{{date.date.day}}.{{date.date.month}}.{{date.date.year}}</td>
-          <td>{{date.start_time.hour}}-{{date.end_time.hour}}</td>
-          <td>{{date.place}}</td>
-          {% for lab in date.labs %}
-            <td>
-              <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ lab.name }}">
-                {% for group in date.groups %}
-                  {% if group.lab_id == lab.id%}
-                    {{group.signed_up_students}} / {{lab.max_students}}
-                  {% endif %}
-                {% endfor %}
-              </span>
+  <div class="container-sm" id="table-sm">
+    <table class="table table-bordered align-middle" id="mobile">
+      <thead>
+        <tr class="table-secondary">
+          <th class="align-middle" colspan="11">{{course.name}}</th>
+        </tr>
+        <tr class="table-light">
+          <th class="hide-on-mobile" colspan="1">Päivä</th>
+          <th class="hide-on-mobile" colspan="1">Aika</th>
+          <th class="hide-on-mobile" colspan="1">Paikka</th>
+          <th class="hide-on-mobile" colspan="4">Täyttöaste töittäin</th>
+          <th class="hide-on-mobile" colspan="1">Yhteensä</th>
+          <th class="hide-on-mobile" colspan="1">Vahvistus</th>
+          <th class="hide-on-mobile" colspan="2">Toiminnot</th>
+        </tr>
+      </thead>
+      {% for date in groups_by_date %}
+        {% if date.course == course %}
+          <tbody
+            {% if date.groups.0.status == 2 %}
+              class="green"
+            {% elif date.groups.0.status == 1 %}
+              {% if current_date <= date.date and date.date <= day_after_tomorrow %}
+                class="red"
+              {% else %}
+                class="yellow"
+              {% endif %}
+            {% endif %}>
+            <td label="Päivä">{{date.date.day}}.{{date.date.month}}.{{date.date.year}}</td>
+            <td label="Aika">
+              {% if date.start_time.minute > 10 %}
+                {{date.start_time.hour}}:{{date.start_time.minute}}
+              {% else %}
+                {{date.start_time.hour}}:0{{date.start_time.minute}}
+              {% endif %} -
+              {% if date.end_time.minute > 10 %}
+                {{date.end_time.hour}}:{{date.end_time.minute}}
+              {% else %}     
+                {{date.end_time.hour}}:0{{date.end_time.minute}}
+              {% endif %}
             </td>
-          {% endfor %}
-          <td>{{date.signup_sum}}</td>
-          {% if date.groups.0.status == 1 %}
-            <td>
-              <form action="{% url 'confirm' %}" method="POST">
-                {% csrf_token %}
-                {% for group in date.groups %}
-                  <input type="hidden" value="{{ group.id }}" name="lab_groups">
-                {% endfor %}
-                <button type="submit" class="btn btn-light btn-outline-success" data-testid="confirm_{{date.groups.0.id}}">Vahvista</button>
-              </form>
-            </td>
-          {% elif date.groups.0.status == 2 %}
-            <td>
-              Vahvistettu
-            </td>
-          {% elif date.groups.0.status == 0 or date.groups.0.status == 3 %}
-            <td></td>
-          {% endif %}
-          {% if date.groups.0.status == 0 or date.groups.0.status == 3 %}
-          <td>
-            <form action="{% url 'labgroup_status' %}" method="POST">
-              {% csrf_token %}
-              {% for group in date.groups %}
-                <input type="hidden" value="{{ group.id }}" name="lab_groups">
-              {% endfor %}
-              <button type="submit" class="btn btn-light btn-outline-info" data-testid="publish_{{date.groups.0.id}}">Julkaise</button>
-            </form>
-          </td>
-          {% elif date.groups.0.status == 1 or date.groups.0.status == 2  %}
+            <td label="Paikka">{{date.place}}</td>
+            {% for lab in date.labs %}
+              <td label="{{lab.name}}">
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ lab.name }}">
+                  {% for group in date.groups %}
+                    {% if group.lab_id == lab.id%}
+                      {{group.signed_up_students}} / {{lab.max_students}}
+                    {% endif %}
+                  {% endfor %}
+                </span>
+              </td>
+            {% endfor %}
+            <td label="Yhteensä">{{date.signup_sum}}/{{date.max_signup_sum}}</td>
+            {% if date.groups.0.status == 1 %}
+              <td>
+                <form action="{% url 'confirm' %}" method="POST">
+                  {% csrf_token %}
+                  {% for group in date.groups %}
+                    <input type="hidden" value="{{ group.id }}" name="lab_groups">
+                  {% endfor %}
+                  <button type="submit" class="btn btn-light btn-outline-success" data-testid="confirm_{{date.groups.0.id}}">Vahvista</button>
+                </form>
+              </td>
+            {% elif date.groups.0.status == 2 %}
+              <td>
+                Vahvistettu
+              </td>
+            {% elif date.groups.0.status == 0 or date.groups.0.status == 3 %}
+              <td></td>
+            {% endif %}
+            {% if date.groups.0.status == 0 or date.groups.0.status == 3 %}
             <td>
               <form action="{% url 'labgroup_status' %}" method="POST">
                 {% csrf_token %}
                 {% for group in date.groups %}
                   <input type="hidden" value="{{ group.id }}" name="lab_groups">
                 {% endfor %}
-                <button type="submit" class="btn btn-light btn-outline-danger" data-testid="cancel_{{date.groups.0.id}}">Peruuta</button>
+                <button type="submit" class="btn btn-light btn-outline-info" data-testid="publish_{{date.groups.0.id}}">Julkaise</button>
               </form>
             </td>
-          {% endif %}
-          <td>
-            <form action="{% url 'update_multiple_groups' %}" method="GET">
-              {% for group in date.groups %}
-                <input type="hidden" value="{{ group.id }}" name="lab_groups[]">
-              {% endfor %}
-              <input type="hidden" value="{{ course.id }}" name="course_id">
-              <button type="submit" class="btn btn-light btn-outline-danger" data-testid="update_{{date.groups.0.id}}">Muokkaa</button>
-            </form>
-          </td>
-        </tbody>
-      {% endif %}
-    {% endfor %}
-  </table>
-</div>
-
+            {% elif date.groups.0.status == 1 or date.groups.0.status == 2  %}
+              <td>
+                <form action="{% url 'labgroup_status' %}" method="POST">
+                  {% csrf_token %}
+                  {% for group in date.groups %}
+                    <input type="hidden" value="{{ group.id }}" name="lab_groups">
+                  {% endfor %}
+                  <button type="submit" class="btn btn-light btn-outline-danger" data-testid="cancel_{{date.groups.0.id}}">Peruuta</button>
+                </form>
+              </td>
+            {% endif %}
+            <td>
+              <form action="{% url 'update_multiple_groups' %}" method="GET">
+                {% for group in date.groups %}
+                  <input type="hidden" value="{{ group.id }}" name="lab_groups[]">
+                {% endfor %}
+                <input type="hidden" value="{{ course.id }}" name="course_id">
+                <button type="submit" class="btn btn-light btn-outline-danger" data-testid="update_{{date.groups.0.id}}">Muokkaa</button>
+              </form>
+            </td>
+          </tbody>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
 {% endfor %}
-
-
-
 
 {% for course in courses %}
   <div class="container-sm" id="table-sm">
@@ -130,7 +144,17 @@
                   <td label="Ajankohta" data-testid="date_{{ lab_group.id }}">
                     {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                     <br>
-                    klo {{lab_group.start_time.hour}} - {{lab_group.end_time.hour}}
+                    klo 
+                    {% if lab_group.start_time.minute > 10 %}
+                      {{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}
+                    {% else %}
+                      {{lab_group.start_time.hour}}:0{{lab_group.start_time.minute}}
+                    {% endif %} -
+                    {% if lab_group.end_time.minute > 10 %}
+                      {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
+                    {% else %}     
+                      {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
+                    {% endif %}
                   </td>
                   <td label="Työ">{{lab.name}}</td>
                   <td label="Paikka" data-testid="place_{{ lab_group.id }}">{{lab_group.place}}</td>
@@ -143,34 +167,34 @@
                   {% elif lab_group.status == 3 %}
                     <td label="Status" data-testid="status_{{ lab_group.id }}">Peruttu</td>
                   {% endif %}
-                    <td>
-                      <form action="/update_group/{{ lab_group.id }}" method="GET">
-                        <input type="hidden" name="course_id" value="{{ course.id }}">
-                        <input type="hidden" name="course_name" value="{{ course.name }}">
-                        <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="group_{{lab_group.id}}" value="Muokkaa">
-                      </form>
-                    </td>
-                    <td>
-                      <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#deleteLabGroupModal_{{ lab_group.id }}" data-testid="lab_group_{{lab_group.id}}">
-                        Poista
-                      </button>
-                      <div class="modal fade" id="deleteLabGroupModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="deleteLabGroupModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="deleteLabGroupModalLabel">Poistetaanko ryhmä: {{lab.name}}, {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}?</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                              <button type="button" class="btn btn-light btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">Eiku</button>
-                              <a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark" data-testid="delete_lab_group_{{lab_group.id}}">Poista</a>
-                            </div>
+                  <td>
+                    <form action="/update_group/{{ lab_group.id }}" method="GET">
+                      <input type="hidden" name="course_id" value="{{ course.id }}">
+                      <input type="hidden" name="course_name" value="{{ course.name }}">
+                      <input class="btn btn-light btn-outline-dark" id="button" type="submit" data-testid="group_{{lab_group.id}}" value="Muokkaa">
+                    </form>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#deleteLabGroupModal_{{ lab_group.id }}" data-testid="lab_group_{{lab_group.id}}">
+                      Poista
+                    </button>
+                    <div class="modal fade" id="deleteLabGroupModal_{{ lab_group.id }}" tabindex="-1" aria-labelledby="deleteLabGroupModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="deleteLabGroupModalLabel">Poistetaanko ryhmä: {{lab.name}}, {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <button type="button" class="btn btn-light btn-outline-dark" data-bs-dismiss="modal" aria-label="Close">Eiku</button>
+                            <a href='/delete_labgroup/{{ lab_group.id }}' class="btn btn-light btn-outline-dark" data-testid="delete_lab_group_{{lab_group.id}}">Poista</a>
                           </div>
                         </div>
                       </div>
-                    </td>
+                    </div>
+                  </td>
                 </tr>
-             {% endif %}
+              {% endif %}
             {% endfor %}
           {% endif %}
         {% endfor %}

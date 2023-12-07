@@ -13,8 +13,8 @@ from django.urls import reverse
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
-from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report
-from ilmoweb.logic import labs, signup, labgroups, files
+from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
+from ilmoweb.logic import labs, signup, labgroups, files, teachermessage
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
@@ -99,6 +99,8 @@ def created_labs(request):
     courses = Courses.objects.all()
     course_labs = Labs.objects.filter(is_visible=1)
     groups = LabGroups.objects.filter(deleted=0).order_by('date')
+    current_date = datetime.date.today()
+    day_after_tomorrow = current_date + datetime.timedelta(days=2)
 
     lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False)
 
@@ -123,6 +125,9 @@ def created_labs(request):
                             group.place) == date_time_key],
                 'signup_sum':sum(([group.signed_up_students for group in lab_groups if
                            (group.date, group.start_time, group.end_time,
+                            group.place) == date_time_key]), 0),
+                'max_signup_sum': sum(([group.lab.max_students for group in lab_groups if 
+                            (group.date, group.start_time, group.end_time,
                             group.place) == date_time_key]), 0)
             }
 
@@ -130,7 +135,9 @@ def created_labs(request):
 
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":groups,
-                                                 'groups_by_date':groups_by_date_time})
+                                                 "groups_by_date":groups_by_date_time,
+                                                 "current_date":current_date,
+                                                 "day_after_tomorrow":day_after_tomorrow})
 
 @login_required(login_url="login")
 def create_lab(request):
@@ -424,7 +431,13 @@ def evaluate_report(request, report_id):
         if grade == 0:
             report.report_status = 2
         else:
+            try:
+                files.delete_file(str(report.report_file))
+            except FileNotFoundError:
+                # this is here for testing reasons
+                pass
             report.report_status = 4
+            report.report_file = report.report_file_name = ""
         report.save()
 
         return redirect(returned_reports)
@@ -534,17 +547,29 @@ def system(request):
     """
         View for system settings
     """
+
     if request.user.is_superuser is not True:
         return redirect(created_labs)
 
-    return render(request, "system.html")
+    teachers_messages = TeachersMessage.objects.all()
+    if len(teachers_messages) == 0:
+        current_message = "Ei viestiä"
+    else:
+        current_message = teachers_messages[0].message
+    return render(request, "system.html", {"current_message":current_message})
 
 @login_required(login_url="login")
 def instructions(request):
     """
-        View for instructions page
+    View for instructions page
     """
-    return render(request, "instructions.html")
+    teachers_messages = TeachersMessage.objects.all()
+
+    if len(teachers_messages) == 0:
+        current_message = "Ei viestiä"
+    else:
+        current_message = teachers_messages[0].message
+    return render(request, "instructions.html", {"current_message": current_message})
 
 @login_required(login_url="login")
 def user_info(request):
@@ -601,6 +626,22 @@ def update_multiple_groups(request):
                             {"lab_group_ids":lab_group_ids,
                             "lab_group":lab_group,
                             "course":course, "assistants":assistants})
+
+@login_required(login_url="login")
+def teachers_message(request):
+    """
+        View for updating message in instuctions page
+    """
+    if request.method == "GET":
+        if not request.user.is_staff:
+            return redirect("/open_labs")
+        return redirect("/system")
+
+    if request.method == "POST":
+        new_message = request.POST.get("message")
+        teachermessage.update(new_message)
+
+    return redirect("/system")
 
 @login_required(login_url="login")
 def report_notes(request, report_id):

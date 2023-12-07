@@ -53,7 +53,7 @@
         </tr>
         <tr>
           <td label="Kommenttitiedosto">
-            Palauta kommenttitiedosto:
+            <class="hide-on-mobile">Palauta kommenttitiedosto:</class>
             <input type="file" name="file" data-testid="file">
           </td>
         </tr>
@@ -65,22 +65,21 @@
       </tbody>
     </table>
   </form>
-
-<form action="/report_notes/{{ report.id }}" method="POST">
-  {% csrf_token %}
-  <table class="table table-bordered" id="mobile">
-    <tr>
-      <td class="hide-on-mobile" width="18.5%">Muistiinpanot</td>
-      <td label="Muistiinpanot">
-        <textarea class="form-control" name="notes" rows="4" data-testid="notes">{{ report.notes }}</textarea>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <input class="btn btn-light btn-outline-dark" type="submit" value="Tallenna muistiinpanot">
-      </td>
-    </tr>
-  </table>
-</form>
+  <form action="/report_notes/{{ report.id }}" method="POST">
+    {% csrf_token %}
+    <table class="table table-bordered" id="mobile">
+      <tr>
+        <td class="hide-on-mobile" width="18.5%">Muistiinpanot</td>
+        <td label="Muistiinpanot">
+          <textarea class="form-control" name="notes" rows="4" data-testid="notes">{{ report.notes }}</textarea>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input class="btn btn-light btn-outline-dark" type="submit" value="Tallenna muistiinpanot">
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
 {% endblock %}

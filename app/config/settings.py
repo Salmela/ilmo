@@ -173,5 +173,3 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-
-MEDIA_ROOT = 'ilmoweb/static/upload/'

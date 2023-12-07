@@ -57,6 +57,18 @@ form {
     display: inline;
 }
 
+.green {
+    color:green;
+}
+
+.red {
+    color:red;
+}
+
+.yellow {
+    color:darkorange;
+}
+
 @media screen and (max-width: 600px) {
     #hy_logo {
         height: 70px;
@@ -86,6 +98,8 @@ form {
         display: flex;
         text-align: left;
         width: 100%;
+        max-width: 300px;
+        overflow: scroll;
     }
       
     table#mobile td::before {
@@ -94,6 +108,7 @@ form {
         width: 150px;
         min-width: 150px;
         text-align: left;
+        color:black;
     }
 
     .float-start{
@@ -102,6 +117,14 @@ form {
 
     .float{
         width:100%;
+    }
+
+    .form-control {
+        width: 150px;
+    }
+
+    .form-select {
+        width: 100px;
     }
 
     .footer {
