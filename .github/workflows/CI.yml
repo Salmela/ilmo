@@ -1,12 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches-ignore:
-      - 'production'
   pull_request:
-    branches-ignore:
-      - 'production'
+    branches:
+      - 'main'
     types: [opened, reopened]
 
   workflow_dispatch:
