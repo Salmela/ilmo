@@ -16,6 +16,7 @@
         <th class="hide-on-mobile" scope="col">Ajankohta</th>
         <th class="hide-on-mobile" scope="col">Paikka</th>
         <th class="hide-on-mobile" scope="col">Palautus</th>
+        <th class="hide-on-mobile" scope="col">Palautuksen tila</th>
         <th class="hide-on-mobile" scope="col">Tarkastele</th>
       </tr>
     </thead>
@@ -65,6 +66,21 @@
                   </div>
                 </div>
               </td>
+              {% for report in filtered_reports %}
+              {% if report.lab_group_id == lab_group.id %}
+                {% if lab_group.id in labgroup_ids_without_grade %}
+                  <td>Odottaa arvostelua</td>
+                {% else %}
+                  <td label="Arvosana">
+                    {% if report.grade == 0 %}
+                      Raportti vaatii korjausta
+                    {% else %}
+                      {{ report.grade }}
+                    {% endif %}
+                  </td>
+                {% endif %}
+              {% endif %}
+              {% endfor %}
               {% if lab_group.id not in labgroup_ids_with_reports %}
                 <td label="Tarkastele">
                   <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Palauta raportti">
@@ -161,6 +177,7 @@
               </td>
               <td label="Paikka">{{lab_group.place}}</td>
               <td label="Palautus">Labra peruttu</td>
+              <td>-</td>
               <td label="Tarkastele">
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Labra peruttu">
                   <button class="btn btn-light disabled">
@@ -188,8 +205,9 @@
                   {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                 {% endif %}
               </td>
-              <td label="Paikka">{{lab_group.place}}</td>             
+              <td label="Paikka">{{lab_group.place}}</td>
               <td label="Palautus">Odota tilaisuuden vahvistusta</td>
+              <td>-</td>
               <td label="Tarkastele">
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Odota tilaisuuden vahvistusta">
                   <button class="btn btn-light disabled">
