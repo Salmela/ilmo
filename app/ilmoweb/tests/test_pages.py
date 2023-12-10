@@ -77,10 +77,39 @@ class TestPages(TestCase):
         self.assertTemplateUsed(response, "my_labs.html")
 
     # Instuctions
-    def test_page_is_rendered_with_correct_template(self):
+    def test_intruction_page_is_rendered_with_correct_template(self):
         self.client.force_login(self.user)
         response = self.client.get(reverse('instructions'))
         self.assertTemplateUsed(response, 'instructions.html')
+
+    # Archive
+    def test_student_can_not_access_archive(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('archive'))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/open_labs')
+        self.assertTemplateNotUsed(response, 'archive.html')
+
+    def test_staff_can_access_archive(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse('archive'))
+        self.assertTemplateUsed(response, 'archive.html')
+        self.assertEqual(response.status_code, 200)
+
+    # Personal archive
+    def test_student_can_not_access_personal_archive(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('personal_archive', args=[str(self.user.id)]))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/open_labs')
+        self.assertTemplateNotUsed(response, 'personal_archive.html')
+    
+    def test_staff_can_access_personal_archive(self):
+        self.client.force_login(self.assistant)
+        response = self.client.get(reverse('personal_archive', args=[str(self.user.id)]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'personal_archive.html')
+
 
     # Returned reports
 
