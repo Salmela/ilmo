@@ -435,6 +435,7 @@ class TestLabGroups(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.url, "/open_labs" )
         self.assertEqual(self.labgroup1.place, "Chemicum")
+  
     # Test for updating multiple lab groups
 
     def test_teacher_can_update_multiple_labgroups(self):

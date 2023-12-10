@@ -14,7 +14,7 @@ from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
-from ilmoweb.logic import labs, signup, labgroups, files, teachermessage
+from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
@@ -429,6 +429,7 @@ def evaluate_report(request, report_id):
         report.grading_date = datetime.date.today()
         report.graded_by_id = request.user.id
         if grade == 0:
+            mail.mail(lab.name, student.email, False)
             report.report_status = 2
         else:
             try:
@@ -436,6 +437,7 @@ def evaluate_report(request, report_id):
             except FileNotFoundError:
                 # this is here for testing reasons
                 pass
+            mail.mail(lab.name, student.email, True)
             report.report_status = 4
             report.report_file = report.report_file_name = ""
         report.save()
