@@ -760,6 +760,38 @@ class TestModels(TestCase):
         recipient = ["pekka.virtanen@ilmoweb.fi"]
         self.assertEqual(mail.outbox[0].to, recipient)
     
+    def test_email_when_report_is_graded(self):
+        self.client.force_login(self.superuser1)
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        self.client.post(url, {"grade": 4, "comments": "Nice"})
+        subject = "Raporttisi on arvioitu"
+        self.assertEqual(mail.outbox[0].subject, subject)
+        message = (
+            f"Raporttisi työhön {self.lab1.name} on arvioitu.\n"
+            f"Arviointia pääsee tarkastelemaan palautussovelluksesta."
+        )
+        self.assertEqual(mail.outbox[0].body, message)
+        sender = "grp-fyskem-labra-ilmo@helsinki.fi"
+        self.assertEqual(mail.outbox[0].from_email, sender)
+        recipient = ["pekka.virtanen@ilmoweb.fi"]
+        self.assertEqual(mail.outbox[0].to, recipient)
+
+    def test_email_when_report_is_sent_back_for_fixing(self):
+        self.client.force_login(self.superuser1)
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        self.client.post(url, {"grade": 0, "comments": "Nice"})
+        subject = "Raporttisi vaatii korjausta"
+        self.assertEqual(mail.outbox[0].subject, subject)
+        message = (
+            f"Raporttisi työhön {self.lab1.name} on arvioitu ja se vaatii korjausta.\n"
+            f"Kommentit ja korjausehdotukset löytyvät palautussovelluksesta."
+        )
+        self.assertEqual(mail.outbox[0].body, message)
+        sender = "grp-fyskem-labra-ilmo@helsinki.fi"
+        self.assertEqual(mail.outbox[0].from_email, sender)
+        recipient = ["pekka.virtanen@ilmoweb.fi"]
+        self.assertEqual(mail.outbox[0].to, recipient)
+  
     # Test for updating multiple lab groups
 
     def test_teacher_can_update_multiple_labgroups(self):
