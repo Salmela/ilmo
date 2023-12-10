@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.core import mail
 from django.test import TestCase, Client
+from django.urls import reverse
 from ilmoweb.models import User, Courses, Labs, LabGroups
 from ilmoweb.logic import labgroups
 
@@ -65,11 +66,11 @@ class TestEmail(TestCase):
 
     def test_user_can_change_their_email(self):
         new_email="testi.meili@ilmo.fi"
-        self.client.force_login(self.user)
+        self.client.force_login(self.user1)
         response = self.client.post("/user_info/", {"new_email":new_email})
         self.assertEqual(response.status_code, 200)
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.email, new_email)
+        self.user1.refresh_from_db()
+        self.assertEqual(self.user1.email, new_email)
     
     def test_cannot_change_email_if_not_logged_in(self):
         new_email="testi.meili@ilmo.fi"
@@ -78,19 +79,19 @@ class TestEmail(TestCase):
     
     def test_cannot_change_email_if_it_is_not_valid(self):
         new_email="sähköpostiosoite"
-        self.client.force_login(self.user)
+        self.client.force_login(self.user1)
         response = self.client.post("/user_info/", {"new_email":new_email})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.user.email, "pekka.virtanen@ilmoweb.fi")
+        self.assertEqual(self.user1.email, "pekka.virtanen@ilmoweb.fi")
 
     # Tests for email notifications
 
     def test_confirmation_email(self):
-        self.client.force_login(self.user)
-        user_id = self.user.id
-        group_id = self.labgroup.id
-        max_students = self.lab.max_students
-        students = self.labgroup.signed_up_students
+        self.client.force_login(self.user1)
+        user_id = self.user1.id
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
 
         response_post = self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
         response_get = self.client.get("/open_labs/")
@@ -98,19 +99,19 @@ class TestEmail(TestCase):
         self.assertEqual(response_post.status_code, 302)
         self.assertEqual(response_get.status_code, 200)
 
-        self.labgroup.refresh_from_db()
-        students = self.labgroup.signed_up_students
+        self.labgroup1.refresh_from_db()
+        students = self.labgroup1.signed_up_students
         self.assertEqual(students, 1)
         
-        labgroups.email(self.labgroup, "confirm")
+        labgroups.email(self.labgroup1, "confirm")
 
         subject = "Ilmoittautuminen laboratoriotyöhön hyväksytty"
         self.assertEqual(mail.outbox[0].subject, subject)
         message = (
-            f"Ilmoittautumisesi laboratoriotyöhön {self.lab.name} on hyväksytty.\n"
-            f"Ajankohta: {self.labgroup.date.day}.{self.labgroup.date.month}.{self.labgroup.date.year} "
-            f"klo {self.labgroup.start_time.hour} - {self.labgroup.end_time.hour}\n"
-            f"Paikka: {self.labgroup.place}\n"
+            f"Ilmoittautumisesi laboratoriotyöhön {self.lab1.name} on hyväksytty.\n"
+            f"Ajankohta: {self.labgroup1.date.day}.{self.labgroup1.date.month}.{self.labgroup1.date.year} "
+            f"klo {self.labgroup1.start_time.hour} - {self.labgroup1.end_time.hour}\n"
+            f"Paikka: {self.labgroup1.place}\n"
         )
         self.assertEqual(mail.outbox[0].body, message)
         sender = "grp-fyskem-labra-ilmo@helsinki.fi"
@@ -119,11 +120,11 @@ class TestEmail(TestCase):
         self.assertEqual(mail.outbox[0].to, recipient)
 
     def test_canceling_email(self):
-        self.client.force_login(self.user)
-        user_id = self.user.id
-        group_id = self.labgroup.id
-        max_students = self.lab.max_students
-        students = self.labgroup.signed_up_students
+        self.client.force_login(self.user1)
+        user_id = self.user1.id
+        group_id = self.labgroup1.id
+        max_students = self.lab1.max_students
+        students = self.labgroup1.signed_up_students
 
         response_post = self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
         response_get = self.client.get("/open_labs/")
@@ -131,18 +132,50 @@ class TestEmail(TestCase):
         self.assertEqual(response_post.status_code, 302)
         self.assertEqual(response_get.status_code, 200)
 
-        self.labgroup.refresh_from_db()
-        students = self.labgroup.signed_up_students
+        self.labgroup1.refresh_from_db()
+        students = self.labgroup1.signed_up_students
         self.assertEqual(students, 1)
         
-        labgroups.email(self.labgroup, "cancel")
+        labgroups.email(self.labgroup1, "cancel")
 
         subject = "Laboratoriotyö peruttu"
         self.assertEqual(mail.outbox[0].subject, subject)
         message = (
             f"Laboratoriotyö "
-            f"{self.lab.name} ({self.labgroup.date.day}.{self.labgroup.date.month}.{self.labgroup.date.year}) "
+            f"{self.lab1.name} ({self.labgroup1.date.day}.{self.labgroup1.date.month}.{self.labgroup1.date.year}) "
             "on peruttu."
+        )
+        self.assertEqual(mail.outbox[0].body, message)
+        sender = "grp-fyskem-labra-ilmo@helsinki.fi"
+        self.assertEqual(mail.outbox[0].from_email, sender)
+        recipient = ["pekka.virtanen@ilmoweb.fi"]
+        self.assertEqual(mail.outbox[0].to, recipient)
+    
+    def test_email_when_report_is_graded(self):
+        self.client.force_login(self.superuser1)
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        self.client.post(url, {"grade": 4, "comments": "Nice"})
+        subject = "Raporttisi on arvioitu"
+        self.assertEqual(mail.outbox[0].subject, subject)
+        message = (
+            f"Raporttisi työhön {self.lab1.name} on arvioitu.\n"
+            f"Arviointia pääsee tarkastelemaan palautussovelluksesta."
+        )
+        self.assertEqual(mail.outbox[0].body, message)
+        sender = "grp-fyskem-labra-ilmo@helsinki.fi"
+        self.assertEqual(mail.outbox[0].from_email, sender)
+        recipient = ["pekka.virtanen@ilmoweb.fi"]
+        self.assertEqual(mail.outbox[0].to, recipient)
+
+    def test_email_when_report_is_sent_back_for_fixing(self):
+        self.client.force_login(self.superuser1)
+        url = reverse("evaluate_report", args=[str(self.report1.id)])
+        self.client.post(url, {"grade": 0, "comments": "Nice"})
+        subject = "Raporttisi vaatii korjausta"
+        self.assertEqual(mail.outbox[0].subject, subject)
+        message = (
+            f"Raporttisi työhön {self.lab1.name} on arvioitu ja se vaatii korjausta.\n"
+            f"Kommentit ja korjausehdotukset löytyvät palautussovelluksesta."
         )
         self.assertEqual(mail.outbox[0].body, message)
         sender = "grp-fyskem-labra-ilmo@helsinki.fi"
