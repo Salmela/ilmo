@@ -6,19 +6,19 @@
 </div>
 {% for course in courses %}
   <div class="container-sm" id="table-sm">
-    <table class="table table-bordered align-middle">
+    <table class="table table-bordered align-middle" id="mobile">
       <thead>
         <tr class="table-secondary">
           <th class="align-middle" colspan="11">{{course.name}}</th>
         </tr>
         <tr class="table-light">
-          <th colspan="1">Päivä</th>
-          <th colspan="1">Aika</th>
-          <th colspan="1">Paikka</th>
-          <th colspan="4">Täyttöaste töittäin</th>
-          <th colspan="1">Yhteensä</th>
-          <th colspan="1">Vahvistus</th>
-          <th colspan="2">Toiminnot</th>
+          <th class="hide-on-mobile" colspan="1">Päivä</th>
+          <th class="hide-on-mobile" colspan="1">Aika</th>
+          <th class="hide-on-mobile" colspan="1">Paikka</th>
+          <th class="hide-on-mobile" colspan="4">Täyttöaste töittäin</th>
+          <th class="hide-on-mobile" colspan="1">Yhteensä</th>
+          <th class="hide-on-mobile" colspan="1">Vahvistus</th>
+          <th class="hide-on-mobile" colspan="2">Toiminnot</th>
         </tr>
       </thead>
       {% for date in groups_by_date %}
@@ -33,8 +33,8 @@
                 class="yellow"
               {% endif %}
             {% endif %}>
-            <td>{{date.date.day}}.{{date.date.month}}.{{date.date.year}}</td>
-            <td>
+            <td label="Päivä">{{date.date.day}}.{{date.date.month}}.{{date.date.year}}</td>
+            <td label="Aika">
               {% if date.start_time.minute > 10 %}
                 {{date.start_time.hour}}:{{date.start_time.minute}}
               {% else %}
@@ -46,9 +46,9 @@
                 {{date.end_time.hour}}:0{{date.end_time.minute}}
               {% endif %}
             </td>
-            <td>{{date.place}}</td>
+            <td label="Paikka">{{date.place}}</td>
             {% for lab in date.labs %}
-              <td>
+              <td label="{{lab.name}}">
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ lab.name }}">
                   {% for group in date.groups %}
                     {% if group.lab_id == lab.id%}
@@ -58,7 +58,7 @@
                 </span>
               </td>
             {% endfor %}
-            <td>{{date.signup_sum}}/{{date.max_signup_sum}}</td>
+            <td label="Yhteensä">{{date.signup_sum}}/{{date.max_signup_sum}}</td>
             {% if date.groups.0.status == 1 %}
               <td>
                 <form action="{% url 'confirm' %}" method="POST">
