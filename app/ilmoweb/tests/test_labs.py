@@ -55,19 +55,19 @@ class TestLabs(TestCase):
         self.client.force_login(self.superuser)
 
         data = {
-            'lab_name': 'Lab',
-            'description': 'Lab description',
-            'max_students': str(5),
-            'course_id': self.course.id
+            "lab_name": "Lab",
+            "description": "Lab description",
+            "max_students": str(5),
+            "course_id": self.course.id
         }
-        response = self.client.post(reverse('create_lab'), data)
+        response = self.client.post(reverse("create_lab"), data)
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('created_labs'))
+        self.assertRedirects(response, reverse("created_labs"))
 
     def test_create_new_lab_when_max_students_is_0(self):
-        lab_name = 'Awesome lab'
-        description = 'This lab is awesome'
+        lab_name = "Awesome lab"
+        description = "This lab is awesome"
         max_students = 0
         course_id = self.course.id
         labs.create_new_lab(lab_name, description, max_students, course_id)

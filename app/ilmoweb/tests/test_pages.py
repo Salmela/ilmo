@@ -36,79 +36,79 @@ class TestPages(TestCase):
     # Tests for system page
     def test_only_super_user_gets_system_page(self):
         self.client.force_login(self.user)
-        response_user = self.client.get(reverse('system'))
+        response_user = self.client.get(reverse("system"))
         self.assertEqual(response_user.status_code, 302)
-        self.assertEqual(response_user.url, '/open_labs/')
+        self.assertEqual(response_user.url, "/open_labs/")
         self.client.logout()
 
         self.client.force_login(self.assistant)
-        response_staff = self.client.get(reverse('system'))
+        response_staff = self.client.get(reverse("system"))
         self.assertEqual(response_staff.status_code, 302)
-        self.assertEqual(response_staff.url, '/created_labs/')
+        self.assertEqual(response_staff.url, "/created_labs/")
         self.client.logout()
 
         self.client.force_login(self.superuser)
-        response_superuser = self.client.get(reverse('system'))
-        self.assertTemplateUsed(response_superuser, 'system.html')
+        response_superuser = self.client.get(reverse("system"))
+        self.assertTemplateUsed(response_superuser, "system.html")
 
     # Teachers Message
     def test_student_can_not_get_to_system_page_to_update_message(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('teachers_message'))
+        response = self.client.get(reverse("teachers_message"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/open_labs/')
+        self.assertEqual(response.url, "/open_labs/")
 
     def test_assistant_can_not_get_to_system_page_to_update_message(self):
         self.client.force_login(self.assistant)
-        response = self.client.get(reverse('teachers_message'))
+        response = self.client.get(reverse("teachers_message"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/created_labs/')
+        self.assertEqual(response.url, "/created_labs/")
 
     def test_get_request_from_superuser_redirects_to_system(self):
         self.client.force_login(self.superuser)
-        response = self.client.get(reverse('teachers_message'))
-        self.assertRedirects(response, reverse('system'))
-    
+        response = self.client.get(reverse("teachers_message"))
+        self.assertRedirects(response, reverse("system"))
+
     # My labs
     def test_user_can_access_my_labs(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('my_labs'))
+        response = self.client.get(reverse("my_labs"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "my_labs.html")
 
     # Instuctions
     def test_intruction_page_is_rendered_with_correct_template(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('instructions'))
-        self.assertTemplateUsed(response, 'instructions.html')
+        response = self.client.get(reverse("instructions"))
+        self.assertTemplateUsed(response, "instructions.html")
 
     # Archive
     def test_student_can_not_access_archive(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('archive'))
+        response = self.client.get(reverse("archive"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/open_labs')
-        self.assertTemplateNotUsed(response, 'archive.html')
+        self.assertEqual(response.url, "/open_labs")
+        self.assertTemplateNotUsed(response, "archive.html")
 
     def test_staff_can_access_archive(self):
         self.client.force_login(self.superuser)
-        response = self.client.get(reverse('archive'))
-        self.assertTemplateUsed(response, 'archive.html')
+        response = self.client.get(reverse("archive"))
+        self.assertTemplateUsed(response, "archive.html")
         self.assertEqual(response.status_code, 200)
 
     # Personal archive
     def test_student_can_not_access_personal_archive(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('personal_archive', args=[str(self.user.id)]))
+        response = self.client.get(reverse("personal_archive", args=[str(self.user.id)]))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/open_labs')
-        self.assertTemplateNotUsed(response, 'personal_archive.html')
+        self.assertEqual(response.url, "/open_labs")
+        self.assertTemplateNotUsed(response, "personal_archive.html")
     
     def test_staff_can_access_personal_archive(self):
         self.client.force_login(self.assistant)
-        response = self.client.get(reverse('personal_archive', args=[str(self.user.id)]))
+        response = self.client.get(reverse("personal_archive", args=[str(self.user.id)]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'personal_archive.html')
+        self.assertTemplateUsed(response, "personal_archive.html")
 
 
     # Returned reports
@@ -116,37 +116,37 @@ class TestPages(TestCase):
     def test_student_can_not_access_returned_reports(self):
         self.client.force_login(self.user)
 
-        response = self.client.get(reverse('returned_reports'))
-        self.assertEqual(response.url, '/my_labs')
+        response = self.client.get(reverse("returned_reports"))
+        self.assertEqual(response.url, "/my_labs")
         self.assertEqual(response.status_code, 302)
 
     def test_staff_can_access_returned_reports(self):
         self.client.force_login(self.assistant)
-        response = self.client.get(reverse('returned_reports'))
-        self.assertTemplateUsed(response, 'returned_reports.html')
+        response = self.client.get(reverse("returned_reports"))
+        self.assertTemplateUsed(response, "returned_reports.html")
 
     # Create lab
     def test_student_can_not_get_create_lab_page(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('create_lab'))
+        response = self.client.get(reverse("create_lab"))
 
-        self.assertEqual(response.url, '/open_labs')
+        self.assertEqual(response.url, "/open_labs")
         self.assertEqual(response.status_code, 302)
 
     def test_staff_gets_correct_template_to_create_lab(self):
         self.client.force_login(self.superuser)
-        response = self.client.get(reverse('create_lab'))
-        self.assertTemplateUsed(response, 'create_lab.html')
+        response = self.client.get(reverse("create_lab"))
+        self.assertTemplateUsed(response, "create_lab.html")
 
     # Created Labs    
     def test_get_request_redirects_to_created_labs(self):
         self.client.force_login(self.superuser)
-        response = self.client.get(reverse('labgroup_status'))
-        self.assertRedirects(response, reverse('created_labs'))
+        response = self.client.get(reverse("labgroup_status"))
+        self.assertRedirects(response, reverse("created_labs"))
 
     # Update multiple groups
     def test_students_get_request_redirects_to_open_labs(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('update_multiple_groups'))
+        response = self.client.get(reverse("update_multiple_groups"))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/open_labs')
+        self.assertEqual(response.url, "/open_labs")

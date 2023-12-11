@@ -51,7 +51,7 @@ class TestTeachersMessage(TestCase):
         self.assertNotEqual(message, new_message)
 
     def test_update_function_in_teachermessage(self):
-        new_message = 'Goodbye students'
+        new_message = "Goodbye students"
         teachermessage.update(new_message)
 
         message = TeachersMessage.objects.get(message = new_message)

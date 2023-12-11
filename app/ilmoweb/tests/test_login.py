@@ -73,13 +73,13 @@ class TestLogin(TestCase):
         self.client.force_login(self.user)
         response = self.client.get(reverse("home"))
         
-        self.assertRedirects(response, reverse('open_labs'))
+        self.assertRedirects(response, reverse("open_labs"))
         
     def test_navigate_to_right_page_after_login_as_staff(self):
         self.client.force_login(self.assistant)
         response = self.client.get(reverse("home"))
         
-        self.assertRedirects(response, reverse('created_labs'))
+        self.assertRedirects(response, reverse("created_labs"))
 
     def test_logged_out_user_gets_home_page(self):
         self.client.logout()
@@ -89,6 +89,6 @@ class TestLogin(TestCase):
 
     def test_student_can_not_get_to_created_labs(self):
         self.client.force_login(self.user)
-        response = self.client.get(reverse('created_labs'))
-        self.assertEqual(response.url, '/open_labs')
+        response = self.client.get(reverse("created_labs"))
+        self.assertEqual(response.url, "/open_labs")
         self.assertEqual(response.status_code, 302)

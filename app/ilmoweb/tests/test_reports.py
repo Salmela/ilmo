@@ -90,8 +90,8 @@ class TestReports(TestCase):
     def test_get_request_redirects_to_home_page(self):
         self.client.force_login(self.user)
 
-        response = self.client.get(reverse('return_report'))
-        self.assertEqual(response.url, '/')
+        response = self.client.get(reverse("return_report"))
+        self.assertEqual(response.url, "/")
         self.assertEqual(response.status_code, 302)
 
     def test_return_report_with_success(self):

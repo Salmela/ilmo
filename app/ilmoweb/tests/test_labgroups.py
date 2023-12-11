@@ -379,32 +379,32 @@ class TestLabGroups(TestCase):
         self.client.force_login(self.superuser1)
         lab_groups = [self.labgroup1.id]
         url = reverse("labgroup_status")
-        response = self.client.post(url, {'lab_groups':lab_groups})
+        response = self.client.post(url, {"lab_groups":lab_groups})
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 1)
-        self.assertRedirects(response, reverse('created_labs'))
+        self.assertRedirects(response, reverse("created_labs"))
     
     def test_teacher_can_cancel_and_republish_labgroup(self):
         self.client.force_login(self.superuser1)
         lab_groups = [self.labgroup2.id]
         url = reverse("labgroup_status")
-        response = self.client.post(url, {'lab_groups':lab_groups})
+        response = self.client.post(url, {"lab_groups":lab_groups})
         self.assertEqual(response.status_code, 302)
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 3)
         url_2 = reverse("labgroup_status")
-        response_2 = self.client.post(url_2, {'lab_groups':lab_groups})
+        response_2 = self.client.post(url_2, {"lab_groups":lab_groups})
         self.assertEqual(response_2.status_code, 302)
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 1)
-        self.assertRedirects(response, reverse('created_labs'))
+        self.assertRedirects(response, reverse("created_labs"))
     
     def test_student_cannot_publish_labgroup(self):
         lab_groups = [self.labgroup1.id]
         self.client.force_login(self.user1)
         url = reverse("labgroup_status")
-        response = self.client.post(url, {'lab_groups':lab_groups})
+        response = self.client.post(url, {"lab_groups":lab_groups})
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 0)
@@ -471,14 +471,14 @@ class TestLabGroups(TestCase):
         self.client.force_login(self.assistant1)
 
         data = {
-            'lab_groups[]': [str(self.labgroup1.id)],
-            'course_id': str(self.course1.id),
+            "lab_groups[]": [str(self.labgroup1.id)],
+            "course_id": str(self.course1.id),
         }
-        response = self.client.get(reverse('update_multiple_groups'), data)
+        response = self.client.get(reverse("update_multiple_groups"), data)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'update_multiple_groups.html')
+        self.assertTemplateUsed(response, "update_multiple_groups.html")
 
-        self.assertEqual(response.context['lab_group_ids'], [str(self.labgroup1.id)])
-        self.assertEqual(response.context['lab_group'], self.labgroup1)
-        self.assertEqual(response.context['course'], self.course1)
+        self.assertEqual(response.context["lab_group_ids"], [str(self.labgroup1.id)])
+        self.assertEqual(response.context["lab_group"], self.labgroup1)
+        self.assertEqual(response.context["course"], self.course1)
