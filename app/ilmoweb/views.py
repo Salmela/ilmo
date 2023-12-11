@@ -551,8 +551,10 @@ def system(request):
     """
 
     if request.user.is_superuser is not True:
-        return redirect(created_labs)
-
+        if request.user.is_staff:
+            return redirect(created_labs)
+        if not request.user.is_staff:
+            return redirect(open_labs)
     teachers_messages = TeachersMessage.objects.all()
     if len(teachers_messages) == 0:
         current_message = "Ei viestiä"
@@ -635,9 +637,12 @@ def teachers_message(request):
         View for updating message in instuctions page
     """
     if request.method == "GET":
-        if not request.user.is_staff:
-            return redirect("/open_labs")
-        return redirect("/system")
+        if not request.user.is_superuser:
+            if request.user.is_staff:
+                return redirect(created_labs)
+            if not request.user.is_staff:
+                return redirect(open_labs)
+        return redirect(system)
 
     if request.method == "POST":
         new_message = request.POST.get("message")
