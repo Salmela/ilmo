@@ -1,0 +1,212 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #4c4c4c;
+    color: #d8d4cf;
+    border: #686c70;
+}
+
+body input {
+    background-color: #4c4c4c;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+body input[type="submit"] {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+tbody tr {
+    border-color: #686c70;
+    color: #d8d4cf;
+    background-color: #343a40;
+    
+}
+
+thead th {
+    border-color: #686c70;
+    color: #d8d4cf;
+    background-color: #343a40;
+}
+
+.container {
+    margin: 20;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    line-height: 1.5;
+    padding: 2em;
+    background-color: black; 
+    color: #d8d4cf; 
+    border-color: #686c70;
+}
+
+.body-container {
+    margin: 20;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    line-height: 1.5;
+    text-align: center;
+    flex: 1;
+    padding: 4em;
+    background-color: #181a1b; /* Reversed color */
+    color: #d8d4cf; /* Reversed color */
+    border-color: #686c70;
+}
+
+.body-container th {
+    border-color: #686c70;
+    background-color: #343a40;
+    color: #d8d4cf;
+}
+
+.body-container tr {
+    border-color: #686c70;
+    color: #d8d4cf;
+    background-color: #343a40;
+}
+
+.body-container thead td {
+    border-color: #686c70;
+    background-color: #343a40;
+    color: #d8d4cf;
+}
+
+.body-container td {
+    border-color: #686c70;
+    background-color: #23272b;
+    color: #d8d4cf;
+}
+
+.body-container td button {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td a {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td select {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td textarea {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td input {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container label select {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container label i {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.left-align {
+    text-align: left;
+    color: white; /* Reversed color */
+}
+
+#main_title {
+    position: absolute;
+    left: 6em;
+    top: 25%;
+    color: #d8d4cf; /* Reversed color */
+}
+
+.footer {
+    padding: 3em;
+    color: #d8d4cf; /* Reversed color */
+    background-color: black; /* Reversed color */
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+.logo {
+    position: relative;
+}
+
+#hy_logo {
+    position: absolute;
+    left: 1em;
+    top: 16%;
+    height: 80px;
+}
+
+form {
+    display: inline;
+}
+
+@media screen and (max-width: 600px) {
+    #hy_logo {
+        height: 70px;
+    }
+
+    #main_title {
+        font-size: 100%;
+    }
+
+    .body-container {
+        padding: 2em;
+    }
+    
+    .hide-on-mobile {
+        display: none;
+    }
+
+    table#mobile th:not(.hide-on-mobile) {
+        display: flex;
+    }
+
+    table#mobile {
+        align-self: left;
+    }
+
+    table#mobile td:not(.hide-on-mobile) {
+        display: flex;
+        text-align: left;
+        width: 100%;
+    }
+      
+    table#mobile td::before {
+        content: attr(label);
+        font-weight: bold;
+        width: 150px;
+        min-width: 150px;
+        text-align: left;
+    }
+
+    .float-start {
+        width: 100%;
+    }
+
+    .float {
+        width: 100%;
+    }
+
+    .footer {
+        padding: 1em;
+    }
+}
