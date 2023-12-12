@@ -1,6 +1,17 @@
 {% extends "layout.html" %}
 {% block title %} Arvostele työ {% endblock %}
 {% block content %}
+<script>
+  $(document).ready(function () {
+    $('#resetbtn').on('click', function (event) {
+      event.preventDefault();
+      let $el = $('#fileid');
+      $el.wrap('<form>').closest(
+        'form').get(0).reset();
+      $el.unwrap();
+      });
+    });
+</script>
 <div class="container-sm">
   <h1>Arvostele työ</h1>
   <form action="/evaluate_report/{{ report.id }}" method="POST" enctype="multipart/form-data">
@@ -54,7 +65,8 @@
         <tr>
           <td label="Kommenttitiedosto">
             <class="hide-on-mobile">Palauta kommenttitiedosto:</class>
-            <input type="file" name="file" data-testid="file">
+            <input type="file" name="file" id="fileid" data-testid="file">
+            <button class="btn btn-light btn-outline-dark" id="resetbtn">Tyhjennä</button>
           </td>
         </tr>
         <tr>
