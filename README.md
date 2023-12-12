@@ -9,25 +9,7 @@
 
 [Documentation](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
 
-## Run tests
-To run unit tests manually, go to app-directory and run ```poetry run invoke unittest```
-
-## Run playwright tests
-Poetry doesn't install playwright automatically since playwright installs its own browser configurations. <br/>
-The first time you pull playwright to your local repository you need to run ```playwright install ``` in poetry shell.
-
-Open the server in a terminal by going to app-directory and running ```poetry run invoke start```
-
-Open another terminal and run ```poetry run invoke e2e```
-
-## Get unit test coverage
-- Go to app/
-
-- Run ```poetry run invoke coverage```
-
-HTML-report is produced automatically.
-
-The report ```index.html``` is located in the htmlcov directory.
+- [Testing instuctions](https://github.com/ILMOWEB/ilmo/blob/main/documentation/testing.md)
 
 ## Connect to a test database
 For this step, you need a Postgres database locally.
