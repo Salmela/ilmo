@@ -73,7 +73,7 @@ Frontend<-->Backend<-->Database;
 ### Students' view
 ```mermaid
   flowchart TD
-  1{{"Kirjautuminen opiskelijan HY-tunnuksilla"}}-->2(["Laboratoriotyöt (aloitusssivu)"]);
+  1{{"Kirjautuminen opiskelijan HY-tunnuksilla"}}-->2(["Laboratoriotyöt (aloitussivu)"]);
   2-->3["Lisätietoa"];
   2-->4["Ilmoittaudu"];
   2-->5["Peruuta ilmoittautuminen"];
