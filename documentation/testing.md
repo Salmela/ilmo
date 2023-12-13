@@ -23,7 +23,7 @@ Example:
 To get test coverage run ```invoke coverage```
 Then access index.html file in the htmlcov folder /ilmo/app/htmlcov/
 
-Currert coverage:
+Current coverage:
 
 ![image](https://github.com/ILMOWEB/ilmo/assets/101889891/cbc3fb40-aa18-4f86-badf-e35daf72c92c)
 
