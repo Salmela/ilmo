@@ -9,7 +9,7 @@
 
 [Documentation](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
 
-- [Testing instuctions](https://github.com/ILMOWEB/ilmo/blob/main/documentation/testing.md)
+- [Testing instructions](https://github.com/ILMOWEB/ilmo/blob/main/documentation/testing.md)
 
 ## Connect to a test database
 For this step, you need a Postgres database locally.
@@ -18,7 +18,7 @@ You can use instructions from the University of Helsinki webpage: [Local databas
 - Go to the app/config and create ```.env``` -file
 
 
-```.env``` should include to following information:
+```.env``` should include the following information:
 
 NAME= ```database_name```  
 USER= ```database_user``` or NONE  
