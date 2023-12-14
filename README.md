@@ -1,4 +1,4 @@
-# ENROLLMENT SYSTEM FOR PHYSICAL CHEMISTRY LABORATORY WORK
+## ENROLLMENT SYSTEM FOR PHYSICAL CHEMISTRY LABORATORY WORK
 ![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)
 
 University of Helsinki, Software Production Project, Fall 2023.
