@@ -2,9 +2,8 @@ name: publish_production
 
 on:
   push:
-    branches: [ "before_dark" ]
-  pull_request:
-    branches: [ "before_dark" ]
+    branches:
+      - production
 
   workflow_dispatch:
 
