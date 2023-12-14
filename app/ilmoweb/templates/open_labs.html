@@ -126,6 +126,8 @@
                         {% else %}
                           <td>Ilmoittauduttu</td>
                         {% endif %}
+                      {% elif lab_group.status == 2 %}
+                        <td>Ilmoittautuminen päättynyt</td> 
                       {% else %}
                         <td>
                           <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#enrollModal_{{ lab_group.id }}" data-testid="group_{{ lab_group.id }}">

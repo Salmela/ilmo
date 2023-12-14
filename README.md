@@ -8,7 +8,7 @@ The project implemented a new enrollment system for physical chemistry lab work 
 
 ## Application
 
-- [Link to App](latest URL here)
+- [Link to App](https://ilmoweb-net-fyskem-labrat.apps.ocp-prod-0.k8s.it.helsinki.fi/)
 
 ## Project progress
 
