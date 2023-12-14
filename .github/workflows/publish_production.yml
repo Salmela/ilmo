@@ -5,7 +5,7 @@ on:
     branches:
       - before_dark
 
-  workflow_dispatch:
+#  workflow_dispatch:
 
 jobs:
   publish:
