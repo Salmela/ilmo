@@ -3,7 +3,7 @@ name: publish_production
 on:
   push:
     branches:
-      - production
+      - before_dark
 
   workflow_dispatch:
 
