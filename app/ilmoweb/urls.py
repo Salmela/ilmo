@@ -41,7 +41,8 @@ if env("LOCAL") == 'False':
         path("teachers_message/", views.teachers_message, name="teachers_message"),
         path("update_multiple_groups/", views.update_multiple_groups,
              name="update_multiple_groups"),
-        path("report_notes/<int:report_id>", views.report_notes, name="report_notes")
+        path("report_notes/<int:report_id>", views.report_notes, name="report_notes"),
+        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status')
 
 
     ]
@@ -76,5 +77,6 @@ else:
         path("teachers_message/", views.teachers_message, name="teachers_message"),
         path("update_multiple_groups/", views.update_multiple_groups,
              name="update_multiple_groups"),
-        path("report_notes/<int:report_id>", views.report_notes, name="report_notes")
+        path("report_notes/<int:report_id>", views.report_notes, name="report_notes"),
+        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status')
     ]

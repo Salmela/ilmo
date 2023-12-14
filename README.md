@@ -1,62 +1,35 @@
-# ILMO
+## Enrollment system for physical chemistry laboratory work
+
 ![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)
 
-[Backlog](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?invite=CIPmtn8&pli=1#gid=1)
+University of Helsinki, Software Production Project, Fall 2023.
 
-[Google Meets](https://meet.google.com/xwd-djmc-bmb)
+The project implemented a new enrollment system for physical chemistry lab work at the University of Helsinki. The web application provides students a platform to register for different laboratory assignments and return reports related to the assignments. The application offers the possibility for the teacher to create new lab assignments for a course and multiple exercise groups for the lab assignments. The teacher and assistants are able to review the reports sent by the students.
 
-[Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
+## Application
 
-[Documentation](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
+- [Link to App](latest URL here)
 
-## Run tests
-To run unit tests manually, go to app-directory and run ```poetry run invoke unittest```
+## Project progress
 
-## Run playwright tests
-Poetry doesn't install playwright automatically since playwright installs its own browser configurations. <br/>
-The first time you pull playwright to your local repository you need to run ```playwright install ``` in poetry shell.
+- [Product Backlog](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?invite=CIPmtn8&pli=1#gid=1)
 
-Open the server in a terminal by going to app-directory and running ```poetry run invoke start```
+- [Time management](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?pli=1#gid=1570737936)
 
-Open another terminal and run ```poetry run invoke e2e```
+- [Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
 
-## Get unit test coverage
-- Go to app/
+## Documentation
 
-- Run ```poetry run invoke coverage```
+- [Architecture](https://github.com/ILMOWEB/ilmo/blob/main/documentation/architecture.md)
 
-HTML-report is produced automatically.
+- [Database diagram](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
 
-The report ```index.html``` is located in the htmlcov directory.
+- [Privacy policy](https://github.com/ILMOWEB/ilmo/blob/main/privacy_policy.md)
 
-## Connect to a test database
-For this step, you need a Postgres database locally.
-You can use instructions from the University of Helsinki webpage: [Local database](https://github.com/hy-tsoha/local-pg)  
-- Start the local database.
-- Go to the app/config and create ```.env``` -file
+- [License](https://github.com/ILMOWEB/ilmo/blob/main/LICENSE)
 
+- [Django-OpenID test case](https://github.com/ellaverak/django-openid)
 
-```.env``` should include to following information:
+## Testing
 
-NAME= ```database_name```  
-USER= ```database_user``` or NONE  
-PASSWORD= ```database_password``` or NONE  
-HOST= ```database_host``` usually ```localhost``` or ```path/to/socket```  
-PORT= ```database_port``` usually 5432
-LOCAL= ```True```
-UNI_LOGIN= ```False```
-EMAIL_HOST_PASSWORD= ```email_host_password```
-
-- Run ```poetry run invoke migrate```
-- Start the application  
-
-Now the application should be connected to your database.
-
-## Populate the test database
-- Go to app/
-
-- Run ```poetry run invoke populate ```
-
-## Create a superuser
-- Go to app/
-- Run ```python manage.py createsuperuser ``` and follow the instructions.
+- [Testing instructions](https://github.com/ILMOWEB/ilmo/blob/main/documentation/testing.md)

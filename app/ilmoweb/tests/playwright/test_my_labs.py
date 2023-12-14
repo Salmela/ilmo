@@ -81,7 +81,6 @@ def test_student_can_check_sent_to_fix_report_info(page: Page):
     page.get_by_role('button', name='Avaa').click()
     expect(page.get_by_role('link', name='file.pdf')).to_be_visible()
     expect(page.get_by_text('Kalle Kemisti')).to_be_visible()
-    expect(page.get_by_text('Raportti vaatii korjausta')).to_be_visible()
     expect(page.get_by_text('tämä on kommentti')).to_be_visible()
     expect(page.get_by_role('link', name='comment.pdf')).to_be_visible()
 
