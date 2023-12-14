@@ -97,7 +97,7 @@ def created_labs(request):
     if request.user.is_staff is not True:
         return redirect("/open_labs")
 
-    courses = Courses.objects.all()
+    courses = Courses.objects.all().exclude(name="Vanhanmalliset työt")
     course_labs = Labs.objects.filter(is_visible=1)
     groups = LabGroups.objects.filter(deleted=0).order_by('date')
     current_date = datetime.date.today()
@@ -128,7 +128,7 @@ def created_labs(request):
                 'signup_sum':sum(([group.signed_up_students for group in lab_groups if
                            (group.date, group.start_time, group.end_time,
                             group.place) == date_time_key]), 0),
-                'max_signup_sum': sum(([group.lab.max_students for group in lab_groups if 
+                'max_signup_sum': sum(([group.lab.max_students for group in lab_groups if
                             (group.date, group.start_time, group.end_time,
                             group.place) == date_time_key]), 0)
             }
@@ -204,7 +204,7 @@ def open_labs(request):
     """
         View for labs that are open
     """
-    courses =  Courses.objects.all()
+    courses =  Courses.objects.all().exclude(name="Vanhanmalliset työt")
     course_labs =  Labs.objects.all()
     lab_groups =  LabGroups.objects.all()
     signedup = SignUp.objects.all()
@@ -616,7 +616,7 @@ def user_info(request):
 
     student = User.objects.get(pk=request.user.id)
     filtered_reports = filter_reports.filter_report(request.user.id)
-    all_courses = Courses.objects.all().order_by("id").values()
+    all_courses = Courses.objects.all().exclude(name="Vanhanmalliset työt").order_by("id").values()
 
     return render(request, "user_info.html", {"student":student,
                                             "filtered_reports":filtered_reports,

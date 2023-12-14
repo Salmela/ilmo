@@ -33,7 +33,7 @@ class AuthenticationBackend:
             else:
                 user.student_id=userdata['hyPersonStudentId']
 
-        if user.email == "None":
+        if user.email == "-":
             user.email=userinfo['email']
 
         return user
