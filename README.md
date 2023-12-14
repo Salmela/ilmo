@@ -1,44 +1,32 @@
-# ILMO
+# ENROLLMENT SYSTEM FOR PHYSICAL CHEMISTRY LABORATORY WORK
 ![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)
 
-[Backlog](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?invite=CIPmtn8&pli=1#gid=1)
+University of Helsinki, Software Production Project, Fall 2023.
 
-[Google Meets](https://meet.google.com/xwd-djmc-bmb)
+The project implemented a new enrollment system for physical chemistry lab work at the University of Helsinki. The web application provides students a platform to register for different laboratory assignments and return reports related to the assignments. 
 
-[Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
+## Application
 
-[Documentation](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
+- [Link to App](latest URL here)
+
+## Project progress
+
+- [Product Backlog](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?invite=CIPmtn8&pli=1#gid=1)
+
+- [Time management](https://docs.google.com/spreadsheets/d/1zsXol2-I28QDLTTSvJKAZO7r786YN_nL7AbXE-i2GJM/edit?pli=1#gid=1570737936)
+
+- [Definition of Done](https://github.com/ILMOWEB/ilmo/blob/main/documentation/DoD.md)
+
+## Documentation
+
+- [Architecture](https://github.com/ILMOWEB/ilmo/blob/main/documentation/architecture.md)
+
+- [Database diagram](https://github.com/ILMOWEB/ilmo/tree/main/documentation)
+
+- [Privacy policy](https://github.com/ILMOWEB/ilmo/blob/main/privacy_policy.md)
+
+- [License](https://github.com/ILMOWEB/ilmo/blob/main/LICENSE)
+
+## Testing
 
 - [Testing instructions](https://github.com/ILMOWEB/ilmo/blob/main/documentation/testing.md)
-
-## Connect to a test database
-For this step, you need a Postgres database locally.
-You can use instructions from the University of Helsinki webpage: [Local database](https://github.com/hy-tsoha/local-pg)  
-- Start the local database.
-- Go to the app/config and create ```.env``` -file
-
-
-```.env``` should include the following information:
-
-NAME= ```database_name```  
-USER= ```database_user``` or NONE  
-PASSWORD= ```database_password``` or NONE  
-HOST= ```database_host``` usually ```localhost``` or ```path/to/socket```  
-PORT= ```database_port``` usually 5432
-LOCAL= ```True```
-UNI_LOGIN= ```False```
-EMAIL_HOST_PASSWORD= ```email_host_password```
-
-- Run ```poetry run invoke migrate```
-- Start the application  
-
-Now the application should be connected to your database.
-
-## Populate the test database
-- Go to app/
-
-- Run ```poetry run invoke populate ```
-
-## Create a superuser
-- Go to app/
-- Run ```python manage.py createsuperuser ``` and follow the instructions.
