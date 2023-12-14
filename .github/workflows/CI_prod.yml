@@ -3,7 +3,7 @@ name: CI_prod
 on:
   pull_request:
     branches:
-      - 'before_dark'
+      - 'production'
     types: [opened, reopened]
 
   workflow_dispatch:
