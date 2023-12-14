@@ -10,7 +10,8 @@ CREATE TABLE ilmoweb_user(
     is_superuser BOOL,
     is_staff BOOL,
     is_active BOOL,
-    date_joined DATE);
+    date_joined DATE
+    dark_mode BOOL DEFAULT false);
 
 CREATE TABLE ilmoweb_courses(
     id SERIAL PRIMARY KEY,

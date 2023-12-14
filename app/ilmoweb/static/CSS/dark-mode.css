@@ -1,0 +1,268 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #4c4c4c;
+    color: #d8d4cf;
+    border: #686c70;
+}
+
+body input {
+    background-color: #4c4c4c;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+body input[type="submit"] {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+tbody tr {
+    border-color: #686c70;
+    color: #d8d4cf;
+    background-color: #343a40;
+    
+}
+
+thead th {
+    border-color: #686c70;
+    color: #d8d4cf;
+    background-color: #343a40;
+}
+
+.container {
+    margin: 20;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    line-height: 1.5;
+    padding: 2em;
+    background-color: black; 
+    color: #d8d4cf; 
+    border-color: #686c70;
+}
+
+.body-container {
+    margin: 20;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    line-height: 1.5;
+    text-align: center;
+    flex: 1;
+    padding: 4em;
+    background-color: #181a1b; /* Reversed color */
+    color: #d8d4cf; /* Reversed color */
+    border-color: #686c70;
+}
+
+.body-container th {
+    border-color: #686c70;
+    background-color: #343a40;
+    color: #d8d4cf;
+}
+
+.body-container tr {
+    border-color: #686c70;
+    color: #d8d4cf;
+    background-color: #343a40;
+}
+
+.body-container thead td {
+    border-color: #686c70;
+    background-color: #343a40;
+    color: #d8d4cf;
+}
+
+.body-container td {
+    border-color: #686c70;
+    background-color: #23272b;
+    color: #d8d4cf;
+}
+
+.body-container td button {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td a {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td select {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td textarea {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container td input {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container label select {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container label i {
+    background-color: #343a40;
+    color: #d8d4cf;
+    border: 0.5px solid#686c70;
+}
+
+.body-container tbody tr{
+    border: 0.5px solid#686c70;
+}
+
+.body-container tbody th {
+    border: 0.5px solid#686c70;
+}
+
+/* Dark mode styling for Bootstrap modals */
+.modal-content {
+    background-color: #343a40; /* Background color for the modal content */
+    color: #d8d4cf; /* Text color for the modal content */
+}
+
+.modal-header {
+    background-color: #343a40; /* Background color for the modal header */
+    border-bottom: 1px solid #686c70; /* Border color for the modal header */
+}
+
+.modal-title {
+    color: #d8d4cf; /* Text color for the modal title */
+}
+
+.modal-body {
+    border-top: 1px solid #686c70;
+    background-color: #343a40;
+     /* Border color for the top of the modal body */
+}
+
+.modal-footer {
+    background-color: #343a40; /* Background color for the modal footer */
+    border-top: 1px solid #686c70; /* Border color for the top of the modal footer */
+    color: #d8d4cf; /* Text color for the modal footer */
+}
+
+.card {
+    color: #d8d4cf;
+    border-top: 1px solid #686c70;
+    background-color: #4b545d;
+}
+
+/* Close button color for the modal */
+.close {
+    color: #d8d4cf;
+}
+
+/* Hover effect for the close button */
+.close:hover {
+    color: #d8d4cf; /* Adjust the color as needed */
+}
+
+/* Overlay background color */
+.modal-backdrop {
+    background-color: #343a40; /* Adjust the color and opacity as needed */
+}
+
+.left-align {
+    text-align: left;
+    color: white; /* Reversed color */
+}
+
+#main_title {
+    position: absolute;
+    left: 6em;
+    top: 25%;
+    color: #d8d4cf; /* Reversed color */
+}
+
+.footer {
+    padding: 3em;
+    color: #d8d4cf; /* Reversed color */
+    background-color: black; /* Reversed color */
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+.logo {
+    position: relative;
+}
+
+#hy_logo {
+    position: absolute;
+    left: 1em;
+    top: 16%;
+    height: 80px;
+}
+
+form {
+    display: inline;
+}
+
+@media screen and (max-width: 600px) {
+    #hy_logo {
+        height: 70px;
+    }
+
+    #main_title {
+        font-size: 100%;
+    }
+
+    .body-container {
+        padding: 2em;
+    }
+    
+    .hide-on-mobile {
+        display: none;
+    }
+
+    table#mobile th:not(.hide-on-mobile) {
+        display: flex;
+    }
+
+    table#mobile {
+        align-self: left;
+    }
+
+    table#mobile td:not(.hide-on-mobile) {
+        display: flex;
+        text-align: left;
+        width: 100%;
+    }
+      
+    table#mobile td::before {
+        content: attr(label);
+        font-weight: bold;
+        width: 150px;
+        min-width: 150px;
+        text-align: left;
+    }
+
+    .float-start {
+        width: 100%;
+    }
+
+    .float {
+        width: 100%;
+    }
+
+    .footer {
+        padding: 1em;
+    }
+}

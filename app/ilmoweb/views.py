@@ -86,6 +86,7 @@ def home_page_view(request):
         if request.user.is_staff:
             return redirect(created_labs)
         return redirect(open_labs)
+
     return render(request, "home.html")
 
 @login_required(login_url="login")
@@ -101,6 +102,7 @@ def created_labs(request):
     groups = LabGroups.objects.filter(deleted=0).order_by('date')
     current_date = datetime.date.today()
     day_after_tomorrow = current_date + datetime.timedelta(days=2)
+    user = User.objects.get(pk=request.user.id)
 
     lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False)
 
@@ -136,6 +138,7 @@ def created_labs(request):
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":groups,
                                                  "groups_by_date":groups_by_date_time,
+                                                 "dark_mode":user.dark_mode,
                                                  "current_date":current_date,
                                                  "day_after_tomorrow":day_after_tomorrow})
 
@@ -157,9 +160,11 @@ def create_lab(request):
         labs.create_new_lab(lab_name, description, max_students, course_id)
 
         return redirect(created_labs)
-    course_id = request.GET.get("course_id")
 
-    return render(request, "create_lab.html", {"course_id": course_id})
+    course_id = request.GET.get("course_id")
+    user = User.objects.get(pk=request.user.id)
+
+    return render(request, "create_lab.html", {"course_id": course_id, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def create_group(request):
@@ -188,11 +193,11 @@ def create_group(request):
     course_id = request.GET.get("course_id")
     course = Courses.objects.get(pk=course_id)
     course_labs = Labs.objects.all()
-
+    user = User.objects.get(pk=request.user.id)
     assistants = User.objects.filter(is_staff=True)
 
     return render(request, "create_group.html", {
-        "labs":course_labs, "course":course, "assistants":assistants})
+        "labs":course_labs, "course":course, "assistants":assistants, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def open_labs(request):
@@ -204,11 +209,13 @@ def open_labs(request):
     lab_groups =  LabGroups.objects.all()
     signedup = SignUp.objects.all()
     users_enrollments = signup.get_labgroups(request.user)
+    user = User.objects.get(pk=request.user.id)
 
     return render(request, "open_labs.html", {"courses":courses, "labs":course_labs,
-                                              "lab_groups":lab_groups, "signedup":signedup,
-                                              "users_enrollments":users_enrollments})
-
+                                              "lab_groups":lab_groups,
+                                              "signedup":signedup,
+                                              "users_enrollments":users_enrollments,
+                                              "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def enroll(request):
@@ -328,6 +335,7 @@ def my_labs(request):
     students_reports = Report.objects.filter(student_id=request.user)
     lg_ids_with_reports = [report.lab_group_id for report in students_reports]
     ids_without_grade = [report.lab_group_id for report in students_reports if report.grade is None]
+    user = User.objects.get(pk=request.user.id)
 
     # Filter the report with the highest status per labgroup
     filtered_reports = filter_reports.filter_report(request.user)
@@ -336,7 +344,8 @@ def my_labs(request):
                                             "reports":students_reports,
                                             "filtered_reports":filtered_reports,
                                             "labgroup_ids_with_reports":lg_ids_with_reports,
-                                            "labgroup_ids_without_grade":ids_without_grade})
+                                            "labgroup_ids_without_grade":ids_without_grade,
+                                            "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def return_report(request):
@@ -384,8 +393,10 @@ def returned_reports(request):
     lab_groups = LabGroups.objects.all()
     reports = Report.objects.all()
     users = User.objects.all()
+    user = User.objects.get(pk=request.user.id)
+
     return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
-    "lab_groups":lab_groups, "reports":reports, "users":users})
+    "lab_groups":lab_groups, "reports":reports, "users":users, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def returned_report(request, report_id):
@@ -416,6 +427,7 @@ def evaluate_report(request, report_id):
     lab = Labs.objects.get(pk=lab_group.lab_id)
     course = Courses.objects.get(pk=lab.course_id)
     student = User.objects.get(pk=report.student_id)
+    user = User.objects.get(pk=request.user.id)
 
     if request.method == "POST":
         grade = int(request.POST.get("grade"))
@@ -445,7 +457,7 @@ def evaluate_report(request, report_id):
         return redirect(returned_reports)
 
     return render(request, "evaluate_report.html", {"course":course, "lab":lab,
-    "lab_group":lab_group, "report":report, "student":student})
+    "lab_group":lab_group, "report":report, "student":student, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def download_report(request, filename):
@@ -510,12 +522,14 @@ def update_group(request, labgroup_id):
     course = Courses.objects.get(pk=course_id)
     course_labs = Labs.objects.all()
     labgroup = LabGroups.objects.get(pk=labgroup_id)
+    user = User.objects.get(pk=request.user.id)
 
     assistants = User.objects.filter(is_staff=True)
 
     return render(request, "update_group.html", {
-        "labs":course_labs, "course":course, "assistants":assistants, "lab_group":labgroup })
-
+        "labs":course_labs, "course":course,
+        "assistants":assistants, "lab_group":labgroup,
+        "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def archive(request):
@@ -525,8 +539,10 @@ def archive(request):
     if request.user.is_staff is not True:
         return redirect("/open_labs")
 
+    user = User.objects.get(pk=request.user.id)
     users = User.objects.filter(is_staff = False)
-    return render(request, "archive.html", {"users":users})
+
+    return render(request, "archive.html", {"users":users, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def personal_archive(request, user_id):
@@ -539,10 +555,12 @@ def personal_archive(request, user_id):
     student = User.objects.get(pk=user_id)
     filtered_reports = filter_reports.filter_report(user_id)
     all_courses = Courses.objects.all().order_by("id").values()
+    user = User.objects.get(pk=request.user.id)
 
     return render(request, "personal_archive.html", {"student":student,
                                                      "filtered_reports":filtered_reports,
-                                                     "all_courses":all_courses})
+                                                     "all_courses":all_courses,
+                                                     "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def system(request):
@@ -560,7 +578,12 @@ def system(request):
         current_message = "Ei viestiä"
     else:
         current_message = teachers_messages[0].message
-    return render(request, "system.html", {"current_message":current_message})
+
+    user = User.objects.get(pk=request.user.id)
+
+    return render(request, "system.html",
+                {"current_message":current_message,
+                "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def instructions(request):
@@ -573,7 +596,12 @@ def instructions(request):
         current_message = "Ei viestiä"
     else:
         current_message = teachers_messages[0].message
-    return render(request, "instructions.html", {"current_message": current_message})
+
+    user = User.objects.get(pk=request.user.id)
+
+    return render(request, "instructions.html",
+                {"current_message": current_message,
+                "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def user_info(request):
@@ -592,7 +620,8 @@ def user_info(request):
 
     return render(request, "user_info.html", {"student":student,
                                             "filtered_reports":filtered_reports,
-                                            "all_courses":all_courses})
+                                            "all_courses":all_courses,
+                                            "dark_mode":student.dark_mode})
 
 @login_required(login_url="login")
 def update_multiple_groups(request):
@@ -623,13 +652,13 @@ def update_multiple_groups(request):
     lab_group = LabGroups.objects.get(id=int(lab_group_ids[0]))
     course_id = request.GET.get("course_id")
     course = Courses.objects.get(pk=course_id)
-
+    user = User.objects.get(pk=request.user.id)
     assistants = User.objects.filter(is_staff=True)
 
     return render(request, "update_multiple_groups.html",
                             {"lab_group_ids":lab_group_ids,
                             "lab_group":lab_group,
-                            "course":course, "assistants":assistants})
+                            "course":course, "assistants":assistants, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def teachers_message(request):
@@ -666,3 +695,19 @@ def report_notes(request, report_id):
         messages.success(request, "Muistiinpanot tallennettu")
 
     return redirect(reverse("evaluate_report", args=[report_id]))
+
+@login_required(login_url="login")
+def get_dark_mode_status(request):
+    """
+        Dark mode feature
+    """
+    if request.method == "GET":
+        user = request.user
+        user_darkmode = User.objects.get(pk=user.id)
+        user_darkmode.dark_mode = not user_darkmode.dark_mode
+        user_darkmode.save()
+    # Get the referrer (previous) URL from the request's META attribute
+    referrer = request.META.get('HTTP_REFERER', None)
+
+    # Use the redirect function to redirect back to the previous URL
+    return redirect(referrer)

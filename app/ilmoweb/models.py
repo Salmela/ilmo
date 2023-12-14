@@ -12,6 +12,7 @@ class User(AbstractUser):
     first_name = encrypt(models.CharField(max_length = 100))
     last_name = encrypt(models.CharField(max_length = 100))
     email = encrypt(models.CharField(max_length = 100))
+    dark_mode = models.BooleanField(default=False)
 
 class Courses(models.Model):
     """
