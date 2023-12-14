@@ -28,6 +28,8 @@ The project implemented a new enrollment system for physical chemistry lab work 
 
 - [License](https://github.com/ILMOWEB/ilmo/blob/main/LICENSE)
 
+- [Django-OpenID test case](https://github.com/ellaverak/django-openid)
+
 ## Testing
 
 - [Testing instructions](https://github.com/ILMOWEB/ilmo/blob/main/documentation/testing.md)
