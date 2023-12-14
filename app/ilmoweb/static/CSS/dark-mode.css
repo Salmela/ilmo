@@ -125,6 +125,62 @@ thead th {
     border: 0.5px solid#686c70;
 }
 
+.body-container tbody tr{
+    border: 0.5px solid#686c70;
+}
+
+.body-container tbody th {
+    border: 0.5px solid#686c70;
+}
+
+/* Dark mode styling for Bootstrap modals */
+.modal-content {
+    background-color: #343a40; /* Background color for the modal content */
+    color: #d8d4cf; /* Text color for the modal content */
+}
+
+.modal-header {
+    background-color: #343a40; /* Background color for the modal header */
+    border-bottom: 1px solid #686c70; /* Border color for the modal header */
+}
+
+.modal-title {
+    color: #d8d4cf; /* Text color for the modal title */
+}
+
+.modal-body {
+    border-top: 1px solid #686c70;
+    background-color: #343a40;
+     /* Border color for the top of the modal body */
+}
+
+.modal-footer {
+    background-color: #343a40; /* Background color for the modal footer */
+    border-top: 1px solid #686c70; /* Border color for the top of the modal footer */
+    color: #d8d4cf; /* Text color for the modal footer */
+}
+
+.card {
+    color: #d8d4cf;
+    border-top: 1px solid #686c70;
+    background-color: #4b545d;
+}
+
+/* Close button color for the modal */
+.close {
+    color: #d8d4cf;
+}
+
+/* Hover effect for the close button */
+.close:hover {
+    color: #d8d4cf; /* Adjust the color as needed */
+}
+
+/* Overlay background color */
+.modal-backdrop {
+    background-color: #343a40; /* Adjust the color and opacity as needed */
+}
+
 .left-align {
     text-align: left;
     color: white; /* Reversed color */

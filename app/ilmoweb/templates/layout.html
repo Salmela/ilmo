@@ -92,17 +92,17 @@
               </li>
             {% endif %}
             <li class="nav-item">
-              <a href="{% url 'logout' %}" class="nav-link">
-                Kirjaudu ulos
-              </a>
-            </li>
-            <li class="nav-item">
               <a href="{% url 'get_dark_mode_status' %}" class="nav-link">
                 {% if dark_mode %}
                     Light Mode
                 {% else %}
                     Dark Mode
                 {% endif %}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'logout' %}" class="nav-link">
+                Kirjaudu ulos
               </a>
             </li>
           </ul>
