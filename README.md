@@ -1,9 +1,10 @@
-## ENROLLMENT SYSTEM FOR PHYSICAL CHEMISTRY LABORATORY WORK
+## Enrollment system for physical chemistry laboratory work
+
 ![GHA badge](https://github.com/ILMOWEB/ilmo/workflows/CI/badge.svg)
 
 University of Helsinki, Software Production Project, Fall 2023.
 
-The project implemented a new enrollment system for physical chemistry lab work at the University of Helsinki. The web application provides students a platform to register for different laboratory assignments and return reports related to the assignments. 
+The project implemented a new enrollment system for physical chemistry lab work at the University of Helsinki. The web application provides students a platform to register for different laboratory assignments and return reports related to the assignments. The application offers the possibility for the teacher to create new lab assignments for a course and multiple exercise groups for the lab assignments. The teacher and assistants are able to review the reports sent by the students.
 
 ## Application
 
