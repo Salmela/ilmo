@@ -430,7 +430,7 @@ def evaluate_report(request, report_id):
     user = User.objects.get(pk=request.user.id)
 
     if request.method == "POST":
-        if request.POST.get("grade") == None:
+        if request.POST.get("grade") is None:
             messages.warning(request, "Anna arvosana")
             return redirect(f"/evaluate_report/{report_id}")
         grade = int(request.POST.get("grade"))
