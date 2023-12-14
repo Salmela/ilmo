@@ -1,10 +1,10 @@
 name: publish_production
 
 on:
+  push:
+    branches: [ "before_dark" ]
   pull_request:
-    branches:
-      - 'before_dark'
-    types: [opened, reopened]
+    branches: [ "before_dark" ]
 
   workflow_dispatch:
 
