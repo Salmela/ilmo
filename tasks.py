@@ -34,3 +34,7 @@ def lint(ctx):
 def e2e(ctx):
     ctx.run("playwright install")
     ctx.run("pytest ilmoweb/tests/playwright/ --headed --base-url http://127.0.0.1:8000/")
+
+@task
+def collectstatic(ctx):
+    ctx.run("python manage.py collectstatic")
