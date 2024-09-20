@@ -3,7 +3,7 @@ name: publish_main
 on:
   push:
     branches:
-      - main
+      - 'main'
 
   workflow_dispatch:
 
