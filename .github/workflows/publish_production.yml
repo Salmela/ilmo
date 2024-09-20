@@ -3,7 +3,7 @@ name: publish_production
 on:
   workflow_dispatch:
     branches:
-      - 'production'
+      - 'production_v2'
 
 #  workflow_dispatch:
 
