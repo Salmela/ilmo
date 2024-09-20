@@ -10,7 +10,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+ #   if: github.event_name == 'push' && github.ref == 'refs/heads/production'
 
     steps:
     - name: Checkout code
