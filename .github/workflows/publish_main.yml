@@ -1,16 +1,16 @@
 name: publish_main
 
 on:
-  push:
+  workflow_dispatch:
     branches:
       - 'main'
 
-  workflow_dispatch:
+#  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+#    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
     - name: Checkout code
