@@ -14,7 +14,7 @@ from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
-from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail
+from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
@@ -388,10 +388,14 @@ def returned_reports(request):
     if request.user.is_staff is not True:
         return redirect("/my_labs")
 
-    courses = Courses.objects.all()
-    course_labs = Labs.objects.all()
-    lab_groups = LabGroups.objects.all()
-    reports = Report.objects.all()
+    data = Report.objects.select_related("lab_group__lab__course").all()
+
+    reports, lab_groups, course_labs, courses = distint_id.sort(data)
+
+#    courses = Courses.objects.all()
+#    course_labs = Labs.objects.all()
+#    lab_groups = LabGroups.objects.all()
+#    reports = Report.objects.all()
     users = User.objects.all()
     user = User.objects.get(pk=request.user.id)
 
