@@ -34,4 +34,3 @@ def sort(data):
         id_3.append(lab.course.id)
 
     return reports, lab_groups, course_labs, courses
-
