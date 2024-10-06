@@ -197,7 +197,7 @@ def create_group(request):
 
     course_id = request.GET.get("course_id")
     course = Courses.objects.get(pk=course_id)
-    course_labs = Labs.objects.all()
+    course_labs = Labs.objects.filter(deleted=False)
     user = User.objects.get(pk=request.user.id)
     assistants = User.objects.filter(is_staff=True)
 

@@ -18,7 +18,7 @@ def test_create_labgroup_and_check_that_it_is_created(page: Page):
     page.get_by_test_id('end_time').fill('16:00')
     page.get_by_test_id('place').select_option('D210 (Phy)')
     page.get_by_test_id('1').click()
-    page.get_by_role('button', name='Luo labra').click()
+    page.get_by_role('button', name='Luo ryhmä').click()
     expect(page).to_have_title('Created labs')
     expect(page.get_by_role('cell', name='31.10.2025 klo 12:00 - 16:00'))
     expect(page.get_by_text('D210 (Phy)').first).to_be_visible()
