@@ -18,13 +18,23 @@
               <p>
                 <b>Opetus</b>
                 <br><br>
-                Tällä sivulla voi luoda uusia harjoitusryhmiä. Ryhmien luominen tapahtuu painamalla halutun kurssin kohdalta <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi ryhmä</button>.
-                Luomisen yhteydessä valitaan päivä, aika, paikka, työt ja assistentti. Ryhmään ilmoittautuminen avataan painamalla <button class="btn btn-sm btn-light btn-outline-info">Julkaise</button>. Ryhmän
-                voi peruuttaa painamalla <button class="btn btn-sm btn-light btn-outline-danger">Peruuta</button>. Ryhmien tietoja voi myös muokata. Taulukosta näkee ryhmän töiden osallistujamäärän, ja kun ryhmässä on
-                tarpeeksi osallistujia, sen voi vahvistaa. Tästä lähtee ilmoittautuneille opiskelijoille sähköpostiviesti. Ryhmässä olevia töitä on mahdollista muokata tai poistaa yksittäin alemmasta taulukosta käsin.
+                Tällä sivulla voi luoda ja hallinnoida laboratoriotöitä ja -ryhmiä.
                 <br><br>
-                Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi työ</button> voi luoda kurssille uuden laboratoriotyön. Luomisen yhteydessä kysytään työn nimi, kuvaus ja ryhmäkoko.
-                Kun työ on aktiivisessa tilassa, se on valittavissa ryhmää luodessa. Jos työ on deaktivoitu, sitä ei voi sisällyttää ryhmään. Työn voi myös poistaa.
+                <i>Harjoitusryhmät kursseittain:</i>
+                <br><br>
+                Uusi ryhmä luodaan painamalla <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi ryhmä</button> halutun kurssin kohdalta. Uudelle ryhmälle asetetaan päivä, aika, paikka, työt ja assistentti.
+                Ryhmään ilmoittautuminen avataan painamalla <button class="btn btn-sm btn-light btn-outline-info">Julkaise</button>. Ryhmän tietoja pääse muokkaamaan painamalla <button class="btn btn-sm btn-light btn-outline-danger">Muokkaa</button>.
+                Ryhmä peruutetaan painamalla <button class="btn btn-sm btn-light btn-outline-danger">Peruuta</button>. Taulukko-osio “Täyttöaste töittäin” ilmoittaa ryhmien töiden osallistujamäärän.
+                Kun ryhmässä on tarpeeksi osallistujia, sen voi vahvistaa painamalla <button class="btn btn-sm btn-light btn-outline-danger">Vahvista</button>. Vahvistamisesta lähtee ilmoittautuneille opiskelijoille sähköpostiviestinä tieto ryhmän vahvistamisesta.
+                <br><br>
+                Ryhmässä olevia laboratoriotöitä on mahdollista hallinnoida alemman taulukon “Muokkaa” osiossa. Työtä muokataan painamalla <button class="btn btn-sm btn-light btn-outline-danger">Muokkaa</button>.
+                Työn voi poistaa painamalla <button class="btn btn-sm btn-light btn-outline-danger">Poista</button>.
+                <br><br>
+                <i>Harjoitustyöt kursseittain::</i>
+                <br><br>
+                Kurssille luodaan uusi laboratoriotyö painamalla <button class="btn btn-sm btn-light btn-outline-dark">Luo uusi työ</button>. Uudelle työlle asetetaan työn nimi, kuvaus ja ryhmäkoko.
+                Työ aktivoidaan painamalla <button class="btn btn-sm btn-light btn-outline-danger">Aktivoi</button> ja deaktivoidaan painamalla <button class="btn btn-sm btn-light btn-outline-danger">Deaktivoi</button>.
+                Kun työ on aktivoitu, se on valittavissa ryhmän luonnissa. Kun työ on deaktivoitu, sitä ei voi sisällyttää ryhmään. Työn voi poistaa painamalla <button class="btn btn-sm btn-light btn-outline-danger">Poista</button>
               </p>
             </td>
           </tr>
@@ -33,28 +43,35 @@
               <p>
                 <b>Laboratoriotyöt</b>
                 <br><br>
-                Tällä sivulla voi tarkastella, ketkä oppilaat ovat ilmoittautuneet harjoitustöihin.
+                Tämä sivu näyttää oppilaat, jotka ovat ilmoittautuneet harjoitustöihin.
               </p>
             </td>
           </tr>
           <tr>
             <td class="left-align">
-              <p>    
+              <p>
                 <b>Palautukset</b>
                 <br><br>
-                Oppilaiden palautuksien arvosteleminen tapahtuu täällä. Jokaiselle raportille on määritelty assistentti, jonka on määrä tarkastaa raportti. Assistentin voi vaihtaa, ja raportin pystyy arvostelemaan 
-                myös muu kuin määritelty assistentti. Raportin arvosteluun pääsee painamalla <button class="btn btn-sm btn-light btn-outline-dark">Avaa</button>. Raportin voi ladata painamalla raporttitiedostoa. Arvosana 
-                valitaan valikosta, ja kommentit voi antaa joko vapaaseen tekstikenttään tai PDF-tiedostona. Jos raportti ei ole hyväksyttävä ja vaatii korjausta, valitse arvosanavalikosta <i>Vaatii korjausta</i>. Tällöin
-                oppilas voi palauttaa parannellun version. Kun raportti on arvosteltu, arvosana näkyy statustilassa.
+                Tällä sivulla arvostellaan oppilaiden palautukset.
+                <br><br>
+                Jokaiselle raportille on määritelty assistentti, jonka on määrä tarkastaa raportti.
+                Assistentin voi vaihtaa painamalla <button class="btn btn-sm btn-light btn-outline-dark">Vaihda</button>, ja raportin voi arvostella myös muu kuin määritelty assistentti.
+                Raportin arvosteluun pääsee painamalla <button class="btn btn-sm btn-light btn-outline-dark">Avaa</button>.
+                <br><br>
+                Raportin voi ladata painamalla raporttitiedostoa. Arvosana valitaan valikosta. Kommentit voi antaa joko vapaaseen tekstikenttään tai PDF-tiedostona.
+                Jos raportti ei ole hyväksyttävä ja vaatii korjausta, valitse arvosanavalikosta “Vaatii korjausta”.
+                Tällöin oppilas voi palauttaa parannellun version. Kun raportti on arvosteltu, arvosana näkyy statustilassa.
               </p>
             </td>
           </tr>
           <tr>
             <td class="left-align">
-              <p>    
+              <p>
                 <b>Arkisto</b>
                 <br><br>
-                Arkistossa näkyvät kaikki järjestelmään kirjautuneet opiskelijat. Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Näytä</button> aukeaa sivu, jonne on listattu kyseisen opiskelijan suoritukset.
+                Arkistossa näkyvät kaikki järjestelmään kirjautuneet opiskelijat.
+                <br><br>
+                Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Näytä</button> aukeaa sivu, jonne on listattu kaikki kyseisen opiskelijan suoritukset.
               </p>
             </td>
           </tr>
@@ -77,7 +94,7 @@
               <b>Tiedotteet</b>
               <br><br>
                 {{ current_message }}
-              <p>    
+              <p>
             </td>
           </tr>
         </tbody>
@@ -96,9 +113,9 @@
                 <br><br>
                 Laboratoriotöihin ilmoittautuminen tapahtuu täällä. Ilmoittautumisnapin vasemmalla puolella näkyy työn osallistujamäärä sekä ryhmäkoko.
                 Mikäli ryhmä on täynnä, siihen ei voi enää ilmoittautua. Kun ilmoittautuminen on vahvistettu, siitä lähetetään ilmoitus sähköpostitse.
-                Mikäli ryhmä perutaan, siitäkin ilmoitetaan sähköpostilla. Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Lisätietoa</button> 
+                Mikäli ryhmä perutaan, siitäkin ilmoitetaan sähköpostilla. Painamalla <button class="btn btn-sm btn-light btn-outline-dark">Lisätietoa</button>
                 pääsee tarkastelemaan kurssille kuuluvia töitä.
-              </p>      
+              </p>
             </td>
           </tr>
           <tr>
@@ -108,14 +125,14 @@
                 <br><br>
                 Tällä sivulla näkyvät kaikki työt, joihin oppilas on ilmoittautunut. Kun ilmoittautuminen on vahvistettu, tausta muuttuu vihreäksi.
                 Jos työ perutaan, muuttuu tausta punaiseksi. Raportin palauttaminen tapahtuu painamalla <button class="btn btn-sm btn-light btn-outline-dark">Palauta raportti</button>.
-                Raportin tulee olla PDF-tiedosto. Opettajan kommentit ja arvosana avautuvat painamalla 
+                Raportin tulee olla PDF-tiedosto. Opettajan kommentit ja arvosana avautuvat painamalla
                 <button class="btn btn-sm btn-light btn-outline-dark">Avaa</button>.
               </p>
             </td>
           </tr>
           <tr>
             <td class="left-align">
-              <p>    
+              <p>
                 <b>Omat tiedot</b>
                 <br><br>
                 Jos haluaa vaihtaa sähköpostiosoitetta, johon ilmoitukset lähetetään, sen voi tehdä täällä.
