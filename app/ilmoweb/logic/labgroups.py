@@ -44,18 +44,25 @@ def confirm(group_id):
     group.save()
     email(group, 'confirm')
 
-def create(id_, lab, date, start_time, end_time, place, assistant): # pylint: disable=too-many-arguments
+def create(lab, date, start_time, end_time, place, assistant, id_=None): # pylint: disable=too-many-arguments
     """
         creates new labgroup in database
     """
-
-    group = LabGroups(id=id_+1,
-                      lab=lab,
-                      date=date,
-                      start_time=start_time,
-                      end_time=end_time,
-                      place=place,
-                      assistant=assistant)
+    if id_ is None:
+        group = LabGroups(lab=lab,
+                          date=date,
+                          start_time=start_time,
+                          end_time=end_time,
+                          place=place,
+                          assistant=assistant)
+    else:
+        group = LabGroups(id=id_+1,
+                          lab=lab,
+                          date=date,
+                          start_time=start_time,
+                          end_time=end_time,
+                          place=place,
+                          assistant=assistant)
     group.save()
 
 def update(date, start_time, end_time, place, assistant, labgroup_id): # pylint: disable=too-many-arguments

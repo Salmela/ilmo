@@ -160,7 +160,7 @@ def create_lab(request):
 
         max_id = Labs.objects.aggregate(Max('id'))['id__max']
 
-        labs.create_new_lab(max_id, lab_name, description, max_students, course_id)
+        labs.create_new_lab(lab_name, description, max_students, course_id, max_id)
 
         return redirect(created_labs)
 
@@ -191,7 +191,7 @@ def create_group(request):
         for lab in course_labs:
             this_lab = Labs.objects.get(pk=lab)
             assistant = User.objects.get(pk=assistant_id)
-            labgroups.create(max_id, this_lab, date, start_time, end_time, place, assistant)
+            labgroups.create(this_lab, date, start_time, end_time, place, assistant, max_id)
 
         return redirect(created_labs)
 
