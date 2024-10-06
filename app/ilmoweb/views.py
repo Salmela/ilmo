@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Max
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
@@ -157,7 +158,9 @@ def create_lab(request):
         max_students = int(request.POST.get("max_students"))
         course_id = request.POST.get("course_id")
 
-        labs.create_new_lab(lab_name, description, max_students, course_id)
+        max_id = Labs.objects.aggregate(Max('id'))['id__max']
+
+        labs.create_new_lab(max_id, lab_name, description, max_students, course_id)
 
         return redirect(created_labs)
 
@@ -183,10 +186,12 @@ def create_group(request):
         end_time = request.POST.get("end_time")
         assistant_id = request.POST.get("assistant")
 
+        max_id = LabGroups.objects.aggregate(Max('id'))['id__max']
+
         for lab in course_labs:
             this_lab = Labs.objects.get(pk=lab)
             assistant = User.objects.get(pk=assistant_id)
-            labgroups.create(this_lab, date, start_time, end_time, place, assistant)
+            labgroups.create(max_id, this_lab, date, start_time, end_time, place, assistant)
 
         return redirect(created_labs)
 
@@ -392,10 +397,6 @@ def returned_reports(request):
 
     reports, lab_groups, course_labs, courses = distint_id.sort(data)
 
-#    courses = Courses.objects.all()
-#    course_labs = Labs.objects.all()
-#    lab_groups = LabGroups.objects.all()
-#    reports = Report.objects.all()
     users = User.objects.all()
     user = User.objects.get(pk=request.user.id)
 
@@ -547,7 +548,7 @@ def archive(request):
         return redirect("/open_labs")
 
     user = User.objects.get(pk=request.user.id)
-    users = User.objects.filter(is_staff = False)
+    users = User.objects.filter(is_staff = False).order_by('-last_name')
 
     return render(request, "archive.html", {"users":users, "dark_mode":user.dark_mode})
 
