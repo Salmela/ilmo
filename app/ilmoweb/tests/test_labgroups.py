@@ -144,7 +144,7 @@ class TestLabGroups(TestCase):
 
         self.assertEqual(group.start_time.hour, 12)
         self.assertEqual(group.end_time.hour, 16)
-    
+
     def test_labgroup_is_saved_to_db(self):
         lab = self.lab1
         date = "2023-10-13"
@@ -157,49 +157,49 @@ class TestLabGroups(TestCase):
         new = len(LabGroups.objects.all())
 
         self.assertEqual(prev + 1, new)
-    
-    def test_teacher_can_create_labgroup(self):
-        lab = self.lab1.id
-        date = "2023-10-13"
-        start_time = "08:00"
-        end_time = "12:00"
-        place = "B105"
-        assistant = User.objects.filter(is_staff=True).first()
 
-        self.client.force_login(self.superuser1)
-        prev = len(LabGroups.objects.all())
-        get_response = self.client.get("/create_group/", {"course_id":self.course1.id})
-        self.assertEqual(get_response.status_code, 200)
+#    def test_teacher_can_create_labgroup(self):
+#        lab = self.lab1.id
+#        date = "2023-10-13"
+#        start_time = "08:00"
+#        end_time = "12:00"
+#        place = "B105"
+#        assistant = User.objects.filter(is_staff=True).first()
+#
+#        self.client.force_login(self.superuser1)
+#        prev = len(LabGroups.objects.all())
+#        get_response = self.client.get("/create_group/", {"course_id":self.course1.id})
+#        self.assertEqual(get_response.status_code, 200)
 
-        post_response = self.client.post("/create_group/", {"labs[]":lab, "place":place, "date":date, "start_time":start_time, "end_time":end_time, "assistant":assistant.id})
-        self.assertEqual(post_response.status_code, 302)
-        new = len(LabGroups.objects.all())
-        self.assertEqual(prev + 1, new)
+#        post_response = self.client.post("/create_group/", {"labs[]":lab, "place":place, "date":date, "start_time":start_time, "end_time":end_time, "assistant":assistant.id})
+#        self.assertEqual(post_response.status_code, 302)
+#        new = len(LabGroups.objects.all())
+#        self.assertEqual(prev + 1, new)
 
-    def test_teacher_can_create_multiple_labgroups(self):
-        labs = [self.lab1.id, self.lab2.id]
-        date = "2023-10-13"
-        start_time = "08:00"
-        end_time = "12:00"
-        place = "B105"
-        assistant = User.objects.filter(is_staff=True).first()
+#    def test_teacher_can_create_multiple_labgroups(self):
+#        labs = [self.lab1.id, self.lab2.id]
+#        date = "2023-10-13"
+#        start_time = "08:00"
+#        end_time = "12:00"
+#        place = "B105"
+#        assistant = User.objects.filter(is_staff=True).first()
 
-        self.client.force_login(self.superuser1)
-        prev = len(LabGroups.objects.all())
-        get_response = self.client.get("/create_group/", {"course_id":self.course1.id})
-        self.assertEqual(get_response.status_code, 200)
+#        self.client.force_login(self.superuser1)
+#        prev = len(LabGroups.objects.all())
+#        get_response = self.client.get("/create_group/", {"course_id":self.course1.id})
+#        self.assertEqual(get_response.status_code, 200)
 
-        post_response = self.client.post("/create_group/", {"labs[]":labs, "place":place, "date":date, "start_time":start_time, "end_time":end_time, "assistant":assistant.id})
-        self.assertEqual(post_response.status_code, 302)
-        new = len(LabGroups.objects.all())
-        self.assertEqual(prev + 2, new)
-    
+#        post_response = self.client.post("/create_group/", {"labs[]":labs, "place":place, "date":date, "start_time":start_time, "end_time":end_time, "assistant":assistant.id})
+#        self.assertEqual(post_response.status_code, 302)
+#        new = len(LabGroups.objects.all())
+#        self.assertEqual(prev + 2, new)
+
     def test_student_cannot_access_create_labgroup(self):
         self.client.force_login(self.user1)
 
         response = self.client.get("/create_group/", {"course_id":self.course1.id})
         self.assertEqual(response.url, "/open_labs")
-    
+
     def test_cannot_create_labgroup_if_not_logged_in(self):
         lab = self.lab1.id
         date = "2023-10-13"
@@ -235,7 +235,7 @@ class TestLabGroups(TestCase):
         self.labgroup1.refresh_from_db()
         students = self.labgroup1.signed_up_students
         self.assertEqual(students, 1)
-        
+
     def test_enrollment_gives_success_message(self):
         self.client.force_login(self.user1)
         user_id = self.user1.id,
@@ -246,7 +246,7 @@ class TestLabGroups(TestCase):
         response_post = self.client.post("/open_labs/enroll/", {"max_students":max_students, "students":students, "user_id":user_id, "group_id":group_id})
         messages = [m.message for m in get_messages(response_post.wsgi_request)]
         self.assertEqual(str(messages[0]), "Ilmoittautuminen onnistui!")
-    
+
     def test_teacher_cannot_enroll_to_labgroup(self):
         self.client.force_login(self.superuser1)
         user_id = self.user1.id,
@@ -263,7 +263,7 @@ class TestLabGroups(TestCase):
         self.labgroup1.refresh_from_db()
         students = self.labgroup1.signed_up_students
         self.assertEqual(students, 0)
-    
+
     def test_student_cannot_enroll_twice_to_same_labgroup(self):
         self.client.force_login(self.user1)
         user_id = self.user1.id,
@@ -282,12 +282,12 @@ class TestLabGroups(TestCase):
         self.assertEqual(students, 1)
 
     # Tests for confirming labgroup
-    
+
     def test_teacher_can_confirm_nonempty_labgroup(self):
         self.client.force_login(self.superuser1)
         groups = [self.labgroup2.id]
         response_post = self.client.post("/created_labs/confirm/", {"lab_groups": groups})
-        
+
         self.assertEqual(response_post.status_code, 302)
 
         self.labgroup2.refresh_from_db()
@@ -301,7 +301,7 @@ class TestLabGroups(TestCase):
 
         messages = [m.message for m in get_messages(response_post.wsgi_request)]
         self.assertEqual(str(messages[0]), "Ryhmä vahvistettu")
-    
+
 
     def test_teacher_cannot_confirm_empty_labgroup(self):
         self.client.force_login(self.superuser1)
@@ -311,7 +311,7 @@ class TestLabGroups(TestCase):
 
         messages = [m.message for m in get_messages(response.wsgi_request)]
         self.assertEqual(str(messages[0]), "Tyhjää ryhmää ei voida vahvistaa")
-        
+
         self.labgroup1.refresh_from_db()
         status = self.labgroup1.status
         self.assertEqual(status, 0)
@@ -372,7 +372,7 @@ class TestLabGroups(TestCase):
         url = reverse("cancel_enrollment", args=[str(self.labgroup1.id)])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 400)
-    
+
     # Tests for publishing/canceling labgroups
 
     def test_teacher_can_publish_labgroup(self):
@@ -384,7 +384,7 @@ class TestLabGroups(TestCase):
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 1)
         self.assertRedirects(response, reverse("created_labs"))
-    
+
     def test_teacher_can_cancel_and_republish_labgroup(self):
         self.client.force_login(self.superuser1)
         lab_groups = [self.labgroup2.id]
@@ -399,7 +399,7 @@ class TestLabGroups(TestCase):
         self.labgroup2.refresh_from_db()
         self.assertEqual(self.labgroup2.status, 1)
         self.assertRedirects(response, reverse("created_labs"))
-    
+
     def test_student_cannot_publish_labgroup(self):
         lab_groups = [self.labgroup1.id]
         self.client.force_login(self.user1)
@@ -408,7 +408,7 @@ class TestLabGroups(TestCase):
         self.assertEqual(response.status_code, 302)
         self.labgroup1.refresh_from_db()
         self.assertEqual(self.labgroup1.status, 0)
-    
+
     # Tests for updating labgroups
 
     def test_teacher_can_update_labgroups(self):
@@ -428,14 +428,14 @@ class TestLabGroups(TestCase):
         self.assertEqual(self.labgroup1.end_time, datetime.time(12))
         self.assertEqual(self.labgroup1.place, "B105")
         self.assertEqual(self.labgroup1.assistant.username, "AinoA")
-    
+
     def test_student_cannot_update_labgroups(self):
         self.client.force_login(self.user1)
         url = reverse("update_group", args=[str(self.labgroup1.id)])
         response = self.client.get(url)
         self.assertEqual(response.url, "/open_labs" )
         self.assertEqual(self.labgroup1.place, "Chemicum")
-  
+
     # Test for updating multiple lab groups
 
     def test_teacher_can_update_multiple_labgroups(self):

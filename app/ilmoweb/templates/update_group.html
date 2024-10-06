@@ -32,14 +32,14 @@
     <div class="row justify-content-center">
       <label for="startTime" class="col-sm-1 col-form-label">Aloitusaika</label>
       <div class="col-3">
-        <input id="startTime" type="time" 
+        <input id="startTime" type="time"
         {% if lab_group.start_time.hour < 10 %}
           {% if lab_group.start_time.minute < 10 %}
             value="0{{lab_group.start_time.hour}}:0{{lab_group.start_time.minute}}"
           {% else %}
             value="0{{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}"
           {% endif %}
-        {% else %} 
+        {% else %}
           {% if lab_group.start_time.minute < 10 %}
             value="{{lab_group.start_time.hour}}:0{{lab_group.start_time.minute}}"
           {% else %}
@@ -60,7 +60,7 @@
           {% else %}
             value="0{{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}"
           {% endif %}
-        {% else %} 
+        {% else %}
           {% if lab_group.end_time.minute < 10 %}
             value="{{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}"
           {% else %}
@@ -116,6 +116,6 @@
   <br>
   <input type="hidden" name="course_id" value="course.id">
   <input type="hidden" name="course_name" value="course.name">
-  <input class="btn btn-light btn-outline-dark" type="submit" value="Päivitä labra">
+  <input class="btn btn-light btn-outline-dark" type="submit" value="Päivitä tiedot">
 </form>
 {% endblock %}

@@ -14,7 +14,7 @@ def test_create_lab_and_check_that_it_is_created(page: Page):
     page.get_by_test_id('lab_name').fill('Testilabra')
     page.get_by_test_id('description').fill('Kuvaus testilabrasta.')
     page.get_by_test_id('max_students').fill('3')
-    page.get_by_role('button', name='Luo labra').click()
+    page.get_by_role('button', name='Luo työ').click()
     page.goto('/created_labs')
     expect(page.get_by_role('cell', name='Testilabra'))
 
@@ -28,7 +28,7 @@ def test_toggling_labgroup_status(page: Page):
     assert page.get_by_test_id('status_2').inner_text() == 'Peruttu'
     page.get_by_test_id('publish_2').click()
     assert page.get_by_test_id('status_2').inner_text() == 'Ilmoittautuminen käynnissä'
-    
+
 def test_update_multiple_groups(page: Page):
     page.goto('/')
     login(page, 'kemianope', 'atomi123')
@@ -40,7 +40,7 @@ def test_update_multiple_groups(page: Page):
     page.get_by_test_id('end_time').fill('15:00')
     page.get_by_test_id('place').select_option('D211 (Phy)')
     page.get_by_test_id('assistant').select_option('kemianope')
-    page.get_by_role('button', name='Päivitä labrat').click()
+    page.get_by_role('button', name='Päivitä tiedot').click()
     expect(page.get_by_test_id('date_10')).to_have_text('12.12.2023 klo 10:00 - 15:00')
     expect(page.get_by_test_id('place_10')).to_have_text('D211 (Phy)')
     expect(page.get_by_test_id('date_12')).to_have_text('12.12.2023 klo 10:00 - 15:00')
