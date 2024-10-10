@@ -393,15 +393,29 @@ def returned_reports(request):
     if request.user.is_staff is not True:
         return redirect("/my_labs")
 
-    data = Report.objects.select_related("lab_group__lab__course").all()
+#    data = Report.objects.select_related("lab_group__lab__course").all()
 
-    reports, lab_groups, course_labs, courses = distint_id.sort(data)
+    data2 = Report.objects.values('student', 'lab_group', 'report_status')
 
-    users = User.objects.all()
-    user = User.objects.get(pk=request.user.id)
+    for item in data2:
+        item['lab_group_info'] = LabGroups.objects.filter(id=item['lab_group']).values_list('date', 'lab', 'assistant').first()
+        item['lab_info'] = Labs.objects.filter(id=item['lab_group_info'][1]).values_list('name', 'course').first()
+        item['student_name'] = User.objects.filter(id=item['student']).values_list('first_name', 'last_name',).first()
+        item['assistan_name'] = User.objects.filter(id=item['lab_group_info'][2]).values_list('first_name', 'last_name',).first()
+        item['course_name'] = Courses.objects.filter(id=item['lab_info'][1]).values_list('name', flat=True).first()
 
-    return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
-    "lab_groups":lab_groups, "reports":reports, "users":users, "dark_mode":user.dark_mode})
+    print('done')
+
+#    reports, lab_groups, course_labs, courses = distint_id.sort(data)
+
+#    users = User.objects.all()
+#    user = User.objects.get(pk=request.user.id)
+
+#    return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
+#    "lab_groups":lab_groups, "reports":reports, "users":users, "dark_mode":user.dark_mode})
+
+    return redirect(instructions)
+
 
 @login_required(login_url="login")
 def returned_report(request, report_id):
