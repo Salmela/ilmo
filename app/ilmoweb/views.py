@@ -473,8 +473,6 @@ def returned_reports(request, lab_id):
     return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
     "lab_groups":lab_groups, "reports":reports, "users":users, "dark_mode":user.dark_mode})
 
-#    return redirect(instructions)
-
 @login_required(login_url="login")
 def returned_report(request, report_id):
     """
