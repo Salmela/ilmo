@@ -396,9 +396,12 @@ def returned_reports_main(request):
     if request.method == "POST":
         course_labs = request.POST.getlist("labs[]")
 
-        lab_id = ""
-        for i in course_labs:
-            lab_id+=f"{i},"
+        if len(course_labs) != 0:
+            lab_id = ""
+            for i in course_labs:
+                lab_id+=f"{i},"
+        else:
+            lab_id=None
 
         return redirect(reverse("returned_reports", args=[lab_id]))
 
@@ -406,7 +409,6 @@ def returned_reports_main(request):
     user = User.objects.get(pk=request.user.id)
 
     return render(request, "returned_reports_main.html", {"labs":labs, "dark_mode":user.dark_mode})
-
 
 @login_required(login_url="login")
 def returned_reports(request, lab_id):
@@ -416,68 +418,33 @@ def returned_reports(request, lab_id):
     if request.user.is_staff is not True:
         return redirect("/my_labs")
 
-    split_list = lab_id.split(',')
-    index_list= [int(x) for x in split_list if x != ""]
-
-#    labs = []
-#    for i in index_list:
-#        labs.append(Labs.objects.filter(id=i))
-
-    course_labs = Labs.objects.filter(id__in=index_list)
-
-#    courses = []
-#    for lab in labs:
-#        courses.append(lab.course)
-
-#    labgroups.append(LabGroups.objects.filter(lab__in=labs))
-
-#    labgroups = []
-
-    lab_groups = LabGroups.objects.filter(lab__in=course_labs)
-
-    reports = Report.objects.filter(lab_group__in=lab_groups)
-
-    users = User.objects.all()
-    courses = Courses.objects.all()
-
-#    if len(final_list) > 0:
-#        labs = Labs.objects.filter(id__in=final_list)
-
-#    courses = []
-#    for lab in labs:
-#        courses.append(lab.course)
-
-
-#    lab_groups = LabGroups.objects.filter(lab__in=final_list)
-
-#    reports= []
-#    for lab_group in lab_groups:
-#        reports.append(Report.objects.filter(lab_group=lab_group.id))
-
-#    print(reports)
-
-#    reports = Report.objects.filter(lab_group__in=)
-
-#    courses2 = labs.course
-#    print(courses2)
-
-
-
-#    data = Report.objects.select_related("lab_group__lab__course").all()
-
-#    reports, lab_groups, course_labs, courses = distint_id.sort(data)
-
-#    users = User.objects.all()
     user = User.objects.get(pk=request.user.id)
+    users = User.objects.all()
 
-    return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
+    if lab_id != "None":
+        split_list = lab_id.split(',')
+        index_list= [int(x) for x in split_list if x != ""]
+
+        course_labs = Labs.objects.filter(id__in=index_list)
+        lab_groups = LabGroups.objects.filter(lab__in=course_labs)
+        reports = Report.objects.filter(lab_group__in=lab_groups)
+
+        courses = Courses.objects.all()
+
+    else:
+        data = Report.objects.select_related("lab_group__lab__course").all()
+        reports, lab_groups, course_labs, courses = distint_id.sort(data)
+
+
+    return render(request, "returned_reports.html", {"lab_id":lab_id, "courses":courses, "labs":course_labs,
     "lab_groups":lab_groups, "reports":reports, "users":users, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
-def returned_report(request, report_id):
+def returned_report(request, report_id, lab_id):
     """
         Changes the assistant of a certain report.
     """
+
     if request.user.is_staff is not True:
         return redirect("/my_labs")
 
@@ -487,10 +454,10 @@ def returned_report(request, report_id):
         report.graded_by_id = assistant_id
         report.save()
 
-    return redirect("/returned_reports")
+    return redirect(reverse("returned_reports", args=[lab_id]))
 
 @login_required(login_url="login")
-def evaluate_report(request, report_id):
+def evaluate_report(request, report_id, lab_id):
     """
         Teacher's view for evaluating a certain report.
     """
@@ -507,7 +474,7 @@ def evaluate_report(request, report_id):
     if request.method == "POST":
         if request.POST.get("grade") is None:
             messages.warning(request, "Anna arvosana")
-            return redirect(f"/evaluate_report/{report_id}")
+            return redirect(f"/evaluate_report/{report_id}/{lab_id}")
         grade = int(request.POST.get("grade"))
         report.grade = grade
         comments = request.POST.get("comments")
@@ -532,9 +499,9 @@ def evaluate_report(request, report_id):
             report.report_file = report.report_file_name = ""
         report.save()
 
-        return redirect(returned_reports)
+        return redirect(reverse("returned_reports", args=[lab_id]))
 
-    return render(request, "evaluate_report.html", {"course":course, "lab":lab,
+    return render(request, "evaluate_report.html", {"lab_id":lab_id, "course":course, "lab":lab,
     "lab_group":lab_group, "report":report, "student":student, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
@@ -758,7 +725,7 @@ def teachers_message(request):
     return redirect("/system")
 
 @login_required(login_url="login")
-def report_notes(request, report_id):
+def report_notes(request, report_id, lab_id):
     """
         Teacher can write notes for a report through this view
     """
@@ -772,7 +739,7 @@ def report_notes(request, report_id):
         report.save()
         messages.success(request, "Muistiinpanot tallennettu")
 
-    return redirect(reverse("evaluate_report", args=[report_id]))
+    return redirect(f"/evaluate_report/{report_id}/{lab_id}")
 
 @login_required(login_url="login")
 def get_dark_mode_status(request):
