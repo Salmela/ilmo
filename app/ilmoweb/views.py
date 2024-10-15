@@ -186,9 +186,8 @@ def create_group(request):
         end_time = request.POST.get("end_time")
         assistant_id = request.POST.get("assistant")
 
-        max_id = LabGroups.objects.aggregate(Max('id'))['id__max']
-
         for lab in course_labs:
+            max_id = LabGroups.objects.aggregate(Max('id'))['id__max']
             this_lab = Labs.objects.get(pk=lab)
             assistant = User.objects.get(pk=assistant_id)
             labgroups.create(this_lab, date, start_time, end_time, place, assistant, max_id)
@@ -386,25 +385,29 @@ def return_report(request):
     return redirect("/my_labs")
 
 @login_required(login_url="login")
-def returned_reports(request):
+def returned_reports(request, limit=0):
     """
         Teacher's view of all returned reports.
     """
     if request.user.is_staff is not True:
         return redirect("/my_labs")
 
-    data = Report.objects.select_related("lab_group__lab__course").all()
-
-    reports, lab_groups, course_labs, courses = distint_id.sort(data)
-
     users = User.objects.all()
     user = User.objects.get(pk=request.user.id)
 
+    if limit == 0:
+        data = Report.objects.select_related("lab_group__lab__course").all()
+    elif limit == 1:
+        data = Report.objects.select_related("lab_group__lab__course").filter(graded_by=user.id)
+
+    reports, lab_groups, course_labs, courses = distint_id.sort(data)
+
     return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
-    "lab_groups":lab_groups, "reports":reports, "users":users, "dark_mode":user.dark_mode})
+    "lab_groups":lab_groups, "reports":reports, "users":users, "limit":limit, "dark_mode":user.dark_mode})
+
 
 @login_required(login_url="login")
-def returned_report(request, report_id):
+def returned_report(request, report_id, limit=0):
     """
         Changes the assistant of a certain report.
     """
@@ -417,10 +420,10 @@ def returned_report(request, report_id):
         report.graded_by_id = assistant_id
         report.save()
 
-    return redirect("/returned_reports")
+    return redirect(f"/returned_reports/{ limit }")
 
 @login_required(login_url="login")
-def evaluate_report(request, report_id):
+def evaluate_report(request, report_id, limit=0):
     """
         Teacher's view for evaluating a certain report.
     """
@@ -437,7 +440,7 @@ def evaluate_report(request, report_id):
     if request.method == "POST":
         if request.POST.get("grade") is None:
             messages.warning(request, "Anna arvosana")
-            return redirect(f"/evaluate_report/{report_id}")
+            return redirect(f"/evaluate_report/{report_id}/{limit}")
         grade = int(request.POST.get("grade"))
         report.grade = grade
         comments = request.POST.get("comments")
@@ -462,10 +465,10 @@ def evaluate_report(request, report_id):
             report.report_file = report.report_file_name = ""
         report.save()
 
-        return redirect(returned_reports)
+        return redirect(f"/returned_reports/{ limit }")
 
     return render(request, "evaluate_report.html", {"course":course, "lab":lab,
-    "lab_group":lab_group, "report":report, "student":student, "dark_mode":user.dark_mode})
+    "lab_group":lab_group, "report":report, "student":student, "limit":limit, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def download_report(request, filename):
@@ -688,10 +691,11 @@ def teachers_message(request):
     return redirect("/system")
 
 @login_required(login_url="login")
-def report_notes(request, report_id):
+def report_notes(request, report_id, limit=0):
     """
         Teacher can write notes for a report through this view
     """
+
     if request.user.is_staff is not True:
         return redirect("/my_labs")
 
@@ -702,7 +706,7 @@ def report_notes(request, report_id):
         report.save()
         messages.success(request, "Muistiinpanot tallennettu")
 
-    return redirect(reverse("evaluate_report", args=[report_id]))
+    return redirect(reverse("evaluate_report", args=[report_id, limit]))
 
 @login_required(login_url="login")
 def get_dark_mode_status(request):
