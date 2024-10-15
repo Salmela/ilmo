@@ -3,6 +3,14 @@
 {% block content %}
 <div class="container-sm">
   <h1 class="mb-3">Oppilaiden palautukset</h1>
+  <div class="col-1">
+    {% if limit == 0 %}
+    <a href="/returned_reports/1" class="btn btn-light btn-outline-dark">Rajaa</a>
+    {% else %}
+    <a href="/returned_reports/0" class="btn btn-light btn-outline-dark">Näytä kaikki</a>
+    {% endif %}
+  </div>
+  <br>
   {% for course in courses %}
   <table class="table table-bordered align-middle" id="mobile">
     <thead>
@@ -48,7 +56,7 @@
                   <h5 class="modal-title" id="formModalLabel">Vaihda assistenttia</h5>
                   <button type="button" class="btn-close" data-dismiss="modal"></button>
                 </div>
-                <form action="/returned_report/{{ report.id }}" method="POST">
+                <form action="/returned_report/{{ report.id }}/{{ limit }}" method="POST">
                   {% csrf_token %}
                   <div class="modal-body">
                     <select class="form-select" name="assistant">
@@ -81,7 +89,7 @@
           {% endif %}
         </td>
         <td label="Arvostelu">
-          <a href="/evaluate_report/{{ report.id }}" class="btn btn-light btn-outline-dark"
+          <a href="/evaluate_report/{{ report.id }}/{{ limit }}" class="btn btn-light btn-outline-dark"
             data-testid="open_{{report.id}}">Avaa</a>
         </td>
       </tr>
