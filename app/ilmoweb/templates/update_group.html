@@ -10,14 +10,19 @@
     });
 </script>
 
-<h1>{{course.name}}</h1><br>
-
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <label for="startTime" class="col-sm-1 col-form-label "></label>
+    <div class="col-3">
+      <h2>{{course.name}}</h2>
+    </div>
+  </div>
+<br>
 <form action="/update_group/{{ lab_group.id }}" method="POST">
   {% csrf_token %}
-  <div class="container-fluid">
     <div class="row justify-content-center">
       <label for="date" class="col-sm-1 col-form-label">Päivä</label>
-      <div class="col-4">
+      <div class="col-3">
         <div class="input-group date" id="datepicker">
           <input type="text" class="form-control" data-testid="date" name="date" placeholder="{{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}">
           <span class="input-group-append">
@@ -114,8 +119,14 @@
     </div>
   </div>
   <br>
-  <input type="hidden" name="course_id" value="course.id">
-  <input type="hidden" name="course_name" value="course.name">
-  <input class="btn btn-light btn-outline-dark" type="submit" value="Päivitä tiedot">
+  <div class="row justify-content-center">
+    <label for="startTime" class="col-sm-1 col-form-label "></label>
+        <div class="col-3">
+          <input type="hidden" name="course_id" value="course.id">
+          <input type="hidden" name="course_name" value="course.name">
+          <input class="btn btn-light btn-outline-dark" type="submit" value="Päivitä tiedot">
+        </div>
+    </div>
 </form>
+</div>
 {% endblock %}

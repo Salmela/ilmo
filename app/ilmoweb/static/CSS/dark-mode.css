@@ -28,7 +28,14 @@ tbody tr {
     border-color: #686c70;
     color: #d8d4cf;
     background-color: #343a40;
-    
+
+}
+
+body textarea {
+        background-color: #4c4c4c;
+        color: #d8d4cf;
+        border: 0.5px solid#686c70;
+
 }
 
 thead th {
@@ -42,8 +49,8 @@ thead th {
     font-family: 'Helvetica', 'Arial', sans-serif;
     line-height: 1.5;
     padding: 2.5em;
-    background-color: black; 
-    color: #d8d4cf; 
+    background-color: black;
+    color: #d8d4cf;
     border-color: #686c70;
 }
 
@@ -204,6 +211,28 @@ thead th {
     position: relative;
 }
 
+.styled-input-container input {
+    width: 300px;
+    padding: 5px;
+    font-size: 1em;
+    border: 0.5px solid#686c70;
+    border-radius: 5px;
+    background-color: #343a40;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.styled-textarea-container textarea {
+    width: 500px;
+    padding: 5px;
+    font-size: 1em;
+    border: 0.5px solid#686c70;
+    border-radius: 5px;
+    background-color: #343a40;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
 #hy_logo {
     position: absolute;
     left: 1em;
@@ -227,7 +256,7 @@ form {
     .body-container {
         padding: 2em;
     }
-    
+
     .hide-on-mobile {
         display: none;
     }
@@ -245,7 +274,7 @@ form {
         text-align: left;
         width: 100%;
     }
-      
+
     table#mobile td::before {
         content: attr(label);
         font-weight: bold;

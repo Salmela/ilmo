@@ -13,7 +13,7 @@
     });
 </script>
 <div class="container-sm">
-  <h1>Arvostele työ</h1>
+  <h1 class="float-left mb-3">Arvostele työ</h1>
   <form action="/evaluate_report/{{ report.id }}/{{ limit }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table class="table table-bordered" id="mobile">
