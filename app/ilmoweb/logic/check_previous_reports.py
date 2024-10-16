@@ -12,12 +12,12 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
 
     if prev_3:
         Report.objects.filter(pk=prev_3[0].id).delete()
-        report = Report(
-            student=student,
-            lab_group=lab_group,
-            report_file=file,
-            report_file_name=file.name,
-            report_status=3)
+        report = Report(student=student,
+                        lab_group=lab_group,
+                        report_file=file,
+                        report_file_name=file.name,
+                        report_status=3,
+                        graded_by=lab_group.assistant)
         report.save()
         messages.success(request, "Korjausehdotukset sisältävä tiedosto korvattu uudella")
         return
@@ -27,7 +27,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
                         lab_group=lab_group,
                         report_file=file,
                         report_file_name=file.name,
-                        report_status=3)
+                        report_status=3,
+                        graded_by=lab_group.assistant)
         report.save()
         messages.success(request, "Korjausehdotukset sisältävä tiedosto lähetetty onnistuneesti")
         return
@@ -38,7 +39,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
                         lab_group=lab_group,
                         report_file=file,
                         report_file_name=file.name,
-                        report_status=1)
+                        report_status=1,
+                        graded_by=lab_group.assistant)
         report.save()
         messages.success(request, "Alkuperäisen korvaava tiedosto lähetetty onnistuneesti")
         return
@@ -47,7 +49,8 @@ def check_and_replace(request, prev_1, prev_2, prev_3, prev_4, student, lab_grou
                     lab_group=lab_group,
                     report_file=file,
                     report_file_name=file.name,
-                    report_status=1)
+                    report_status=1,
+                    graded_by=lab_group.assistant)
     report.save()
     messages.success(request, "Tiedosto lähetetty onnistuneesti")
     return

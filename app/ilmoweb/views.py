@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
-from django.db.models import Max
+from django.db.models import Max, Q
 from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
@@ -165,9 +165,10 @@ def create_lab(request):
         return redirect(created_labs)
 
     course_id = request.GET.get("course_id")
+    course = Courses.objects.get(pk=course_id)
     user = User.objects.get(pk=request.user.id)
 
-    return render(request, "create_lab.html", {"course_id": course_id, "dark_mode":user.dark_mode})
+    return render(request, "create_lab.html", {"course_id": course_id, "course": course, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def create_group(request):
@@ -396,9 +397,9 @@ def returned_reports(request, limit=0):
     user = User.objects.get(pk=request.user.id)
 
     if limit == 0:
-        data = Report.objects.select_related("lab_group__lab__course").all()
+        data = Report.objects.select_related("lab_group__lab__course").filter(~Q(report_status=4))
     elif limit == 1:
-        data = Report.objects.select_related("lab_group__lab__course").filter(graded_by=user.id)
+        data = Report.objects.select_related("lab_group__lab__course").filter(~Q(report_status=4) & Q(graded_by=user.id))
 
     reports, lab_groups, course_labs, courses = distint_id.sort(data)
 

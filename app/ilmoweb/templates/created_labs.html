@@ -42,7 +42,7 @@
               {% endif %} -
               {% if date.end_time.minute > 10 %}
                 {{date.end_time.hour}}:{{date.end_time.minute}}
-              {% else %}     
+              {% else %}
                 {{date.end_time.hour}}:0{{date.end_time.minute}}
               {% endif %}
             </td>
@@ -140,11 +140,11 @@
           {% if lab.course_id == course.id %}
             {% for lab_group in lab_groups %}
               {% if lab_group.lab_id == lab.id %}
-                <tr>         
+                <tr>
                   <td label="Ajankohta" data-testid="date_{{ lab_group.id }}">
                     {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                     <br>
-                    klo 
+                    klo
                     {% if lab_group.start_time.minute > 10 %}
                       {{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}
                     {% else %}
@@ -152,7 +152,7 @@
                     {% endif %} -
                     {% if lab_group.end_time.minute > 10 %}
                       {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
-                    {% else %}     
+                    {% else %}
                       {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                     {% endif %}
                   </td>
@@ -274,7 +274,7 @@
           {% endif %}
         </tbody>
       </table>
-    </div>        
+    </div>
   {% endfor %}
 {% endif %}
 {% endblock %}
