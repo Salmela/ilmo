@@ -176,9 +176,9 @@ if env("LOCAL") == 'False':
 
 # email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'in-v3.mailjet.com'
-EMAIL_PORT = 465
+EMAIL_HOST = 'smtp.helsinki.fi'
+EMAIL_PORT = 25
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = '06962f3717a19c291812c6e8c54f984c'
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = None
+EMAIL_HOST_PASSWORD = None
 DEFAULT_FROM_EMAIL = 'grp-fyskem-labra-ilmo@helsinki.fi'
