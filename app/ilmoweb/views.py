@@ -15,12 +15,10 @@ from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
-from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id
+from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id, test_mail
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
-from django.core.mail import send_mail
-from django.conf import settings
 
 if env("UNI_LOGIN") == 'True':
     CONF_URL = "https://login.helsinki.fi/.well-known/openid-configuration"
@@ -729,12 +727,8 @@ def get_dark_mode_status(request):
 
 @login_required(login_url="login")
 def mail(request):
-    subject = 'Test Email from ilmoweb'
-    message = 'This is a test email sent from ilmoweb.'
-    from_email = settings.DEFAULT_FROM_EMAIL
-    recipient_list = ['ella.korkeaaho@gmail.com']
 
-    send_mail(subject, message, from_email, recipient_list)
+    test_mail.mail()
 
-    return HttpResponse("Email sent!")
+    return redirect(created_labs)
 
