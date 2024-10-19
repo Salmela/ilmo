@@ -1,10 +1,13 @@
 """Module for app logic."""
 from django.core.mail import send_mail
+import time
 
 def mail(lab, email, passed):
     """
         send notification to student when report is graded
     """
+    time.sleep(8)
+
     if passed:
         subject = 'Raporttisi on arvioitu'
         message = (
