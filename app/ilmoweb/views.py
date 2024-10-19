@@ -3,7 +3,7 @@ import datetime
 import urllib.request
 import json
 import environ
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth.decorators import login_required
@@ -19,6 +19,8 @@ from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, 
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
+from django.core.mail import send_mail
+from django.conf import settings
 
 if env("UNI_LOGIN") == 'True':
     CONF_URL = "https://login.helsinki.fi/.well-known/openid-configuration"
@@ -724,3 +726,15 @@ def get_dark_mode_status(request):
 
     # Use the redirect function to redirect back to the previous URL
     return redirect(referrer)
+
+@login_required(login_url="login")
+def mail(request):
+    subject = 'Test Email from ilmoweb'
+    message = 'This is a test email sent from ilmoweb.'
+    from_email = settings.DEFAULT_FROM_EMAIL
+    recipient_list = ['ella.korkeaaho@gmail.com']
+
+    send_mail(subject, message, from_email, recipient_list)
+
+    return HttpResponse("Email sent!")
+

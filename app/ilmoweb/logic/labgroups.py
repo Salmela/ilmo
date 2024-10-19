@@ -1,11 +1,14 @@
 """Module for app logic."""
 from django.core.mail import send_mail
 from ilmoweb.models import Labs, LabGroups, SignUp
+import time
 
 def email(lab_group, message_type):
     """
         sends a certain email message to given addresses according to the message_type
     """
+    time.sleep(8)
+
     lab = Labs.objects.get(pk=lab_group.lab_id)
     all_students = SignUp.objects.all()
     email_recipient_list = []
