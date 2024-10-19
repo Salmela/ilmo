@@ -46,7 +46,8 @@ if env("LOCAL") == 'False':
              name="update_multiple_groups"),
         path("report_notes/<int:report_id>", views.report_notes, name="report_notes"),
         path("report_notes/<int:report_id>/<int:limit>", views.report_notes, name="report_notes"),
-        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status')
+        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status'),
+        path('mail/', views.mail, name='mail')
 
 
     ]
@@ -86,5 +87,6 @@ else:
              name="update_multiple_groups"),
         path("report_notes/<int:report_id>", views.report_notes, name="report_notes"),
         path("report_notes/<int:report_id>/<int:limit>", views.report_notes, name="report_notes"),
-        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status')
+        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status'),
+        path('mail/', views.mail, name='mail')
     ]
