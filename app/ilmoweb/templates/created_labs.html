@@ -15,7 +15,7 @@
           <th class="hide-on-mobile" colspan="1">Päivä</th>
           <th class="hide-on-mobile" colspan="1">Aika</th>
           <th class="hide-on-mobile" colspan="1">Paikka</th>
-          <th class="hide-on-mobile" colspan="4">Täyttöaste töittäin</th>
+          <th class="hide-on-mobile" colspan="1">Täyttöaste töittäin</th>
           <th class="hide-on-mobile" colspan="1">Yhteensä</th>
           <th class="hide-on-mobile" colspan="1">Vahvistus</th>
           <th class="hide-on-mobile" colspan="2">Toiminnot</th>
@@ -47,17 +47,21 @@
               {% endif %}
             </td>
             <td label="Paikka">{{date.place}}</td>
-            {% for lab in date.labs %}
-              <td label="{{lab.name}}">
-                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ lab.name }}">
-                  {% for group in date.groups %}
-                    {% if group.lab_id == lab.id%}
-                      {{group.signed_up_students}} / {{lab.max_students}}
-                    {% endif %}
-                  {% endfor %}
-                </span>
-              </td>
-            {% endfor %}
+            <td>
+              <div class="labs-info">
+                {% for lab in date.labs %}
+                  <div class="lab-entry" label="{{lab.name}}">
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="{{ lab.name }}">
+                      {% for group in date.groups %}
+                        {% if group.lab_id == lab.id %}
+                          {{group.signed_up_students}} / {{lab.max_students}}
+                        {% endif %}
+                      {% endfor %}
+                    </span>
+                  </div>
+                {% endfor %}
+              </div>
+            </td>
             <td label="Yhteensä">{{date.signup_sum}}/{{date.max_signup_sum}}</td>
             {% if date.groups.0.status == 1 %}
               <td>
