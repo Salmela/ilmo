@@ -6,7 +6,7 @@ def mail(lab, email, passed):
     """
         send notification to student when report is graded
     """
-    time.sleep(7)
+    time.sleep(6.5)
 
     if passed:
         subject = 'Raporttisi on arvioitu'
