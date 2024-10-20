@@ -3,7 +3,7 @@ import datetime
 import urllib.request
 import json
 import environ
-from django.http import HttpResponseBadRequest, HttpResponse
+from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,7 @@ from authlib.integrations.django_client import OAuth
 from authlib.oidc.core import CodeIDToken
 from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
-from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id, test_mail
+from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
 env = environ.Env()
 environ.Env.read_env()
@@ -724,11 +724,3 @@ def get_dark_mode_status(request):
 
     # Use the redirect function to redirect back to the previous URL
     return redirect(referrer)
-
-@login_required(login_url="login")
-def mail(request):
-
-    test_mail.mail()
-
-    return redirect(created_labs)
-
