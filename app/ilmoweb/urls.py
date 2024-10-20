@@ -1,6 +1,6 @@
 """Module for routing urls."""
 import environ
-from django.urls import path, include, re_path
+from django.urls import path, include
 
 from . import views
 
@@ -46,8 +46,7 @@ if env("LOCAL") == 'False':
              name="update_multiple_groups"),
         path("report_notes/<int:report_id>", views.report_notes, name="report_notes"),
         path("report_notes/<int:report_id>/<int:limit>", views.report_notes, name="report_notes"),
-        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status'),
-        path('mail/', views.mail, name='mail')
+        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status')
 
 
     ]
@@ -87,6 +86,5 @@ else:
              name="update_multiple_groups"),
         path("report_notes/<int:report_id>", views.report_notes, name="report_notes"),
         path("report_notes/<int:report_id>/<int:limit>", views.report_notes, name="report_notes"),
-        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status'),
-        path('mail/', views.mail, name='mail')
+        path('get-dark-mode-status/', views.get_dark_mode_status, name='get_dark_mode_status')
     ]
