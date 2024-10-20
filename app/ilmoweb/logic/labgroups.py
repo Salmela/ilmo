@@ -7,7 +7,7 @@ def email(lab_group, message_type):
     """
         sends a certain email message to given addresses according to the message_type
     """
-    time.sleep(7)
+    time.sleep(6.5)
 
     lab = Labs.objects.get(pk=lab_group.lab_id)
     all_students = SignUp.objects.all()
