@@ -2,6 +2,8 @@
 from django.core.mail import send_mail
 from ilmoweb.models import Labs, LabGroups, SignUp
 import time
+from django.utils import timezone
+from datetime import timedelta
 
 def email(lab_group, message_type):
     """
@@ -83,3 +85,14 @@ def update(date, start_time, end_time, place, assistant, labgroup_id): # pylint:
     group.assistant = assistant
 
     group.save()
+
+def set_as_deleted():
+
+    today = timezone.now().date()
+    two_days_ago = today - timedelta(days=2)
+
+    lab_groups = LabGroups.objects.filter(date__lte=two_days_ago)
+
+    for group in lab_groups:
+        group.deleted = 1
+        group.save()
