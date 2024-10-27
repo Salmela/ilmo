@@ -57,4 +57,3 @@ def sort_limited(data):
         courses.append(lab.course)
 
     return reports, lab_groups, course_labs, courses
-

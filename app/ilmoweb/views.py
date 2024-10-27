@@ -3,6 +3,7 @@ import datetime
 import urllib.request
 import json
 import environ
+from django.utils import timezone
 from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate as django_authenticate
 from django.contrib.auth import login as django_login
@@ -17,7 +18,6 @@ from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
 from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
-from django.utils import timezone
 env = environ.Env()
 environ.Env.read_env()
 
@@ -106,7 +106,9 @@ def created_labs(request):
     groups = LabGroups.objects.filter(deleted=0).order_by('date', 'start_time')
     user = User.objects.get(pk=request.user.id)
 
-    lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False).order_by('date', 'start_time')
+    lab_groups = ( LabGroups.objects.select_related('lab__course', 'assistant')
+                    .filter(deleted=False).order_by('date', 'start_time')
+                )
 
     dates_times = set()
     groups_by_date_time = []
@@ -167,7 +169,8 @@ def create_lab(request):
     course = Courses.objects.get(pk=course_id)
     user = User.objects.get(pk=request.user.id)
 
-    return render(request, "create_lab.html", {"course_id": course_id, "course": course, "dark_mode":user.dark_mode})
+    return render(request, "create_lab.html",
+                  {"course_id": course_id, "course": course, "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def create_group(request):
@@ -400,12 +403,16 @@ def returned_reports(request, limit=0):
     if limit == 0:
         data = Report.objects.select_related("lab_group__lab__course").filter(~Q(report_status=4))
     elif limit == 1:
-        data = Report.objects.select_related("lab_group__lab__course").filter(~Q(report_status=4) & Q(graded_by=user.id))
+        data = ( Report.objects.select_related("lab_group__lab__course")
+                .filter(~Q(report_status=4) & Q(graded_by=user.id))
+        )
 
     reports, lab_groups, course_labs, courses = distint_id.sort(data)
 
-    return render(request, "returned_reports.html", {"courses":courses, "labs":course_labs,
-    "lab_groups":lab_groups, "reports":reports, "users":users, "limit":limit, "dark_mode":user.dark_mode})
+    return render(request, "returned_reports.html",
+                  {"courses":courses, "labs":course_labs,
+                    "lab_groups":lab_groups, "reports":reports,
+                    "users":users, "limit":limit, "dark_mode":user.dark_mode})
 
 
 @login_required(login_url="login")
@@ -469,8 +476,11 @@ def evaluate_report(request, report_id, limit=0):
 
         return redirect(f"/returned_reports/{ limit }")
 
-    return render(request, "evaluate_report.html", {"course":course, "lab":lab,
-    "lab_group":lab_group, "report":report, "student":student, "limit":limit, "dark_mode":user.dark_mode})
+    return render(request, "evaluate_report.html",
+                            {"course":course, "lab":lab,
+                            "lab_group":lab_group, "report":report,
+                            "student":student, "limit":limit,
+                            "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def download_report(request, filename):

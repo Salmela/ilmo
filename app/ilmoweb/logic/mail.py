@@ -1,6 +1,6 @@
 """Module for app logic."""
-from django.core.mail import send_mail
 import time
+from django.core.mail import send_mail
 
 def mail(lab, email, passed):
     """
