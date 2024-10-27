@@ -212,10 +212,16 @@ def open_labs(request):
         View for labs that are open
     """
     today = timezone.now().date()
+    two_days_ago = today - datetime.timedelta(days=2)
 
     courses =  Courses.objects.all().exclude(name="Vanhanmalliset työt")
     course_labs =  Labs.objects.all()
-    lab_groups = LabGroups.objects.filter(date__gte=today).order_by('date', 'start_time')
+
+    if request.user.is_staff is not True:
+        lab_groups = LabGroups.objects.filter(date__gte=today).order_by('date', 'start_time')
+    else:
+        lab_groups = LabGroups.objects.filter(date__gte=two_days_ago).order_by('date', 'start_time')
+
     signedup = SignUp.objects.all()
     users_enrollments = signup.get_labgroups(request.user)
     user = User.objects.get(pk=request.user.id)
