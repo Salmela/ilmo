@@ -17,6 +17,7 @@ from authlib.jose import jwt
 from ilmoweb.models import User, Courses, Labs, LabGroups, SignUp, Report, TeachersMessage
 from ilmoweb.logic import labs, signup, labgroups, files, teachermessage, mail, distint_id
 from ilmoweb.logic import check_previous_reports, users_info, filter_reports
+from django.utils import timezone
 env = environ.Env()
 environ.Env.read_env()
 
@@ -98,14 +99,14 @@ def created_labs(request):
     if request.user.is_staff is not True:
         return redirect("/open_labs")
 
+    labgroups.set_as_deleted()
+
     courses = Courses.objects.all().exclude(name="Vanhanmalliset työt")
     course_labs = Labs.objects.filter(is_visible=1)
-    groups = LabGroups.objects.filter(deleted=0).order_by('date')
-    current_date = datetime.date.today()
-    day_after_tomorrow = current_date + datetime.timedelta(days=2)
+    groups = LabGroups.objects.filter(deleted=0).order_by('date', 'start_time')
     user = User.objects.get(pk=request.user.id)
 
-    lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False)
+    lab_groups = LabGroups.objects.select_related('lab__course', 'assistant').filter(deleted=False).order_by('date', 'start_time')
 
     dates_times = set()
     groups_by_date_time = []
@@ -139,9 +140,7 @@ def created_labs(request):
     return render(request, "created_labs.html", {"courses":courses, "labs":course_labs,
                                                  "lab_groups":groups,
                                                  "groups_by_date":groups_by_date_time,
-                                                 "dark_mode":user.dark_mode,
-                                                 "current_date":current_date,
-                                                 "day_after_tomorrow":day_after_tomorrow})
+                                                 "dark_mode":user.dark_mode})
 
 @login_required(login_url="login")
 def create_lab(request):
@@ -209,9 +208,11 @@ def open_labs(request):
     """
         View for labs that are open
     """
+    today = timezone.now().date()
+
     courses =  Courses.objects.all().exclude(name="Vanhanmalliset työt")
     course_labs =  Labs.objects.all()
-    lab_groups =  LabGroups.objects.all()
+    lab_groups = LabGroups.objects.filter(date__gte=today).order_by('date', 'start_time')
     signedup = SignUp.objects.all()
     users_enrollments = signup.get_labgroups(request.user)
     user = User.objects.get(pk=request.user.id)
