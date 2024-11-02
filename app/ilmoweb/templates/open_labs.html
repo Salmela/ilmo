@@ -82,7 +82,7 @@
                         {% endif %} -
                         {% if lab_group.end_time.minute > 10 %}
                           {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
-                        {% else %}     
+                        {% else %}
                           {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                         {% endif %}
                       </td>
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="modal-body">
                                   {% for signup in signedup %}
-                                  {% if signup.labgroups_id == lab_group.id %} 
+                                  {% if signup.labgroups_id == lab_group.id %}
                                     <p><b  data-testid="{{signup.user}}">{{signup.user.first_name}} {{signup.user.last_name}}:</b> {{signup.user.email}},  {{signup.user.student_id}}<br></p>
                                   {% endif %}
                                   {% endfor %}
@@ -113,7 +113,7 @@
                             </div>
                           </div>
                         </td>
-                      {% elif lab_group.signed_up_students == lab.max_students %}
+                      {% elif lab_group.signed_up_students == lab.max_students and lab_group.id not in users_enrollments%}
                         <td>Täynnä</td>
                       {% elif lab_group.id in users_enrollments %}
                         {% if lab_group.status == 1 %}
@@ -127,7 +127,7 @@
                           <td>Ilmoittauduttu</td>
                         {% endif %}
                       {% elif lab_group.status == 2 %}
-                        <td>Ilmoittautuminen päättynyt</td> 
+                        <td>Ilmoittautuminen päättynyt</td>
                       {% else %}
                         <td>
                           <button type="button" class="btn btn-light btn-outline-dark" data-bs-toggle="modal" data-bs-target="#enrollModal_{{ lab_group.id }}" data-testid="group_{{ lab_group.id }}">
@@ -149,7 +149,7 @@
                                     {% endif %} -
                                     {% if lab_group.end_time.minute > 10 %}
                                       {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
-                                    {% else %}     
+                                    {% else %}
                                       {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                                     {% endif %}
                                   </b>
