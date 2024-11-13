@@ -33,8 +33,6 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
 else:
     DEBUG = True
 
-DEBUG = False
-
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'ilmoweb.User'
