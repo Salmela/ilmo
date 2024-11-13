@@ -22,7 +22,6 @@
     </thead>
     <tbody>
       {% for lab_group in labgroups %}
-        {% if lab_group.deleted == 0 %}
           {% if lab_group.status == 2 %}
             <tr class="table-success">
               <td label="Kurssi">{{lab_group.lab.course.name}}</td>
@@ -30,7 +29,7 @@
               <td label="Ajankohta">
                 {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                 <br>
-                klo 
+                klo
                 {% if lab_group.start_time.minute > 10 %}
                   {{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}
                 {% else %}
@@ -38,7 +37,7 @@
                 {% endif %} -
                 {% if lab_group.end_time.minute > 10 %}
                   {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
-                {% else %}     
+                {% else %}
                   {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                 {% endif %}
               </td>
@@ -57,7 +56,7 @@
                       <div class="modal-body">
                         <form method="POST" action="/return_report/" enctype="multipart/form-data">
                           {% csrf_token %}
-                          <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}"> 
+                          <input type="hidden" name="lab_group_id" value="{{ lab_group.id }}">
                           <input type="file" name="file" data-testid="file_{{ lab_group.id }}">
                           <button class="btn btn-light btn-outline-dark" type="submit">Tallenna</button>
                         </form>
@@ -167,7 +166,7 @@
               <td label="Ajankohta">
                 {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                 <br>
-                klo 
+                klo
                 {% if lab_group.start_time.minute > 10 %}
                   {{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}
                 {% else %}
@@ -175,7 +174,7 @@
                 {% endif %} -
                 {% if lab_group.end_time.minute > 10 %}
                   {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
-                {% else %}     
+                {% else %}
                   {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                 {% endif %}
               </td>
@@ -197,7 +196,7 @@
               <td label="Ajankohta">
                 {{lab_group.date.day}}.{{lab_group.date.month}}.{{lab_group.date.year}}
                 <br>
-                klo 
+                klo
                 {% if lab_group.start_time.minute > 10 %}
                   {{lab_group.start_time.hour}}:{{lab_group.start_time.minute}}
                 {% else %}
@@ -205,7 +204,7 @@
                 {% endif %} -
                 {% if lab_group.end_time.minute > 10 %}
                   {{lab_group.end_time.hour}}:{{lab_group.end_time.minute}}
-                {% else %}     
+                {% else %}
                   {{lab_group.end_time.hour}}:0{{lab_group.end_time.minute}}
                 {% endif %}
               </td>
@@ -221,7 +220,6 @@
               </td>
             </tr>
           {% endif %}
-        {% endif %}
       {% endfor %}
     </tbody>
   </table>

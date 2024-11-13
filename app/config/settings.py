@@ -33,7 +33,7 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
 else:
     DEBUG = True
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
