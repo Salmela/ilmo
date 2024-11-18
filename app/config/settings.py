@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
     DATABASES = {
             'default': {
-                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'ENGINE': 'django.db.backends.postgresql',
                 'NAME': env("NAME"),
                 'USER': env("USER"),
                 'PASSWORD': env("PASSWORD"),
@@ -108,7 +108,7 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
 else:
     DATABASES = {
             'default': {
-                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'ENGINE': 'django.db.backends.postgresql',
                 'NAME': env("NAME"),
                 'USER': env("USER"),
                 'PASSWORD': env("PASSWORD"),
