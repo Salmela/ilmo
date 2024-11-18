@@ -90,16 +90,32 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': env("NAME"),
-            'USER': env("USER"),
-            'PASSWORD': env("PASSWORD"),
-            'HOST': env("HOST"),
-            'PORT': env("PORT"),
+
+if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
+    DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'NAME': env("NAME"),
+                'USER': env("USER"),
+                'PASSWORD': env("PASSWORD"),
+                'HOST': f"{env('HOST_1')},{env('HOST_2')}",
+                'PORT': env("PORT"),
+                'OPTIONS': {
+                'options': '-c target_session_attrs=read-write'
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2',
+                'NAME': env("NAME"),
+                'USER': env("USER"),
+                'PASSWORD': env("PASSWORD"),
+                'HOST': env("HOST"),
+                'PORT': env("PORT"),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -174,9 +190,7 @@ if env("LOCAL") == 'False':
 
 # email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.helsinki.fi'
-EMAIL_PORT = 25
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = None
-EMAIL_HOST_PASSWORD = None
 DEFAULT_FROM_EMAIL = 'grp-fyskem-labra-ilmo@helsinki.fi'
