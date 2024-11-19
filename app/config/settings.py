@@ -105,7 +105,7 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
 #                'HOST': env("HOST_1"),
                 'PORT': env("PORT"),
                 'OPTIONS': {
-                'options': '-c target_server_type=primary'
+                'options': '-c targerServerType=primary'
             },
         }
     }
