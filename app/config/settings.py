@@ -100,12 +100,10 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
                 'NAME': env("NAME"),
                 'USER': env("USER"),
                 'PASSWORD': env("PASSWORD"),
-#                'HOST': f"{env('HOST_1')},{env('HOST_2')}",
                 'HOST': ','.join([env('HOST_1'), env('HOST_2')]),
-#                'HOST': env("HOST_1"),
                 'PORT': env("PORT"),
                 'OPTIONS': {
-                'options': '-c targerServerType=primary'
+                'target_session_attrs': 'read-write',
             },
         }
     }
