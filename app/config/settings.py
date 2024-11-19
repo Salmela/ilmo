@@ -33,6 +33,8 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
 else:
     DEBUG = True
 
+DEBUG = True
+
 ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'ilmoweb.User'
@@ -99,10 +101,11 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
                 'USER': env("USER"),
                 'PASSWORD': env("PASSWORD"),
 #                'HOST': f"{env('HOST_1')},{env('HOST_2')}",
-                'HOST': env('HOST_1'),
+#                'HOST': ','.join([env('HOST_1'), env('HOST_2')]),
+                'HOST': env("HOST_1"),
                 'PORT': env("PORT"),
 #                'OPTIONS': {
-#                'options': '-c target_session_attrs=read-write'
+#                'options': '-c target_server_type=primary'
 #            },
         }
     }
@@ -117,6 +120,7 @@ else:
                 'PORT': env("PORT"),
         }
     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
