@@ -101,12 +101,12 @@ if env("LOCAL") == 'False' and env('UNI_LOGIN') == 'True':
                 'USER': env("USER"),
                 'PASSWORD': env("PASSWORD"),
 #                'HOST': f"{env('HOST_1')},{env('HOST_2')}",
-#                'HOST': ','.join([env('HOST_1'), env('HOST_2')]),
-                'HOST': env("HOST_1"),
+                'HOST': ','.join([env('HOST_1'), env('HOST_2')]),
+#                'HOST': env("HOST_1"),
                 'PORT': env("PORT"),
-#                'OPTIONS': {
-#                'options': '-c target_server_type=primary'
-#            },
+                'OPTIONS': {
+                'options': '-c target_server_type=primary'
+            },
         }
     }
 else:
