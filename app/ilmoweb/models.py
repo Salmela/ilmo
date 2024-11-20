@@ -85,6 +85,13 @@ class Report(models.Model):
         on_delete=models.SET_NULL,
         related_name = "grader"
     )
+    @property
+    def comment_file_path(self):
+        return self.comment_file.split('/')[-1] if self.comment_file else None
+
+    @property
+    def report_file_path(self):
+        return self.report_file.split('/')[-1] if self.report_file else None
 
 class TeachersMessage(models.Model):
     """
