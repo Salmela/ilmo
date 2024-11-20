@@ -59,7 +59,7 @@
                 </td>
                 <td label="Kommenttitiedosto">
                   {% if report.comment_file %}
-                    <a href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
+                    <a href="/download_comment/{{ report.pk }}" download>{{ report.pk }}</a>
                   {% else %}
                     -
                   {% endif %}
