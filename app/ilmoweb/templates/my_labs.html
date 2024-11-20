@@ -113,7 +113,7 @@
                                   {% if report.report_status != 4 %}
                                     <tr>
                                       <th class="hide-on-mobile">Raportti</th>
-                                      <td class="file-name" label="Raportti"><a href="/download_report/{{ report.report_file_name}}" download>{{ report.report_file_name }}</a></td>
+                                      <td class="file-name" label="Raportti"><a href="/download_report/{{ report.report_file_path }}" download>{{ report.report_file_name }}</a></td>
                                     </tr>
                                   {% endif %}
                                   <tr>
@@ -143,7 +143,7 @@
                                           <br>
                                         {% endif %}
                                         {% if report.comment_file %}
-                                          <a class="file-name" href="/download_report/{{ report.comment_file_name }}" download>{{ report.comment_file_name }}</a>
+                                          <a class="file-name" href="/download_report/{{ report.comment_file_path }}" download>{{ report.comment_file_name }}</a>
                                         {% endif %}
                                       </td>
                                     </tr>
